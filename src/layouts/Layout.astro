@@ -14,10 +14,9 @@ export interface Props {
     description?: string
 }
 
-let { title, navbar,description,transition } = Astro.props
+let { title, navbar,description } = Astro.props
 if (navbar === undefined) navbar = true
 if (!description) description = t('layout.description')
-if (!transition) transition = 'fade'
 const fullTitle = `${title} - ${t('layout.title')}`
 ---
 

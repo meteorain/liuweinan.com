@@ -1,6 +1,7 @@
 import {getCollection} from "astro:content";
 import groupBy from "lodash/groupBy";
 import keys from "lodash/keys";
+import {DateTime} from "luxon";
 
 export const getAllPosts = async (locale: string, tag: string, category: string) => {
     const allPosts = await getCollection('posts')
@@ -18,10 +19,12 @@ export const getAllPosts = async (locale: string, tag: string, category: string)
             }
             return !frontmatter.isDraft && frontmatter.pubDate
         })
-        .sort((a, b) => b.pubDate -a.pubDate)
+        .sort((a, b) =>{
+            return DateTime.fromJSDate(b.pubDate).toMillis() - DateTime.fromJSDate(a.pubDate).toMillis()
+        })
 
 
-    const postsByYear = groupBy(filteredPosts, (frontmatter) => frontmatter.pubDate.getFullYear())
+    const postsByYear = groupBy(filteredPosts, (frontmatter) => frontmatter.pubDate?.getFullYear())
     const result = keys(postsByYear)
         .map((key) => ({
             year: key,
@@ -33,7 +36,7 @@ export const getAllPosts = async (locale: string, tag: string, category: string)
     return {
         posts: result,
         tags: new Set(
-            result
+            filteredPosts
                 .filter((i) => i.tags)
                 .map((i) => i.tags)
                 .flat()

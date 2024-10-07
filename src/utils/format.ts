@@ -8,16 +8,16 @@ export function relativeTo(dateStr: string, locale = 'zh') {
     })
 }
 
-export function formatDateMD(dateStr: string | Date, locale: string = 'zh') {
-    const date =  dateStr instanceof String ?  DateTime.fromISO(dateStr): DateTime.fromJSDate(dateStr)
+export function formatDateMD(dateStr: string | Date | undefined, locale: string = 'zh') {
+    const date =  dateStr instanceof String ?  DateTime.fromISO(dateStr as string): DateTime.fromJSDate(dateStr as Date)
     if (locale === 'en') {
         return date.setLocale(locale).toFormat('dd, MMM')
     }
     return date.toFormat('MM-dd')
 }
 
-export function formatDateYMD(dateStr: string | Date, locale: string = 'zh') {
-    const date =  dateStr instanceof String ?  DateTime.fromISO(dateStr): DateTime.fromJSDate(dateStr)
+export function formatDateYMD(dateStr: string | Date | undefined, locale: string = 'zh') {
+    const date =  dateStr instanceof String ?  DateTime.fromISO(dateStr as string): DateTime.fromJSDate(dateStr as Date)
     if (locale === 'en') {
         return date.setLocale(locale).toFormat('dd, MMM, yyyy')
     }

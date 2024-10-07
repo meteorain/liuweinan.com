@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro check && astro build",
+    "build": "astro check --minimumSeverity error && astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
@@ -20,6 +20,9 @@
   "devDependencies": {
     "@expressive-code/core": "^0.37.0",
     "@rollup/plugin-yaml": "^4.1.2",
+    "@types/lodash": "^4.17.10",
+    "@types/luxon": "^3.4.2",
+    "@types/node": "^22.7.4",
     "mdast-util-wiki-link": "^0.1.2",
     "micromark-util-symbol": "^2.0.0",
     "unocss": "latest"

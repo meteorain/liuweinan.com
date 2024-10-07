@@ -68,14 +68,14 @@ const menubar = [
 
                 <ul >
                     {menubar.map((node) => (
-                            <li class="py-2" key={node.label}>
+                            <li class="py-2" >
                                 <a class="panda-link italic font-bold"
                                    href={'/notes' + (node.link ?? '')}>{node.label}</a>
                                 {node.items && node.items.length > 0 && (
                                         <ul class="mt-2">
                                             {
                                                 node.items.map((child) => (
-                                                        <li key={child.link} class="py-1">
+                                                        <li  class="py-1">
                                                             <a class="panda-link-static text-normal"
                                                                href={'/notes' + (child.link ?? '')}>{child.label}</a>
                                                         </li>

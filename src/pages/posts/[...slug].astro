@@ -6,7 +6,8 @@ import {formatDateYMD} from "@utils/format";
 import {getCollection,getEntry, render} from 'astro:content';
 
 const {path, t, locale} = useLocale(Astro.url)
-const {slug,title } = Astro.params
+let {slug,title } = Astro.params
+if (!title) title = slug;
 const post = await getEntry('posts', slug);
 const {categories,tags,pubDate,lastModified} = post.data;
 const {Content} = await render(post);
