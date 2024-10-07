@@ -1,0 +1,71 @@
+layout:
+    title: Yuhang Chen's Blog
+    description: Chen Yuhang's personal blog, writing and drawing in places where no one sees. Less technology, more life. This is where he records his learning and life, and occasionally shares his views on the world.
+nav:
+    posts: posts
+    moments: moments
+    recent: recent
+    timeline: timeline
+    ping: ping
+    reviews: reviews
+    notes: notes
+footer:
+    home: home
+    rss: rss
+    timeline: timeline
+    collection: collection
+    drafts: drafts
+    contact: contact
+    built-with: Built with
+    inspired-by: Inspired by
+post:
+    back: Back
+    post_at: Posted at
+    last_modified_at: Last modified at
+message:
+    404-content: Page not found
+    back-later: Work not finished yet, please come back later
+    loading: Loading...
+pagination:
+    previous: Previous
+    next: Next
+tags:
+    'ogc': 'ogc'
+    'web tile map': 'web tile map'
+    'technology': 'technology'
+    'social': 'social'
+    'music': 'music'
+    'openlayers': 'openlayers'
+    'spatial': 'spatial'
+    'gis': 'gis'
+    'map': 'map'
+    'editor': 'editor'
+    'vim': 'vim'
+    'media': 'media'
+    'reading': 'reading'
+    'social media': 'social media'
+    'life': 'life'
+    'domain': 'domain'
+    'data format': 'data format'
+    'python': 'python'
+    'cog': 'cog'
+    'geoserver': 'geoserver'
+    'fish': 'fish'
+    'shell': 'shell'
+    'hugo': 'hugo'
+    'blog': 'blog'
+    'javascript': 'javascript'
+    'github': 'github'
+    'open source': 'open source'
+    'map server': 'map server'
+    'wedding': 'wedding'
+categories:
+    shares: shares
+    thought: thought
+    story: story
+    stories: stories
+    comment: comment
+    map: map
+    translation: translation
+reviews:
+    review: review

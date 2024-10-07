@@ -10,8 +10,18 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^4.15.9",
-    "@astrojs/check": "^0.9.3",
+    "@astrojs/check": "latest",
+    "astro": "latest",
+    "astro-expressive-code": "^0.37.0",
+    "lodash": "^4.17.21",
+    "luxon": "^3.5.0",
     "typescript": "^5.6.2"
+  },
+  "devDependencies": {
+    "@expressive-code/core": "^0.37.0",
+    "@rollup/plugin-yaml": "^4.1.2",
+    "mdast-util-wiki-link": "^0.1.2",
+    "micromark-util-symbol": "^2.0.0",
+    "unocss": "latest"
   }
 }

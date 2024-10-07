@@ -1,0 +1,62 @@
+---
+import Layout from '@layouts/Layout.astro'
+import {getCollection} from "astro:content";
+
+import {getEntry, render} from 'astro:content';
+
+import {useLocale} from '@utils/locale'
+const {path, t} = useLocale(Astro.url)
+const {slug, title} = Astro.params
+const product = await getEntry('notes', slug);
+const {Content} = await render(product);
+export async function getStaticPaths() {
+    const notes = await getCollection('notes');
+    const paths = notes.map((note) => {
+        return {
+            params: {
+                slug: note.slug,
+                title: note.data.title
+            },
+        };
+    });
+    return paths;
+};
+---
+
+<Layout>
+
+    <div class="mt-6">
+
+    </div>
+    <div class="mt-6">
+        <h1 class="text-4xl">{title}</h1>
+        <div class="flex sm:flex-row flex-col rounded-lg bg-stone-100 dark:bg-stone-600 p-2 px-4">
+
+            <a rel="prefetch">
+                {
+
+                    <span>
+                                    <a class="panda-link" href={`/notes/`} rel="prefetch">home </a>
+                        <span>&nbsp;</span>
+                                </span>
+                }
+                {
+                    slug.split('/').map((part, index, array) => {
+                        const url = array.slice(0, index + 1).join('/');
+                        return (
+                                <span class="mr-2">
+                                    <a class="panda-link" href={`/notes/${url}/`} rel="prefetch">
+                                       <span>/</span>
+                                        {part}</a>
+                                </span>
+                        );
+                    })
+                }
+            </a>
+            <span class="ml-auto mr-4 text-sm font-normal"> {t('post.post_at')} </span>
+        </div>
+    </div>
+    <article class="prose dark:prose-invert prose-stone max-w-prose mt-6">
+        <Content/>
+    </article>
+</Layout>

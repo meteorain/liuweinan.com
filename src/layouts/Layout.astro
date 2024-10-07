@@ -1,50 +1,50 @@
 ---
-interface Props {
-	title: string;
+import '../styles/index.css'
+import Header from './Header.astro'
+import Navbar from './Navbar.astro'
+import Footer from './Footer.astro'
+import { useLocale } from '@utils/locale'
+const { t, locale } = useLocale(Astro.url)
+
+export const prerender = true
+
+export interface Props {
+    title: string
+    navbar?: boolean
+    description?: string
 }
 
-const { title } = Astro.props;
+let { title, navbar,description,transition } = Astro.props
+if (navbar === undefined) navbar = true
+if (!description) description = t('layout.description')
+if (!transition) transition = 'fade'
+const fullTitle = `${title} - ${t('layout.title')}`
 ---
 
 <!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="description" content="Astro description" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
-	</head>
-	<body>
-		<slot />
-	</body>
+<html lang={locale} class="mx-4" >
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width" />
+        <meta name="generator" content={Astro.generator} />
+        <script
+            type="text/partytown"
+            async
+            src="https://analytics.us.umami.is/script.js"
+            data-website-id="3f16bfed-629c-4b28-af80-4c5b97bbf16d"></script>
+        <title>{fullTitle}</title>
+        <style>
+            @view-transition {
+                navigation: auto; /* enabled! */
+            }
+         </style>
+    </head>
+    <body class="max-width dark:bg-stone-700">
+        <Header />
+        { navbar && <Navbar />}
+        <main >
+            <slot />
+        </main>
+        <Footer />
+    </body>
 </html>
-<style is:global>
-	:root {
-		--accent: 136, 58, 234;
-		--accent-light: 224, 204, 250;
-		--accent-dark: 49, 10, 101;
-		--accent-gradient: linear-gradient(
-			45deg,
-			rgb(var(--accent)),
-			rgb(var(--accent-light)) 30%,
-			white 60%
-		);
-	}
-	html {
-		font-family: system-ui, sans-serif;
-		background: #13151a;
-	}
-	code {
-		font-family:
-			Menlo,
-			Monaco,
-			Lucida Console,
-			Liberation Mono,
-			DejaVu Sans Mono,
-			Bitstream Vera Sans Mono,
-			Courier New,
-			monospace;
-	}
-</style>

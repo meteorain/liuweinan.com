@@ -1,0 +1,72 @@
+layout:
+    title: 陈昱行博客
+    description: 陈昱行的个人博客，在没人看到的地方写写画画。少些技术，多些生活。这里自己的学习生活，偶尔分享一下自己对这个世界的看法。
+nav:
+    posts: 随笔
+    moments: 闲话
+    recent: 最近
+    timeline: 时间线
+    ping: 钝评
+    reviews: 评论
+    notes: 笔记
+footer:
+    home: 首页
+    rss: 订阅
+    timeline: 时间线
+    collection: 文集
+    drafts: 草稿本
+    contact: 联络
+    built-with: 基于
+    inspired-by: 灵感来自
+post:
+    back: 返回
+    post_at: 发布于
+    last_modified_at: 最后编辑于
+
+message:
+    404-content: 页面未找到
+    back-later: 数据请求发生些许问题，请稍后再试
+    loading: 加载中...
+pagination:
+    previous: 上一页
+    next: 下一页
+tags:
+    'ogc': 'ogc'
+    'web tile map': '瓦片地图'
+    'technology': '技术'
+    'social': '社会'
+    'music': '音乐'
+    'openlayers': 'openlayers'
+    'spatial': '空间地理信息'
+    'gis': 'gis'
+    'map': '地图'
+    'editor': '编辑器'
+    'vim': 'vim'
+    'media': '影音'
+    'reading': '阅读'
+    'social media': '社交媒体'
+    'life': '生活'
+    'domain': '域名'
+    'data format': '数据格式'
+    'python': 'python'
+    'cog': 'cog'
+    'geoserver': 'geoserver'
+    'fish': 'fish'
+    'shell': '终端'
+    'hugo': 'hugo'
+    'blog': '博客'
+    'javascript': 'javascript'
+    'github': 'github'
+    'open source': '开源'
+    'map server': '地图服务'
+    'wedding': '婚礼'
+categories:
+    shares: 分享
+    thought: 想法
+    story: 轶事
+    stories: 轶事
+    comment: 评论
+    map: 地图
+    translation: 翻译
+reviews:
+    review: 评论

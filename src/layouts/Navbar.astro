@@ -1,0 +1,40 @@
+---
+import {useLocale} from '@utils/locale'
+
+const {url} = Astro
+const {path, t, locale} = useLocale(url)
+
+const items = [
+    'notes',
+    'moments',
+    'reviews',
+    'recent'
+    // 'ping',
+    // 'timeline'
+]
+// function page in root path
+function isRootPage() {
+    return !items.some((item) => url.toString().includes(item))
+}
+---
+
+<nav class={url.toString().includes('/posts/') ? 'hidden' : ''}>
+    <a
+            rel="prefetch"
+            href={path('/')}
+            class="panda-link mr-4 animated hover:no-underline"
+            class:list={isRootPage() ? 'active' : ''}>{t('nav.posts')}</a
+    >
+    {
+        items.map((item) => {
+            return (
+                    <a
+                            rel="prefetch"
+                            href={path(`/${item}`)}
+                            class="panda-link mr-4 animated hover:no-underline"
+                            class:list={url.toString().includes(item) ? 'active' : ''}
+                    >{t(`nav.${item}`)}</a>
+            )
+        })
+    }
+</nav>

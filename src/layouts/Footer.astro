@@ -1,0 +1,26 @@
+---
+import { useLocale } from '@utils/locale'
+const { t, path } = useLocale(Astro.url)
+---
+
+<footer class="mt-12 mb-6 text-sm">
+    <div class="mb-1">
+        <a href="https://github.com/yuhangch" class="panda-link">{t('footer.contact')}</a>
+        <span class="mx-1">|</span>
+        <a rel="prefetch-intent" href="/rss.xml" class="panda-link">{t('footer.rss')}</a>
+        <span class="mx-1">|</span>
+        <a rel="prefetch-intent" href="https://chenyuhang.cn" class="panda-link">{t('footer.collection')}</a>
+        <span class="mx-1">|</span>
+        <a rel="prefetch-intent" href="https://open.yuhang.ch" class="panda-link">{t('footer.drafts')}</a>
+    </div>
+    <div class="mb-1">
+        <span>2016-{new Date().getFullYear()}</span>
+    </div>
+    <div class="text-sm">
+        {t('footer.built-with')}
+        <a class="panda-link italic" href="https://astro.build/">astro</a>, {t('footer.inspired-by')}<a
+            class="panda-link italic ml-1"
+            href="https://bearblog.dev/">bearblog</a
+        >.
+    </div>
+</footer>

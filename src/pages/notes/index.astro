@@ -1,0 +1,94 @@
+---
+import {getCollection} from 'astro:content';
+import Layout from '@layouts/Layout.astro';
+
+const menubar = [
+    {
+        label: 'Tech Notes',
+        collapsed: true,
+
+        items: [
+            // Each item here is one entry in the navigation menu.
+            {label: 'Web', link: '/tech/web/'},
+            {label: 'Obsidian', link: '/tech/obsidian/'},
+            {label: 'DevOps', link: '/tech/devops/'},
+            {label: 'Foobar', link: '/tech/foobar/'},
+        ],
+    },
+    {
+        label: 'Read N Write',
+        collapsed: true,
+        items: [
+            // Each item here is one entry in the navigation menu.
+            {
+                label: 'Clips',
+                collapsed: true,
+                autogenerate: {
+                    directory: '/read/clips/',
+                }
+            },
+            {label: 'Nobody', link: '/read/nobody/'},
+        ],
+    },
+    {
+        label: 'Haphazard Living',
+        collapsed: true,
+        items: [
+            // Each item here is one entry in the navigation menu.
+            {label: 'City Walk', link: '/life/city-walk/'},
+            {label: 'Eat Eat', link: '/life/delicious/'},
+            {label: 'Travel', link: '/life/travel/'},
+            {label: 'Photography', link: '/life/photography/'},
+        ],
+    },
+    {
+        label: 'Have Fun',
+        collapsed: true,
+        items: [
+            // Each item here is one entry in the navigation menu.
+            {label: 'Movie', link: '/have-fun/movie/'},
+            {label: 'TV', link: '/have-fun/tv/'},
+            // {label: 'Anime', link: '/have-fun/anime/'},
+            {label: 'Music', link: '/have-fun/music/'},
+            {label: 'Gaming', link: '/have-fun/gaming/'},
+        ],
+    },
+
+    {label: "What's O.P.E.N. ", link: '/'},
+    {label: 'Tech Stack', link: '/overview/tech-stack/'},
+    {label: 'Whois', link: '/overview/about-me/'},
+
+]
+---
+
+<Layout title='hello'>
+    <main class="pl-0 mt-8">
+        <ul style="padding-inline-start: 0;">
+            {
+
+                <ul >
+                    {menubar.map((node) => (
+                            <li class="py-2" key={node.label}>
+                                <a class="panda-link italic font-bold"
+                                   href={'/notes' + (node.link ?? '')}>{node.label}</a>
+                                {node.items && node.items.length > 0 && (
+                                        <ul class="mt-2">
+                                            {
+                                                node.items.map((child) => (
+                                                        <li key={child.link} class="py-1">
+                                                            <a class="panda-link-static text-normal"
+                                                               href={'/notes' + (child.link ?? '')}>{child.label}</a>
+                                                        </li>
+                                                ))
+
+                                            }
+                                        </ul>
+                                )}
+                            </li>
+                    ))}
+                </ul>
+            }
+
+        </ul>
+    </main>
+</Layout>

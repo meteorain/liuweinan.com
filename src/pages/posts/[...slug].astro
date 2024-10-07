@@ -1,0 +1,64 @@
+---
+import Layout from '@layouts/Layout.astro'
+import {useLocale} from '@utils/locale'
+import {formatDateYMD} from "@utils/format";
+
+import {getCollection,getEntry, render} from 'astro:content';
+
+const {path, t, locale} = useLocale(Astro.url)
+const {slug,title } = Astro.params
+const post = await getEntry('posts', slug);
+const {categories,tags,pubDate,lastModified} = post.data;
+const {Content} = await render(post);
+export async function getStaticPaths() {
+    const notes = await getCollection('posts', (i) => !i.slug.includes('.en.'));
+    return notes.map((note) => {
+        return {
+            params: {
+                slug: note.slug,
+                title: note.data.title
+            },
+        };
+    });
+}
+
+
+// const title = locale === 'en' && FrontMatter['title-en'] ? FrontMatter['title-en'] : FrontMatter['title']
+---
+
+<Layout title={title} navbar={false}>
+    <a rel="prefetch" class="panda-link mt-6" href={path('/')}>{t('post.back')}</a>
+
+    <div class="mt-6">
+        <h1 class="text-4xl">{title}</h1>
+        <div class="flex sm:flex-row flex-col rounded-lg bg-stone-100 dark:bg-stone-600 p-2 px-4">
+            <div>
+                {
+                    categories &&
+                    categories.map((category) => (
+                            <span class="ml-2">
+                                <a href={path('/categories/' + category)} class="text-sm mr-2 panda-link">
+                                    #{t('categories.' + category)}#
+                                </a>
+                            </span>
+                    ))
+                }
+            </div>
+            <span class="ml-auto mr-4 text-sm font-normal"> {t('post.post_at')} {formatDateYMD(pubDate)}</span>
+        </div>
+    </div>
+    <article class="prose dark:prose-invert prose-stone max-w-prose mt-6">
+        <Content/>
+    </article>
+    {
+        pubDate !== lastModified && (
+                    <div class="mt-9 flex text-sm font-italic opacity-80">
+                <span class="ml-auto">
+                    {t('post.last_modified_at')} {formatDateYMD(lastModified)}
+                </span>
+                    </div>
+        )
+    }
+</Layout>
+
+
