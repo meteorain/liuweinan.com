@@ -65,7 +65,7 @@ const menubar = [
 ]
 ---
 
-<Layout title={t('nav.notes')} navbar={false}>
+<Layout title={t('nav.docs')} navbar={false}>
     <main class="pl-0 mt-8">
         <ul style="padding-inline-start: 0;">
             {
@@ -74,14 +74,14 @@ const menubar = [
                     {menubar.map((node) => (
                             <li class="py-2" >
                                 <a class="panda-link italic font-bold"
-                                   href={'/notes' + (node.link ?? '')}>{node.label}</a>
+                                   href={'/docs' + (node.link ?? '')}>{node.label}</a>
                                 {node.items && node.items.length > 0 && (
                                         <ul class="mt-2">
                                             {
                                                 node.items.map((child) => (
                                                         <li  class="py-1">
                                                             <a class="panda-link-static text-normal"
-                                                               href={'/notes' + (child.link ?? '')}>{child.label}</a>
+                                                               href={'/docs' + (child.link ?? '')}>{child.label}</a>
                                                         </li>
                                                 ))
 

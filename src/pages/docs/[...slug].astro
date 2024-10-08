@@ -7,12 +7,12 @@ import {getEntry, render} from 'astro:content';
 import {useLocale} from '@utils/locale'
 const {path, t} = useLocale(Astro.url)
 const {slug, title} = Astro.params
-const product = await getEntry('notes', slug);
+const product = await getEntry('docs', slug);
 const {Content} = await render(product);
 export const prerender = true;
 export async function getStaticPaths() {
-    const notes = await getCollection('notes');
-    const paths = notes.map((note) => {
+    const docs = await getCollection('docs');
+    const paths = docs.map((note) => {
         return {
             params: {
                 slug: note.slug,
@@ -37,7 +37,7 @@ export async function getStaticPaths() {
                 {
 
                     <span>
-                                    <a class="panda-link" href={`/notes/`} rel="prefetch">home </a>
+                                    <a class="panda-link" href={`/docs/`} rel="prefetch">home </a>
                         <span>&nbsp;</span>
                                 </span>
                 }
@@ -46,7 +46,7 @@ export async function getStaticPaths() {
                         const url = array.slice(0, index + 1).join('/');
                         return (
                                 <span class="mr-2">
-                                    <a class="panda-link" href={`/notes/${url}/`} rel="prefetch">
+                                    <a class="panda-link" href={`/docs/${url}/`} rel="prefetch">
                                        <span>/</span>
                                         {part}</a>
                                 </span>

@@ -8,7 +8,7 @@ nav:
     timeline: timeline
     ping: ping
     reviews: reviews
-    notes: notes
+    docs: docs
 footer:
     home: home
     rss: rss
