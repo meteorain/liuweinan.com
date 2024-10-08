@@ -17,12 +17,15 @@ export default defineConfig({
     vite: {
         plugins: [yaml()]
     },
-    env: {
-        schema: {
-            API_URL: envField.string({ context: "server", access: "secret" }),
-            API_SECRET: envField.string({ context: "server", access: "secret" }),
-        }
+    experimental:{
+        env: {
+            schema: {
+                API_URL: envField.string({ context: "server", access: "secret" }),
+                API_SECRET: envField.string({ context: "server", access: "secret" }),
+            }
+        },
     },
+
     prefetch: true,
     site: 'https://yuhang.ch',
     scopedStyleStrategy: 'class',
