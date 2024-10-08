@@ -1,6 +1,10 @@
 ---
-import {getCollection} from 'astro:content';
+import {useLocale} from "@utils/locale";
 import Layout from '@layouts/Layout.astro';
+
+export const prerender = true;
+
+const {path, t, locale} = useLocale(Astro.url)
 
 const menubar = [
     {
@@ -61,7 +65,7 @@ const menubar = [
 ]
 ---
 
-<Layout title='hello'>
+<Layout title={t('nav.notes')} navbar={false}>
     <main class="pl-0 mt-8">
         <ul style="padding-inline-start: 0;">
             {

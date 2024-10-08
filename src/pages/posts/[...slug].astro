@@ -4,7 +4,7 @@ import {useLocale} from '@utils/locale'
 import {formatDateYMD} from "@utils/format";
 
 import {getCollection,getEntry, render} from 'astro:content';
-
+export const prerender = true;
 const {path, t, locale} = useLocale(Astro.url)
 let {slug,title } = Astro.params
 if (!title) title = slug;

@@ -9,6 +9,7 @@ const {path, t} = useLocale(Astro.url)
 const {slug, title} = Astro.params
 const product = await getEntry('notes', slug);
 const {Content} = await render(product);
+export const prerender = true;
 export async function getStaticPaths() {
     const notes = await getCollection('notes');
     const paths = notes.map((note) => {
