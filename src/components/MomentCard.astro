@@ -1,0 +1,55 @@
+---
+import {relativeTo} from '@utils/format'
+import {useLocale} from '@utils/locale'
+import MarkdownIt from 'markdown-it'
+interface Props {
+    content: {
+        id: string
+        body: string
+        created_at: string
+        tags: string
+    }
+}
+
+const {t, path, locale} = useLocale(Astro.url)
+const {id, body, created_at, tags,title,title_en,imdb_id} = Astro.props.content
+
+const review_title = locale === 'en' ? title_en : title
+
+
+const content = new MarkdownIt('commonmark',{
+    breaks: true,
+    typographer: true
+}).render(body)
+---
+
+<div class="my-4">
+    <div class="p-4 rounded-xl bg-stone-100 dark:bg-stone-600">
+        <!--<div class="p-4 border border-blue-500 dark:border-stone-400 border-solid">-->
+        <div class="text-sm grid grid-cols-7">
+            <div class="min-w-[2.5rem] align-left">
+                <a href={path('/moments/' + id + '/')} class="panda-link"
+                >
+                    <span class="text-sm font-bold w-full">#{id}</span>
+                </a>
+
+            </div>
+            <div class="panda-link col-start-2 col-span-3 flex"></div>
+            <!--<div class="panda-link col-start-2 col-span-3 flex">{tags && <span class="mx-auto">  #{tags}#</span>}</div>-->
+            <div class="text-amber-400 font-medium italic col-span-1"></div>
+            <!--<div class="text-amber-400   font-medium italic col-span-1"> ✨&nbsp; {star}</div>-->
+            <div class="col-span-2 flex">
+                <time class="italic opacity-70 ml-auto mr-4">{relativeTo(created_at, locale)}</time>
+            </div>
+        </div>
+        <div class="prose prose-stone dark:prose-invert px-2 py-0" set:html={content}/>
+        <div class="panda-link text-sm flex">
+            {tags && <span class="mr-auto"> #{tags}#</span>}
+            {
+                review_title &&  <a href={`https://www.imdb.com/title/${imdb_id}`} class="panda-link mr-2">
+                        <span class="text-sm font-bold font-italic underline">{review_title}</span>
+                    </a>
+            }
+        </div>
+    </div>
+</div>

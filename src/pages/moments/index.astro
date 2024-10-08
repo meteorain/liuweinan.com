@@ -1,0 +1,16 @@
+---
+import MomentLayout from '@layouts/MomentLayout.astro'
+export const prerender = false;
+
+
+const pageOptions = {
+    currentPage: 1,
+    pageSize: 10,
+    url: {
+        prev: null,
+        next: '/moments/p/2'
+    }
+}
+---
+
+<MomentLayout page={pageOptions}/>

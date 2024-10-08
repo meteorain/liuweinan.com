@@ -4,7 +4,7 @@ layout:
 nav:
     posts: posts
     moments: moments
-    recent: recent
+    now: now
     timeline: timeline
     ping: ping
     reviews: reviews

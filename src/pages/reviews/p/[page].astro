@@ -1,0 +1,15 @@
+---
+import ReviewLayout from '@layouts/ReviewLayout.astro'
+export const prerender = false;
+const {page} = Astro.params
+const pageOptions = {
+    currentPage: page,
+    url: {
+        current: '/reviews/p/1',
+        next: '/reviews/p/2',
+        prev: null
+    }
+}
+---
+
+<ReviewLayout page={pageOptions} />

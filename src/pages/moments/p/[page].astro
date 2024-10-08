@@ -1,0 +1,19 @@
+---
+import MomentLayout from '@layouts/MomentLayout.astro'
+export const prerender = false;
+
+const {page} = Astro.params
+if (page === undefined) {
+    throw new Error('Slug is required')
+}
+const pageOptions = {
+    currentPage: page,
+    pageSize: 10,
+    url: {
+        prev: page > 1 ? `/moments/p/${page - 1}` : '',
+        next: '/moments/p/' + (page + 1)
+    }
+}
+---
+
+<MomentLayout page={pageOptions}/>

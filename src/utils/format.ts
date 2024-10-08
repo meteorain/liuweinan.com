@@ -9,7 +9,7 @@ export function relativeTo(dateStr: string, locale = 'zh') {
 }
 
 export function formatDateMD(dateStr: string | Date | undefined, locale: string = 'zh') {
-    const date =  dateStr instanceof String ?  DateTime.fromISO(dateStr as string): DateTime.fromJSDate(dateStr as Date)
+    const date = dateStr instanceof String ? DateTime.fromISO(dateStr as string) : DateTime.fromJSDate(dateStr as Date)
     if (locale === 'en') {
         return date.setLocale(locale).toFormat('dd, MMM')
     }
@@ -17,7 +17,8 @@ export function formatDateMD(dateStr: string | Date | undefined, locale: string 
 }
 
 export function formatDateYMD(dateStr: string | Date | undefined, locale: string = 'zh') {
-    const date =  dateStr instanceof String ?  DateTime.fromISO(dateStr as string): DateTime.fromJSDate(dateStr as Date)
+    console.log(dateStr)
+    const date = dateStr instanceof String ? DateTime.fromISO(dateStr as string) : DateTime.fromJSDate(dateStr as Date)
     if (locale === 'en') {
         return date.setLocale(locale).toFormat('dd, MMM, yyyy')
     }

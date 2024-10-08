@@ -1,0 +1,20 @@
+---
+import {momentLoader} from "../../loaders/moments";
+
+import Layout from '@layouts/Layout.astro'
+import MomentCard from '@components/MomentCard.astro'
+import { useLocale } from '@utils/locale'
+export const prerender = false;
+const {id} = Astro.params;
+const loader = momentLoader(id)
+const moment = await loader.load()
+
+
+const { t } = useLocale(Astro.url)
+let result = moment
+
+---
+
+<Layout title={t('nav.moments') + ' #' + id}>
+    <MomentCard content={moment} />
+</Layout>

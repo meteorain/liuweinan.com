@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig,envField  } from 'astro/config';
 
 import UnoCSS from 'unocss/astro'
 import remarkWikiLink from "./src/plugins/wiki-link/index.ts";
@@ -8,15 +8,20 @@ import yaml from '@rollup/plugin-yaml'
 import expressiveCode from 'astro-expressive-code'
 import { ExpressiveCodeTheme } from '@expressive-code/core'
 
-const nightOwlDark = new ExpressiveCodeTheme('./src/styles/expressive-code/night-owl-dark.json')
-const nightOwlLight = new ExpressiveCodeTheme('./src/styles/expressive-code/night-owl-light.json')
+import nightOwlDark from './src/styles/expressive-code/night-owl-dark.json'
+import nightOwlLight from './src/styles/expressive-code/night-owl-light.json'
 
 // https://astro.build/config
 export default defineConfig({
     vite: {
         plugins: [yaml()]
     },
-
+    env: {
+        schema: {
+            API_URL: envField.string({ context: "server", access: "secret" }),
+            API_SECRET: envField.string({ context: "server", access: "secret" }),
+        }
+    },
     prefetch: true,
     site: 'https://yuhang.ch',
     scopedStyleStrategy: 'class',
@@ -39,7 +44,7 @@ export default defineConfig({
     integrations: [
         UnoCSS(),
         expressiveCode({
-            themes: ['vitesse-dark','snazzy-light'],
+            themes: [nightOwlDark,nightOwlLight],
             themeCssSelector: (theme) => {
                 return '.' + theme.type
             }

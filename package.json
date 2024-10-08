@@ -11,10 +11,11 @@
   },
   "dependencies": {
     "@astrojs/check": "latest",
-    "astro": "latest",
+    "astro": "beta",
     "astro-expressive-code": "^0.37.0",
     "lodash": "^4.17.21",
     "luxon": "^3.5.0",
+    "markdown-it": "^14.1.0",
     "typescript": "^5.6.2"
   },
   "devDependencies": {
@@ -22,6 +23,7 @@
     "@rollup/plugin-yaml": "^4.1.2",
     "@types/lodash": "^4.17.10",
     "@types/luxon": "^3.4.2",
+    "@types/markdown-it": "^14.1.2",
     "@types/node": "^22.7.4",
     "mdast-util-wiki-link": "^0.1.2",
     "micromark-util-symbol": "^2.0.0",

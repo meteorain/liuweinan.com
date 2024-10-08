@@ -9,10 +9,15 @@ const {path, t, locale} = useLocale(Astro.url)
 let {slug,title } = Astro.params
 if (!title) title = slug;
 const post = await getEntry('posts', slug);
+
 const {categories,tags,pubDate,lastModified} = post.data;
 const {Content} = await render(post);
 export async function getStaticPaths() {
-    const notes = await getCollection('posts', (i) => !i.slug.includes('.en.'));
+    const notes = await getCollection('posts',
+        (i) =>
+            !i.slug?.includes('.en.')
+    );
+    console.log(notes)
     return notes.map((note) => {
         return {
             params: {
