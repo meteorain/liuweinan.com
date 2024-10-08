@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@astrojs/check": "latest",
+    "@astrojs/vercel": "^7.8.1",
     "astro": "beta",
     "astro-expressive-code": "^0.37.0",
     "lodash": "^4.17.21",

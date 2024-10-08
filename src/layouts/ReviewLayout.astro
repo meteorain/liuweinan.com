@@ -9,7 +9,7 @@ const { path, t, locale } = useLocale(Astro.url)
 const { page } = Astro.props
 
 
-const loader = new reviewsLoader(page.currentPage,'')
+const loader =  reviewsLoader(page.currentPage,'')
 const { reviews, next, prev } = await loader.load()
 const pageHref = (page) => {
     if (!page) return null

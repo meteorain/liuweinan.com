@@ -52,7 +52,6 @@ export function momentsLoader(page:number): any {
         }
     }).then(res => res.json());
 
-    console.log(moments)
 
     return {
         name: "moments-loader",

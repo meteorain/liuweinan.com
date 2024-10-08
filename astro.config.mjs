@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig,envField  } from 'astro/config';
+import vercel from '@astrojs/vercel/serverless'
 
 import UnoCSS from 'unocss/astro'
 import remarkWikiLink from "./src/plugins/wiki-link/index.ts";
@@ -49,5 +50,8 @@ export default defineConfig({
                 return '.' + theme.type
             }
         }),
-    ],
+    ],output: 'server',
+    adapter: vercel({
+        functionPerRoute: false
+    })
 });

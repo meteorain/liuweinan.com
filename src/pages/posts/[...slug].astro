@@ -17,7 +17,6 @@ export async function getStaticPaths() {
         (i) =>
             !i.slug?.includes('.en.')
     );
-    console.log(notes)
     return notes.map((note) => {
         return {
             params: {
