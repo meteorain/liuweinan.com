@@ -5,6 +5,7 @@ nav:
     posts: posts
     moments: moments
     now: now
+    whois: whois
     timeline: timeline
     ping: ping
     reviews: reviews

@@ -124,6 +124,12 @@ a.animated.active:after {
     hover: underline;
 }
 
+/*prose link add arrow when class not have 'internal'*/
+
+.prose :where(a):not(:where([data-footnote-ref], [data-footnote-backref], .not-prose, .not-prose *)):not(.internal) {
+    @apply after:content-['↗'] after:ml-0;
+}
+
 /*
  * blockquote
  */

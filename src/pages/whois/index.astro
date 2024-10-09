@@ -4,7 +4,7 @@ import {getEntry, render} from 'astro:content'
 import Layout from "../../layouts/Layout.astro";
 const {path, t, locale} = useLocale(Astro.url)
 
-const content = await getEntry('now', 'index')
+const content = await getEntry('whois', 'index')
 
 const {Content} = await render(content);
 ---
@@ -20,7 +20,7 @@ const {Content} = await render(content);
         <div data-orientation="horizontal" role="separator" class="bg-stone-200 w-full h-px my-8"></div>
         <div><h2 class="font-medium text-xl my-8">Projects</h2>
             <ul class="grid grid-cols-1 gap-3 p-1">
-                <li class="group flex items-center justify-between px-4 py-3 bg-neutral-2 hover:bg-stone-200  outline-none border border-neutral-4 hover:border-neutral-6 rounded-3xl focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-7 focus-visible:ring-offset-neutral-1">
+                <li class="group flex items-center justify-between px-4 py-3 bg-stone-100 hover:bg-stone-200  outline-none border border-neutral-4 hover:border-neutral-6 rounded-3xl focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-7 focus-visible:ring-offset-neutral-1">
                     <div class="flex flex-row items-stretch gap-5 pl-2">
                         <div class="flex items-center justify-center">
                             <svg fill="currentColor"
@@ -39,7 +39,7 @@ const {Content} = await render(content);
                     </div>
                     <a type="button" role="button" href="https://github.com/yuhangch/zhmoji" target="_blank"
                        aria-label="Open"
-                       class="inline-flex panda-link items-center justify-center gap-2 outline-none border focus-visible:ring-2 focus-visible:ring-offset-2 bg-stone-100  hover:bg-neutral-4 active:bg-neutral-5 text-neutral-11 border-neutral-6 focus-visible:ring-neutral-8 focus-visible:ring-offset-neutral-1 w-8 h-8 text-base font-medium rounded-xl group/icon">
+                       class="inline-flex panda-link items-center justify-center gap-2 outline-none border focus-visible:ring-2 focus-visible:ring-offset-2 bg-stone-100  hover:bg-stone-300 active:bg-neutral-5 text-neutral-11 border-neutral-6 focus-visible:ring-neutral-8 focus-visible:ring-offset-neutral-1 w-8 h-8 text-base font-medium rounded-xl group/icon">
                         <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                              stroke-linejoin="round" aria-label="Open"
                              class="transition text-neutral-10 group-hover:text-primary-11 group-focus-visible/icon:text-primary-11"
@@ -49,7 +49,7 @@ const {Content} = await render(content);
                             <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
                         </svg>
                     </a></li>
-                <li class="group flex items-center justify-between px-4 py-3 bg-neutral-2 hover:bg-stone-200  outline-none border border-neutral-4 hover:border-neutral-6 rounded-3xl focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-7 focus-visible:ring-offset-neutral-1">
+                <li class="group flex items-center justify-between px-4 py-3 bg-stone-100 hover:bg-stone-200  outline-none border border-neutral-4 hover:border-neutral-6 rounded-3xl focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-7 focus-visible:ring-offset-neutral-1">
                     <div class="flex flex-row items-stretch gap-5 pl-2">
                         <div class="flex items-center justify-center">
                             <svg fill="currentColor"
@@ -68,7 +68,7 @@ const {Content} = await render(content);
                     </div>
                     <a type="button" role="button" href="https://github.com/yuhangch/ol-search" target="_blank"
                        aria-label="Open"
-                       class="inline-flex panda-link items-center justify-center gap-2 outline-none border focus-visible:ring-2 focus-visible:ring-offset-2 bg-stone-100  hover:bg-neutral-4 active:bg-neutral-5 text-neutral-11 border-neutral-6 focus-visible:ring-neutral-8 focus-visible:ring-offset-neutral-1 w-8 h-8 text-base font-medium rounded-xl group/icon">
+                       class="inline-flex panda-link items-center justify-center gap-2 outline-none border focus-visible:ring-2 focus-visible:ring-offset-2 bg-stone-100  hover:bg-stone-300 active:bg-neutral-5 text-neutral-11 border-neutral-6 focus-visible:ring-neutral-8 focus-visible:ring-offset-neutral-1 w-8 h-8 text-base font-medium rounded-xl group/icon">
                         <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                              stroke-linejoin="round" aria-label="Open"
                              class="transition text-neutral-10 group-hover:text-primary-11 group-focus-visible/icon:text-primary-11"
@@ -78,7 +78,7 @@ const {Content} = await render(content);
                             <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
                         </svg>
                     </a></li>
-                <li class="group flex items-center justify-between px-4 py-3 bg-neutral-2 hover:bg-stone-200  outline-none border border-neutral-4 hover:border-neutral-6 rounded-3xl focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-7 focus-visible:ring-offset-neutral-1">
+                <li class="group flex items-center justify-between px-4 py-3 bg-stone-100 hover:bg-stone-200  outline-none border border-neutral-4 hover:border-neutral-6 rounded-3xl focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-7 focus-visible:ring-offset-neutral-1">
                     <div class="flex flex-row items-stretch gap-5 pl-2">
                         <div class="flex items-center justify-center">
                             <svg fill="currentColor"
@@ -96,7 +96,7 @@ const {Content} = await render(content);
                         </div>
                     </div>
                     <a type="button" role="button" href="https://open.yuhang.ch/" target="_blank" aria-label="Open"
-                       class="inline-flex panda-link items-center justify-center gap-2 outline-none border focus-visible:ring-2 focus-visible:ring-offset-2 bg-stone-100  hover:bg-neutral-4 active:bg-neutral-5 text-neutral-11 border-neutral-6 focus-visible:ring-neutral-8 focus-visible:ring-offset-neutral-1 w-8 h-8 text-base font-medium rounded-xl group/icon">
+                       class="inline-flex panda-link items-center justify-center gap-2 outline-none border focus-visible:ring-2 focus-visible:ring-offset-2 bg-stone-100  hover:bg-stone-300 active:bg-neutral-5 text-neutral-11 border-neutral-6 focus-visible:ring-neutral-8 focus-visible:ring-offset-neutral-1 w-8 h-8 text-base font-medium rounded-xl group/icon">
                         <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                              stroke-linejoin="round" aria-label="Open"
                              class="transition text-neutral-10 group-hover:text-primary-11 group-focus-visible/icon:text-primary-11"
@@ -106,7 +106,7 @@ const {Content} = await render(content);
                             <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
                         </svg>
                     </a></li>
-                <li class="group flex items-center justify-between px-4 py-3 bg-neutral-2 hover:bg-stone-200  outline-none border border-neutral-4 hover:border-neutral-6 rounded-3xl focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-7 focus-visible:ring-offset-neutral-1">
+                <li class="group flex items-center justify-between px-4 py-3 bg-stone-100 hover:bg-stone-200  outline-none border border-neutral-4 hover:border-neutral-6 rounded-3xl focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-7 focus-visible:ring-offset-neutral-1">
                     <div class="flex flex-row items-stretch gap-5 pl-2">
                         <div class="flex items-center justify-center">
                             <svg fill="currentColor"
@@ -125,7 +125,7 @@ const {Content} = await render(content);
                     </div>
                     <a type="button" role="button" href="https://github.com/yuhangch/astro-theme-panda" target="_blank"
                        aria-label="Open"
-                       class="inline-flex panda-link items-center justify-center gap-2 outline-none border focus-visible:ring-2 focus-visible:ring-offset-2 bg-stone-100  hover:bg-neutral-4 active:bg-neutral-5 text-neutral-11 border-neutral-6 focus-visible:ring-neutral-8 focus-visible:ring-offset-neutral-1 w-8 h-8 text-base font-medium rounded-xl group/icon">
+                       class="inline-flex panda-link items-center justify-center gap-2 outline-none border focus-visible:ring-2 focus-visible:ring-offset-2 bg-stone-100  hover:bg-stone-300 active:bg-neutral-5 text-neutral-11 border-neutral-6 focus-visible:ring-neutral-8 focus-visible:ring-offset-neutral-1 w-8 h-8 text-base font-medium rounded-xl group/icon">
                         <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                              stroke-linejoin="round" aria-label="Open"
                              class="transition text-neutral-10 group-hover:text-primary-11 group-focus-visible/icon:text-primary-11"
@@ -141,7 +141,7 @@ const {Content} = await render(content);
         <div>
             <div><h2 class="font-medium text-xl mb-3">Stacks</h2>
                 <ul class="grid grid-cols-2 gap-3 p-1">
-                    <li class="group flex items-center justify-between px-4 py-3 bg-neutral-2 hover:bg-neutral-3 outline-none border border-neutral-4 hover:border-neutral-6 rounded-3xl focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-7 focus-visible:ring-offset-neutral-1">
+                    <li class="group flex items-center justify-between px-4 py-3 bg-stone-100 hover:bg-stone-200 outline-none border border-neutral-4 hover:border-neutral-6 rounded-3xl focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-7 focus-visible:ring-offset-neutral-1">
                         <div class="flex flex-row items-stretch gap-5 pl-2">
                             <div class="flex items-center justify-center">
                                 <svg fill="currentColor"
@@ -160,7 +160,7 @@ const {Content} = await render(content);
                             </div>
                         </div>
                         <a type="button" role="button" href="https://www.vim.org/" target="_blank" aria-label="Open"
-                           class="inline-flex panda-link items-center justify-center gap-2 outline-none border focus-visible:ring-2 focus-visible:ring-offset-2 bg-neutral-3 hover:bg-neutral-4 active:bg-neutral-5 text-neutral-11 border-neutral-6 focus-visible:ring-neutral-8 focus-visible:ring-offset-neutral-1 w-8 h-8 text-base font-medium rounded-xl group/icon">
+                           class="inline-flex panda-link items-center justify-center gap-2 outline-none border focus-visible:ring-2 focus-visible:ring-offset-2 bg-stone-100 hover:bg-stone-300 active:bg-neutral-5 text-neutral-11 border-neutral-6 focus-visible:ring-neutral-8 focus-visible:ring-offset-neutral-1 w-8 h-8 text-base font-medium rounded-xl group/icon">
                             <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                  stroke-linejoin="round" aria-label="Open"
                                  class="transition text-neutral-10 group-hover:text-primary-11 group-focus-visible/icon:text-primary-11"
@@ -171,7 +171,7 @@ const {Content} = await render(content);
                                 <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
                             </svg>
                         </a></li>
-                    <li class="group flex items-center justify-between px-4 py-3 bg-neutral-2 hover:bg-neutral-3 outline-none border border-neutral-4 hover:border-neutral-6 rounded-3xl focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-7 focus-visible:ring-offset-neutral-1">
+                    <li class="group flex items-center justify-between px-4 py-3 bg-stone-100 hover:bg-stone-200 outline-none border border-neutral-4 hover:border-neutral-6 rounded-3xl focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-7 focus-visible:ring-offset-neutral-1">
                         <div class="flex flex-row items-stretch gap-5 pl-2">
                             <div class="flex items-center justify-center">
                                 <svg fill="currentColor"
@@ -190,7 +190,7 @@ const {Content} = await render(content);
                             </div>
                         </div>
                         <a type="button" role="button" href="https://obsidian.md/" target="_blank" aria-label="Open"
-                           class="inline-flex panda-link items-center justify-center gap-2 outline-none border focus-visible:ring-2 focus-visible:ring-offset-2 bg-neutral-3 hover:bg-neutral-4 active:bg-neutral-5 text-neutral-11 border-neutral-6 focus-visible:ring-neutral-8 focus-visible:ring-offset-neutral-1 w-8 h-8 text-base font-medium rounded-xl group/icon">
+                           class="inline-flex panda-link items-center justify-center gap-2 outline-none border focus-visible:ring-2 focus-visible:ring-offset-2 bg-stone-100 hover:bg-stone-300 active:bg-neutral-5 text-neutral-11 border-neutral-6 focus-visible:ring-neutral-8 focus-visible:ring-offset-neutral-1 w-8 h-8 text-base font-medium rounded-xl group/icon">
                             <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                  stroke-linejoin="round" aria-label="Open"
                                  class="transition text-neutral-10 group-hover:text-primary-11 group-focus-visible/icon:text-primary-11"
@@ -201,7 +201,7 @@ const {Content} = await render(content);
                                 <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
                             </svg>
                         </a></li>
-                    <li class="group flex items-center justify-between px-4 py-3 bg-neutral-2 hover:bg-neutral-3 outline-none border border-neutral-4 hover:border-neutral-6 rounded-3xl focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-7 focus-visible:ring-offset-neutral-1">
+                    <li class="group flex items-center justify-between px-4 py-3 bg-stone-100 hover:bg-stone-200 outline-none border border-neutral-4 hover:border-neutral-6 rounded-3xl focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-7 focus-visible:ring-offset-neutral-1">
                         <div class="flex flex-row items-stretch gap-5 pl-2">
                             <div class="flex items-center justify-center">
                                 <svg fill="currentColor"
@@ -220,7 +220,7 @@ const {Content} = await render(content);
                             </div>
                         </div>
                         <a type="button" role="button" href="https://astro.build" target="_blank" aria-label="Open"
-                           class="inline-flex panda-link items-center justify-center gap-2 outline-none border focus-visible:ring-2 focus-visible:ring-offset-2 bg-neutral-3 hover:bg-neutral-4 active:bg-neutral-5 text-neutral-11 border-neutral-6 focus-visible:ring-neutral-8 focus-visible:ring-offset-neutral-1 w-8 h-8 text-base font-medium rounded-xl group/icon">
+                           class="inline-flex panda-link items-center justify-center gap-2 outline-none border focus-visible:ring-2 focus-visible:ring-offset-2 bg-stone-100 hover:bg-stone-300 active:bg-neutral-5 text-neutral-11 border-neutral-6 focus-visible:ring-neutral-8 focus-visible:ring-offset-neutral-1 w-8 h-8 text-base font-medium rounded-xl group/icon">
                             <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                  stroke-linejoin="round" aria-label="Open"
                                  class="transition text-neutral-10 group-hover:text-primary-11 group-focus-visible/icon:text-primary-11"
@@ -231,7 +231,7 @@ const {Content} = await render(content);
                                 <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
                             </svg>
                         </a></li>
-                    <li class="group flex items-center justify-between px-4 py-3 bg-neutral-2 hover:bg-neutral-3 outline-none border border-neutral-4 hover:border-neutral-6 rounded-3xl focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-7 focus-visible:ring-offset-neutral-1">
+                    <li class="group flex items-center justify-between px-4 py-3 bg-stone-100 hover:bg-stone-200 outline-none border border-neutral-4 hover:border-neutral-6 rounded-3xl focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-7 focus-visible:ring-offset-neutral-1">
                         <div class="flex flex-row items-stretch gap-5 pl-2">
                             <div class="flex items-center justify-center">
                                 <svg fill="currentColor"
@@ -251,7 +251,7 @@ const {Content} = await render(content);
                         </div>
                         <a type="button" role="button" href="https://dotnet.microsoft.com/" target="_blank"
                            aria-label="Open"
-                           class="inline-flex panda-link items-center justify-center gap-2 outline-none border focus-visible:ring-2 focus-visible:ring-offset-2 bg-neutral-3 hover:bg-neutral-4 active:bg-neutral-5 text-neutral-11 border-neutral-6 focus-visible:ring-neutral-8 focus-visible:ring-offset-neutral-1 w-8 h-8 text-base font-medium rounded-xl group/icon">
+                           class="inline-flex panda-link items-center justify-center gap-2 outline-none border focus-visible:ring-2 focus-visible:ring-offset-2 bg-stone-100 hover:bg-stone-300 active:bg-neutral-5 text-neutral-11 border-neutral-6 focus-visible:ring-neutral-8 focus-visible:ring-offset-neutral-1 w-8 h-8 text-base font-medium rounded-xl group/icon">
                             <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                  stroke-linejoin="round" aria-label="Open"
                                  class="transition text-neutral-10 group-hover:text-primary-11 group-focus-visible/icon:text-primary-11"
@@ -262,7 +262,7 @@ const {Content} = await render(content);
                                 <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
                             </svg>
                         </a></li>
-                    <li class="group flex items-center justify-between px-4 py-3 bg-neutral-2 hover:bg-neutral-3 outline-none border border-neutral-4 hover:border-neutral-6 rounded-3xl focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-7 focus-visible:ring-offset-neutral-1">
+                    <li class="group flex items-center justify-between px-4 py-3 bg-stone-100 hover:bg-stone-200 outline-none border border-neutral-4 hover:border-neutral-6 rounded-3xl focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-7 focus-visible:ring-offset-neutral-1">
                         <div class="flex flex-row items-stretch gap-5 pl-2">
                             <div class="flex items-center justify-center">
                                 <svg fill="currentColor"
@@ -281,7 +281,7 @@ const {Content} = await render(content);
                             </div>
                         </div>
                         <a type="button" role="button" href="https://www.debian.org/" target="_blank" aria-label="Open"
-                           class="inline-flex panda-link items-center justify-center gap-2 outline-none border focus-visible:ring-2 focus-visible:ring-offset-2 bg-neutral-3 hover:bg-neutral-4 active:bg-neutral-5 text-neutral-11 border-neutral-6 focus-visible:ring-neutral-8 focus-visible:ring-offset-neutral-1 w-8 h-8 text-base font-medium rounded-xl group/icon">
+                           class="inline-flex panda-link items-center justify-center gap-2 outline-none border focus-visible:ring-2 focus-visible:ring-offset-2 bg-stone-100 hover:bg-stone-300 active:bg-neutral-5 text-neutral-11 border-neutral-6 focus-visible:ring-neutral-8 focus-visible:ring-offset-neutral-1 w-8 h-8 text-base font-medium rounded-xl group/icon">
                             <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                  stroke-linejoin="round" aria-label="Open"
                                  class="transition text-neutral-10 group-hover:text-primary-11 group-focus-visible/icon:text-primary-11"
@@ -292,7 +292,7 @@ const {Content} = await render(content);
                                 <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
                             </svg>
                         </a></li>
-                    <li class="group flex items-center justify-between px-4 py-3 bg-neutral-2 hover:bg-neutral-3 outline-none border border-neutral-4 hover:border-neutral-6 rounded-3xl focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-7 focus-visible:ring-offset-neutral-1">
+                    <li class="group flex items-center justify-between px-4 py-3 bg-stone-100 hover:bg-stone-200 outline-none border border-neutral-4 hover:border-neutral-6 rounded-3xl focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-7 focus-visible:ring-offset-neutral-1">
                         <div class="flex flex-row items-stretch gap-5 pl-2">
                             <div class="flex items-center justify-center">
                                 <svg fill="currentColor"
@@ -312,7 +312,7 @@ const {Content} = await render(content);
                         </div>
                         <a type="button" role="button" href="https://www.thinkpad.com/" target="_blank"
                            aria-label="Open"
-                           class="inline-flex panda-link items-center justify-center gap-2 outline-none border focus-visible:ring-2 focus-visible:ring-offset-2 bg-neutral-3 hover:bg-neutral-4 active:bg-neutral-5 text-neutral-11 border-neutral-6 focus-visible:ring-neutral-8 focus-visible:ring-offset-neutral-1 w-8 h-8 text-base font-medium rounded-xl group/icon">
+                           class="inline-flex panda-link items-center justify-center gap-2 outline-none border focus-visible:ring-2 focus-visible:ring-offset-2 bg-stone-100 hover:bg-stone-300 active:bg-neutral-5 text-neutral-11 border-neutral-6 focus-visible:ring-neutral-8 focus-visible:ring-offset-neutral-1 w-8 h-8 text-base font-medium rounded-xl group/icon">
                             <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                  stroke-linejoin="round" aria-label="Open"
                                  class="transition text-neutral-10 group-hover:text-primary-11 group-focus-visible/icon:text-primary-11"

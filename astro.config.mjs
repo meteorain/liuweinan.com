@@ -24,12 +24,13 @@ export default defineConfig({
                 API_SECRET: envField.string({ context: "server", access: "secret" }),
             }
         },
+        serverIslands: true,
     },
 
     prefetch: true,
     site: 'https://yuhang.ch',
     scopedStyleStrategy: 'class',
-    trailingSlash: 'always',
+    // trailingSlash: 'always',
     build: {
         format: 'directory'
     },
