@@ -5,7 +5,6 @@ import BackLater from '@components/BackLater.astro'
 import {useLocale} from '@utils/locale'
 import {momentsLoader} from "../loaders/moments";
 const {path, t, locale} = useLocale(Astro.url)
-const URL = import.meta.env.BLOG_API + '/moments'
 const {page} = Astro.props
 
 interface PageURL {

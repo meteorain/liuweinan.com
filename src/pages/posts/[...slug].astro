@@ -6,11 +6,10 @@ import {formatDateYMD} from "@utils/format";
 import {getCollection,getEntry, render} from 'astro:content';
 export const prerender = true;
 const {path, t, locale} = useLocale(Astro.url)
-let {slug,title } = Astro.params
-if (!title) title = slug;
+let {slug } = Astro.params
 const post = await getEntry('posts', slug);
 
-const {categories,tags,pubDate,lastModified} = post.data;
+const {categories,title,tags,pubDate,lastModified} = post.data;
 const {Content} = await render(post);
 export async function getStaticPaths() {
     const notes = await getCollection('posts',
@@ -21,7 +20,6 @@ export async function getStaticPaths() {
         return {
             params: {
                 slug: note.slug,
-                title: note.data.title
             },
         };
     });

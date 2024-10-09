@@ -29,7 +29,7 @@ export default defineConfig({
     prefetch: true,
     site: 'https://yuhang.ch',
     scopedStyleStrategy: 'class',
-    trailingSlash: 'always',
+    // trailingSlash: 'always',
     build: {
         format: 'directory'
     },
@@ -55,6 +55,6 @@ export default defineConfig({
         }),
     ],output: 'server',
     adapter: vercel({
-        functionPerRoute: false
+        // functionPerRoute: false
     })
 });
