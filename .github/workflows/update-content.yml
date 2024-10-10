@@ -25,5 +25,9 @@ jobs:
         git commit -m "Update submodule to latest version" || echo "No changes to commit"
         
     - name: Push updated submodule
+      env:
+        GITHUB_TOKEN: ${{ secrets.CONTENT_DEPLOY_TOKEN }}  # Use the token from secrets
       run: |
-        git push origin main
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git push https://x-access-token:${GITHUB_TOKEN}@github.com/yuhangch/yuhang.ch.git HEAD:main
