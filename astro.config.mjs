@@ -40,7 +40,10 @@ export default defineConfig({
                 permalinks: getPermalinks("src/content/"),
                 pathFormat: "obsidian-short",
                 hrefTemplate: (permalink) => {
-                    return  permalink.replaceAll("src/content/", "/") + '/';
+                    const href =  permalink.replaceAll("src/content/", "/") + '/';
+                    if (!href.startsWith('/'))
+                        return '/' + href;
+                    return href;
                 }
             }]
         ]
