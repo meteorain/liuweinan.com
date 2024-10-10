@@ -1,0 +1,24 @@
+name: Update Submodule and Deploy to Vercel
+
+on:
+  repository_dispatch:
+    types: [content_update]
+
+jobs:
+  update_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout main repository
+      uses: actions/checkout@v2
+      with:
+        submodules: true  
+
+    - name: Update submodule to latest commit
+      run: |
+        git submodule update --remote --merge  
+        git add .
+        git commit -m "Update submodule to latest version" || echo "No changes to commit" 
+
+    - name: Push updated submodule
+      run: |
+        git push origin main
