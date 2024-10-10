@@ -16,6 +16,8 @@ jobs:
     - name: Update submodule to latest commit
       run: |
         # Fetch the latest commits from the submodule
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
         cd src/content
         git fetch
         git checkout main  # Replace 'main' with the branch you want to track
@@ -28,6 +30,4 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.CONTENT_DEPLOY_TOKEN }}  # Use the token from secrets
       run: |
-        git config --global user.name "GitHub Actions"
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git push https://x-access-token:${GITHUB_TOKEN}@github.com/yuhangch/yuhang.ch.git HEAD:main
