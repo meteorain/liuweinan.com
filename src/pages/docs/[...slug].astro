@@ -4,6 +4,9 @@ import {getCollection} from "astro:content";
 
 import {getEntry, render} from 'astro:content';
 
+import AnimationStyle from "astro-vtbot/animations/AnimationStyle.astro";
+import {customSwing} from "astro-vtbot/animations/swing";
+import {swingOption} from "@utils/transition";
 import {useLocale} from '@utils/locale'
 const {path, t} = useLocale(Astro.url)
 const {slug} = Astro.params
@@ -11,6 +14,8 @@ const note = await getEntry('docs', slug);
 if (!note) {
     return new Response(null, {status: 404});
 }
+const swing1Scope = customSwing('swing1',swingOption);
+
 const {title} = note.data
 const {Content} = await render(note);
 export const prerender = true;
@@ -29,38 +34,40 @@ export async function getStaticPaths() {
 
 <Layout title={title} navbar={true}>
 
-    <div class="mt-6">
+    <main data-astro-transition-scope={swing1Scope}>
 
-    </div>
-    <div class="mt-6">
-        <h1 class="text-4xl">{title}</h1>
-        <div class="flex sm:flex-row flex-col rounded-lg bg-stone-100 dark:bg-stone-600 p-2 px-4">
+        <AnimationStyle name="swing1"/>
 
-            <a rel="prefetch">
-                {
+        <div class="mt-6">
+            <h1 class="text-4xl">{title}</h1>
+            <div class="flex sm:flex-row flex-col rounded-lg bg-stone-100 dark:bg-stone-600 p-2 px-4">
 
-                    <span>
+                <a rel="prefetch">
+                    {
+
+                        <span>
                                     <a class="panda-link" href={`/docs/`} rel="prefetch">home </a>
                         <span>&nbsp;</span>
                                 </span>
-                }
-                {
-                    slug.split('/').map((part, index, array) => {
-                        const url = array.slice(0, index + 1).join('/');
-                        return (
-                                <span class="mr-2">
+                    }
+                    {
+                        slug.split('/').map((part, index, array) => {
+                            const url = array.slice(0, index + 1).join('/');
+                            return (
+                                    <span class="mr-2">
                                     <a class="panda-link" href={`/docs/${url}/`} rel="prefetch">
                                        <span>/</span>
                                         {part}</a>
                                 </span>
-                        );
-                    })
-                }
-            </a>
-            <span class="ml-auto mr-4 text-sm font-normal"> {t('post.post_at')} </span>
+                            );
+                        })
+                    }
+                </a>
+                <span class="ml-auto mr-4 text-sm font-normal"> {t('post.post_at')} </span>
+            </div>
         </div>
-    </div>
-    <article class="prose dark:prose-invert prose-stone max-w-prose mt-6">
-        <Content/>
-    </article>
+        <article class="prose dark:prose-invert prose-stone max-w-prose mt-6">
+            <Content/>
+        </article>
+    </main>
 </Layout>

@@ -1,6 +1,7 @@
 ---
 import {useLocale} from '@utils/locale'
 
+
 const {url} = Astro
 const {path, t, locale} = useLocale(url)
 
@@ -16,9 +17,10 @@ const items = [
 function isRootPage() {
     return !items.some((item) => url.toString().includes(item))
 }
+
 ---
 
-<nav class={url.toString().includes('/posts/') ? 'hidden' : ''}>
+<nav class={url.toString().includes('/posts/') ? 'hidden' : ''} >
     <a
             rel="prefetch"
             href={path('/')}

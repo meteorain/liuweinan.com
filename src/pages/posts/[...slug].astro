@@ -3,12 +3,12 @@ import Layout from '@layouts/Layout.astro'
 import {useLocale} from '@utils/locale'
 import {formatDateYMD} from "@utils/format";
 
+
 import {getCollection, getEntry, render} from 'astro:content';
 export const prerender = true;
 const {path, t, locale} = useLocale(Astro.url)
 let {slug} = Astro.params
 const post = await getEntry('posts', slug);
-
 
 
 const {categories, title, tags, pubDate, lastModified, notificationTypes} = post.data;
@@ -33,7 +33,7 @@ export async function getStaticPaths() {
 
 <Layout title={title} navbar={false}>
     <style is:inline>
-        
+
         .notification p {
             margin-top: 0;
             margin-bottom: 0;
@@ -91,7 +91,9 @@ export async function getStaticPaths() {
         }
 
     </style>
-    <a rel="prefetch" class="panda-link mt-6" href={path('/')}>{t('post.back')}</a>
+
+    <a rel="prefetch" class="panda-link mt-6" href={path('/')} transition:animate="none">{t('post.back')}</a>
+    <main transition:animate="fade">
 
     <div class="mt-6">
         <h1 class="text-4xl">{title}</h1>
@@ -123,6 +125,7 @@ export async function getStaticPaths() {
                     </div>
         )
     }
+    </main>
 </Layout>
 
 

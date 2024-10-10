@@ -4,9 +4,7 @@ import keys from "lodash/keys";
 import {DateTime} from "luxon";
 
 export const getAllPosts = async (locale: string, tag: string, category: string) => {
-    const allPosts = await getCollection('posts',{
-        include: ['slug', 'data']
-    })
+    const allPosts = await getCollection('posts')
     const filteredPosts = allPosts
         .map( i=>({
             ...i.data,
