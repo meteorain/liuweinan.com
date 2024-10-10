@@ -8,8 +8,6 @@ import {useLocale} from '@utils/locale'
 const {path, t} = useLocale(Astro.url)
 const {slug} = Astro.params
 const note = await getEntry('docs', slug);
-const allNotes = await getCollection('docs');
-console.log(allNotes.find(i => i.slug === slug))
 if (!note) {
     return new Response(null, {status: 404});
 }

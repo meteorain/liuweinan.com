@@ -35,15 +35,18 @@ export default defineConfig({
         format: 'directory'
     },
     markdown:{
-        // remarkPlugins: [
-        //     [remarkWikiLink, {
-        //         permalinks: getPermalinks("src/content/"),
-        //         pathFormat: "obsidian-short",
-        //         hrefTemplate: (permalink) => {
-        //                 return '//////' + permalink;
-        //         }
-        //     }]
-        // ]
+        remarkPlugins: [
+            [remarkWikiLink, {
+                permalinks: getPermalinks("src/content/"),
+                pathFormat: "obsidian-short",
+                hrefTemplate: (permalink) => {
+                    const href =  permalink.replaceAll("src/content/", "/") + '/';
+                    if (!href.startsWith('/'))
+                        return '/' + href;
+                    return href;
+                }
+            }]
+        ]
     },
 
     integrations: [
