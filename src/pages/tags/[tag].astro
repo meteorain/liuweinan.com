@@ -1,0 +1,32 @@
+---
+import PostsLayout from '@layouts/PostsLayout.astro'
+import {getCollection} from "astro:content";
+export const prerender = true
+
+
+
+export async function getStaticPaths() {
+    const posts = await getCollection('posts', {include: ['tags']});
+    const tags = [
+        ...new Set(
+            posts
+                .filter((i) => i.data.tags)
+                .map((i) => i.data.tags)
+                .flat()
+        )
+    ]
+    return tags.map((tag) => {
+        return {
+            params: {
+                tag: tag.replace(/\s/g, '-')
+            },
+            props: {
+                tag
+            }
+        }
+    })
+}
+const { tag } = Astro.props
+---
+
+<PostsLayout tag={tag} category="" />

@@ -7,10 +7,15 @@ import remarkWikiLink from "./src/plugins/wiki-link/index.ts";
 import {getPermalinks} from "./src/plugins/wiki-link/getPermalinks.ts";
 import yaml from '@rollup/plugin-yaml'
 import expressiveCode from 'astro-expressive-code'
-import { ExpressiveCodeTheme } from '@expressive-code/core'
 
 import nightOwlDark from './src/styles/expressive-code/night-owl-dark.json'
 import nightOwlLight from './src/styles/expressive-code/night-owl-light.json'
+
+// remark plugins
+import {remarkModifiedTime} from './src/plugins/remark-modified-time.mjs'
+import remarkDirective from 'remark-directive'
+import {RDNotePlugin,RDBilibiliPlugin} from "./src/plugins/remark-directive.mjs";
+
 
 // https://astro.build/config
 export default defineConfig({
@@ -35,7 +40,13 @@ export default defineConfig({
         format: 'directory'
     },
     markdown:{
+
+        syntaxHighlight: false,
+        remarkRehype: {
+            footnoteLabel: ' '
+        },
         remarkPlugins: [
+            remarkDirective,RDNotePlugin,RDBilibiliPlugin, remarkModifiedTime,
             [remarkWikiLink, {
                 permalinks: getPermalinks("src/content/"),
                 pathFormat: "obsidian-short",

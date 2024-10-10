@@ -11,7 +11,7 @@ const {path, t, locale} = useLocale(Astro.url)
 let {tag, category} = Astro.props
 const {posts, tags} = await getAllPosts(locale, tag, category)
 
-function getTitle(post:any) {
+function getTitle(post: any) {
     if (!locale || locale === 'zh') return post.title
     const enTitle = post['title-en']
     if (!enTitle) return post.title

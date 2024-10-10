@@ -4,20 +4,22 @@ import keys from "lodash/keys";
 import {DateTime} from "luxon";
 
 export const getAllPosts = async (locale: string, tag: string, category: string) => {
-    const allPosts = await getCollection('posts')
+    const allPosts = await getCollection('posts',{
+        include: ['slug', 'data']
+    })
     const filteredPosts = allPosts
         .map( i=>({
             ...i.data,
             url : `/posts/${i.slug}/`
         }))
-        .filter((frontmatter) => {
-            if (!frontmatter) return false
+        .filter((d) => {
+            if (!d) return false
             if (tag) {
-                return frontmatter.pubDate && !frontmatter.isDraft && frontmatter.tags && frontmatter.tags.includes(tag)
+                return d.pubDate && !d.isDraft && d.tags && d.tags.includes(tag)
             } else if (category) {
-                return frontmatter.pubDate && !frontmatter.isDraft && frontmatter.categories && frontmatter.categories.includes(category)
+                return d.pubDate && !d.isDraft && d.categories && d.categories.includes(category)
             }
-            return !frontmatter.isDraft && frontmatter.pubDate
+            return !d.isDraft && d.pubDate
         })
         .sort((a, b) =>{
             return DateTime.fromJSDate(b.pubDate).toMillis() - DateTime.fromJSDate(a.pubDate).toMillis()

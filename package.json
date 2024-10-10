@@ -11,13 +11,15 @@
   },
   "dependencies": {
     "@astrojs/check": "latest",
+    "@astrojs/rss": "^4.0.7",
     "@astrojs/vercel": "^7.8.1",
     "astro": "latest",
     "astro-expressive-code": "^0.37.0",
     "lodash": "^4.17.21",
     "luxon": "^3.5.0",
     "markdown-it": "^14.1.0",
-    "typescript": "^5.6.2"
+    "remark-directive": "^3.0.0",
+    "typescript": "^5.6.3"
   },
   "devDependencies": {
     "@expressive-code/core": "^0.37.0",
@@ -25,9 +27,11 @@
     "@types/lodash": "^4.17.10",
     "@types/luxon": "^3.4.2",
     "@types/markdown-it": "^14.1.2",
-    "@types/node": "^22.7.4",
+    "@types/node": "^22.7.5",
+    "hastscript": "^9.0.0",
     "mdast-util-wiki-link": "^0.1.2",
     "micromark-util-symbol": "^2.0.0",
+    "unist-util-visit": "^5.0.0",
     "unocss": "latest"
   }
 }
