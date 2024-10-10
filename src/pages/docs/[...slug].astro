@@ -6,9 +6,15 @@ import {getEntry, render} from 'astro:content';
 
 import {useLocale} from '@utils/locale'
 const {path, t} = useLocale(Astro.url)
-const {slug, title} = Astro.params
-const product = await getEntry('docs', slug);
-const {Content} = await render(product);
+const {slug} = Astro.params
+const note = await getEntry('docs', slug);
+const allNotes = await getCollection('docs');
+console.log(allNotes.find(i => i.slug === slug))
+if (!note) {
+    return new Response(null, {status: 404});
+}
+const {title} = note.data
+const {Content} = await render(note);
 export const prerender = true;
 export async function getStaticPaths() {
     const docs = await getCollection('docs');
@@ -16,7 +22,6 @@ export async function getStaticPaths() {
         return {
             params: {
                 slug: note.slug,
-                title: note.data.title
             },
         };
     });

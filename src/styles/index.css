@@ -120,7 +120,7 @@ a.animated.active:after {
  */
 .prose :where(a):not(:where([data-footnote-ref], [data-footnote-backref], .not-prose, .not-prose *)) {
     @apply underline px-1
-    underline-offset-4;
+    underline-offset-4
     hover: underline;
 }
 
@@ -129,6 +129,21 @@ a.animated.active:after {
 .prose :where(a):not(:where([data-footnote-ref], [data-footnote-backref], .not-prose, .not-prose *)):not(.internal) {
     @apply after:content-['↗'] after:ml-0;
 }
+
+/*prose link add ' [[ link ]] ' when class have 'internal'*/
+
+.prose :where(a):not(:where([data-footnote-ref], [data-footnote-backref], .not-prose, .not-prose *)):where(.internal)::after {
+    content: ']';
+    margin-right: 0;
+    margin-left: 0;
+    @apply no-underline;
+}
+
+.prose :where(a):not(:where([data-footnote-ref], [data-footnote-backref], .not-prose, .not-prose *)):where(.internal)::before {
+    content: '[';
+    margin-right: 0;
+}
+
 
 /*
  * blockquote

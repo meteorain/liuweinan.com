@@ -1,8 +1,20 @@
 ---
 import {useLocale} from "@utils/locale";
 import Layout from '@layouts/Layout.astro';
+import {getCollection} from "astro:content";
 
 export const prerender = true;
+
+const clips = await getCollection('docs',(i)=>{
+    return i.slug.includes('read/clips/')
+})
+const clipsList = clips.map((clip) => {
+    return {
+            link: clip.slug,
+            label: clip.data.title
+    };
+});
+
 
 const {path, t, locale} = useLocale(Astro.url)
 
@@ -10,6 +22,7 @@ const menubar = [
     {
         label: 'Tech Notes',
         collapsed: true,
+        link: '/tech/',
 
         items: [
             // Each item here is one entry in the navigation menu.
@@ -21,21 +34,19 @@ const menubar = [
     },
     {
         label: 'Read N Write',
+        link : '/read/',
         collapsed: true,
         items: [
             // Each item here is one entry in the navigation menu.
             {
                 label: 'Clips',
-                collapsed: true,
-                autogenerate: {
-                    directory: '/read/clips/',
-                }
-            },
-            {label: 'Nobody', link: '/read/nobody/'},
+                link: '/read/clips/',
+            }
         ],
     },
     {
         label: 'Haphazard Living',
+        link : '/life/',
         collapsed: true,
         items: [
             // Each item here is one entry in the navigation menu.
@@ -47,6 +58,7 @@ const menubar = [
     },
     {
         label: 'Have Fun',
+        link : '/have-fun/',
         collapsed: true,
         items: [
             // Each item here is one entry in the navigation menu.
@@ -65,7 +77,7 @@ const menubar = [
 ]
 ---
 
-<Layout title={t('nav.docs')} navbar={false}>
+<Layout title={t('nav.docs')} navbar={true}>
     <main class="pl-0 mt-8">
         <ul style="padding-inline-start: 0;">
             {

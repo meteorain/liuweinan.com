@@ -25,18 +25,9 @@ const fullTitle = `${title} - ${t('layout.title')}`
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width" />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon">
         <meta name="generator" content={Astro.generator} />
-        <script
-            type="text/partytown"
-            async
-            src="https://analytics.us.umami.is/script.js"
-            data-website-id="3f16bfed-629c-4b28-af80-4c5b97bbf16d"></script>
         <title>{fullTitle}</title>
-        <style>
-            @view-transition {
-                navigation: auto; /* enabled! */
-            }
-         </style>
     </head>
     <body class="max-width dark:bg-stone-700">
         <Header />
