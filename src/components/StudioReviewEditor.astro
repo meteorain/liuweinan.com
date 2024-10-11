@@ -2,7 +2,7 @@
 
 import {API_URL,API_SECRET} from 'astro:env/server'
 
-const apiUrl = API_URL + '/moments'
+const apiUrl = API_URL
 const secret = API_SECRET
 ---
 <div id="review-editor" data-api={apiUrl} data-api-secret={secret}>
@@ -150,17 +150,19 @@ const secret = API_SECRET
 
     }
 
-    document.getElementById('item-selector').addEventListener('change', async (e) => {
-        const id = e.target.value
-        const type = e.target.options[e.target.selectedIndex].innerText.split('[')[1].split(']')[0].toLowerCase()
+    document.getElementById('item-selector').addEventListener('change', async (e: Event) => {
+        const target = e.target as HTMLSelectElement;
+        const id = target.value
+        const type = target.options[target.selectedIndex].innerText.split('[')[1].split(']')[0].toLowerCase()
         const entity = await findEntityByTMDBId(id, type)
         fillFields(entity)
     })
     document.getElementById('btn-search').addEventListener('click', async () => {
-        const keyword = document.getElementById('search').value
+        const target = document.getElementById('search') as HTMLInputElement
+        const keyword = target.value
         const results = await search(keyword)
         // add options to select
-        const select = document.getElementById('item-selector')
+        const select = document.getElementById('item-selector') as HTMLSelectElement
         select.innerHTML = ''
         results.forEach(({id, title, name, media_type, release_date, first_air_date}) => {
             const _title = title ? title : name
@@ -177,23 +179,46 @@ const secret = API_SECRET
             fillFields(e)
         }
     })
+    const setValue = (id, value) => {
+        const el = document.getElementById(id) as HTMLInputElement
+        if (el) {
+            el.value = value
+        }
+    }
+    const getValue = (id) => {
+        const el = document.getElementById(id) as HTMLInputElement
+        if (el) {
+            return el.value
+        }
+    }
 
     function fillFields(entity) {
         // fill entity to form
-        document.getElementById('id').value = entity.imdb_id
-        document.getElementById('title').value = entity.title
-        document.getElementById('title_en').value = entity.title_en
-        document.getElementById('media-type').value = entity.media_type
-        document.getElementById('rating').value = entity.imdb_rating
+
+
+        // document.getElementById('id').value = entity.imdb_id
+        //  document.getElementById('title').value = entity.title
+        //  document.getElementById('title_en').value = entity.title_en
+        //  document.getElementById('media-type').value = entity.media_type
+        //  document.getElementById('rating').value = entity.imdb_rating
+        //  entity = entity
+        //  // clean content
+        //  document.getElementById('content').value = ''
+
+        setValue('id', entity.imdb_id)
+        setValue('title', entity.title)
+        setValue('title_en', entity.title_en)
+        setValue('media-type', entity.media_type)
+        setValue('rating', entity.imdb_rating)
         entity = entity
         // clean content
-        document.getElementById('content').value = ''
+        setValue('content', '')
 
     }
 
 
     document.getElementById("find").addEventListener('click', async () => {
-        const imdb_id = document.getElementById('id').value
+        const imdb_id = (document.getElementById('id')as HTMLInputElement).value
         const entity = await findEntity(imdb_id)
         fillFields(entity)
     })
@@ -203,25 +228,34 @@ const secret = API_SECRET
         //imdb_id	title	title_en	media_type	imdb_rating	rating	release_date	rated_date	moments_id
         return {
             moments_id: null,
-            imdb_id: document.getElementById('id').value || entity.imdb_id,
+            // imdb_id: document.getElementById('id').value || entity.imdb_id,
+            imdb_id: getValue('id') || entity.imdb_id ,
             imdb_rating: entity ? entity.imdb_rating : null,
             rated_date: new Date().toISOString(),
             release_date: entity ? entity.release_date : null,
-            title: document.getElementById('title').value,
-            title_en: document.getElementById('title_en').value,
-            media_type: document.getElementById('media-type').value,
-            rating: document.getElementById('rating').value,
-            content: document.getElementById('content').value
+            // title: document.getElementById('title').value,
+            // title_en: document.getElementById('title_en').value,
+            // media_type: document.getElementById('media-type').value,
+            // rating: document.getElementById('rating').value,
+            // content: document.getElementById('content').value
+
+            title: getValue('title'),
+            title_en: getValue('title_en'),
+            media_type: getValue('media-type'),
+            rating: getValue('rating'),
+            content: getValue('content')
+
         }
 
     }
     document.getElementById('submit').addEventListener('click', async () => {
         try {
-            let lastRowId = document.getElementById('moment-id').value
+            // let lastRowId = document.getElementById('moment-id').value
+            let lastRowId = getValue('moment-id')
             if (!lastRowId){
                 const tag = "影评"
                 // handle tag change
-                const content = document.getElementById('content').value
+                const content = getValue('content')
                 // send data to api
                 const momentResponse = await fetch(momentApiUrl, {
                     method: 'POST',
