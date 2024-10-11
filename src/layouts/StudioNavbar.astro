@@ -1,0 +1,28 @@
+---
+import {useLocale} from '@utils/locale'
+
+const {url} = Astro
+const {path, t, locale} = useLocale(url)
+
+const items = [
+    'moments',
+    'reviews',
+]
+const routePath = (item) => item === 'moments' ? path("/studio") : path(`/studio/${item}`)
+const isActive = (item) => (url.toString().endsWith("studio/") && item === 'moments') || url.toString().includes(item) ? 'active' : ''
+---
+
+<nav transition:animate="none">
+    {
+        items.map((item) => {
+            return (
+                    <a
+                            rel="prefetch"
+                            href={routePath(item)}
+                            class="panda-link mr-4 animated hover:no-underline"
+                            class:list={isActive(item)}
+                    >{t(`nav.${item}`)}</a>
+            )
+        })
+    }
+</nav>

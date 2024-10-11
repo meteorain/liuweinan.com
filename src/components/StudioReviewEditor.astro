@@ -1,0 +1,273 @@
+---
+
+import {API_URL,API_SECRET} from 'astro:env/server'
+
+const apiUrl = API_URL + '/moments'
+const secret = API_SECRET
+---
+<div id="review-editor" data-api={apiUrl} data-api-secret={secret}>
+    <div class="mt-4 flex flex-col">
+        <div class="">
+            <label for="id">
+                <h3>Search</h3>
+                <div class="flex flex-col">
+                    <div>
+
+                        <input id="search" class="mr-5"/>
+                        <button class="btn btn-primary " id="btn-search">Query</button>
+                    </div>
+                    <select id="item-selector" class="p-[2px] mt-4">
+                    </select>
+                </div>
+            </label>
+
+        </div>
+        <label for="btn-search">
+        </label>
+        <label for="id">
+            <h3>IMDB ID</h3>
+            <input id="id" class="mr-5"/>
+            <button id="find">Find</button>
+        </label>
+        <!-- when small screen flex-col -->
+        <div class="flex-row-or-col">
+            <label for="title">
+                <h3>Title</h3>
+                <input id="title" class="mr-5"/>
+            </label>
+            <label for="title_en">
+                <h3>English Title</h3>
+                <input id="title_en"/>
+            </label>
+        </div>
+        <div class="flex-row-or-col">
+            <label for="media-type">
+                <h3>Media type</h3>
+                <input id="media-type" class="mr-5"/>
+            </label>
+            <label for="rating">
+                <h3>Rating</h3>
+                <input id="rating"/>
+            </label>
+        </div>
+
+        <label for="moment-id">
+            <h3>Moment Id</h3>
+        </label>
+        <input  id="moment-id"></input>
+
+        <label for="content">
+            <h3>Content</h3>
+        </label>
+        <textarea rows="9" id="content"></textarea>
+
+    </div>
+    <div class="flex">
+        <span id="notification" class="mt-4"></span>
+        <button id="submit" class="mt-4 ml-auto">Submit</button>
+    </div>
+</div>
+
+<script>
+    // get api url from element
+    const apiUrl = document.getElementById('review-editor').getAttribute('data-api')
+    const momentApiUrl = apiUrl + '/moments'
+    const reviewApiUrl = apiUrl + '/reviews'
+    const tmdbApiUrl = apiUrl + '/tmdb'
+    const secret = document.getElementById('review-editor').getAttribute('data-api-secret')
+
+    function updateNotificationMessage(msg) {
+        document.getElementById('notification').innerText = msg
+    }
+
+    const options = {
+        method: 'GET',
+        headers: {
+            accept: 'application/json',
+            Authorization:
+                `Bearer ${secret}`
+        }
+    }
+
+    async function search(keyword) {
+        const url = `${tmdbApiUrl}/3/search/multi?query=${keyword}&language=zh`
+        const response = await fetch(url, options)
+        const {results} = await response.json()
+        if (results.length === 0) {
+            return []
+        }
+        return results.map(({id, release_date, first_air_date, title, name, media_type}) => ({
+            id,
+            release_date,
+            first_air_date,
+            title,
+            name,
+            media_type
+        }))
+    }
+
+    async function findEntityByTMDBId(id, type) {
+        const url = `${tmdbApiUrl}/3/${type}/${id}/external_ids?language=zh`
+        const response = await fetch(url, options)
+        const {imdb_id} = await response.json()
+        if (imdb_id)
+            return await findEntity(imdb_id)
+
+    }
+
+    async function findEntity(id) {
+        const url = (lang) => `${tmdbApiUrl}/3/find/${id}?external_source=imdb_id&language=${lang}`
+        const getResult = async (response) => {
+            const {movie_results, tv_results, tv_episode_results, tv_season_results} = await response.json()
+            return movie_results[0] || tv_results[0] || tv_episode_results[0] || tv_season_results[0]
+        }
+        const zhResp = await fetch(url('zh'), options)
+        const enResp = await fetch(url('en'), options)
+
+        var zhResult = await getResult(zhResp)
+        if (!zhResult) {
+            return
+        }
+        let {title,name, media_type, vote_average, release_date,first_air_date} = zhResult
+        title = title || name
+        release_date = release_date || first_air_date
+        let {title: title_en,name:name_en} = await getResult(enResp)
+        title_en = title_en || name_en
+        title = title.replace(/'/g, "''")
+        title_en = title_en.replace(/'/g, "''")
+
+        return {
+            imdb_id: id,
+            title,
+            title_en,
+            media_type,
+            imdb_rating: vote_average,
+            rating: -1,
+            release_date: release_date,
+            rated_date: null
+        }
+
+
+    }
+
+    document.getElementById('item-selector').addEventListener('change', async (e) => {
+        const id = e.target.value
+        const type = e.target.options[e.target.selectedIndex].innerText.split('[')[1].split(']')[0].toLowerCase()
+        const entity = await findEntityByTMDBId(id, type)
+        fillFields(entity)
+    })
+    document.getElementById('btn-search').addEventListener('click', async () => {
+        const keyword = document.getElementById('search').value
+        const results = await search(keyword)
+        // add options to select
+        const select = document.getElementById('item-selector')
+        select.innerHTML = ''
+        results.forEach(({id, title, name, media_type, release_date, first_air_date}) => {
+            const _title = title ? title : name
+            const _release_date = release_date ? release_date : first_air_date
+            const option = document.createElement('option')
+            option.value = id
+            option.innerText = `${_title}  [${media_type.toUpperCase()}]   ${_release_date}`
+            select.appendChild(option)
+        })
+        // auto select first item
+        select.selectedIndex = 0
+        if (results.length > 0) {
+            const e = await findEntityByTMDBId(results[0].id, results[0].media_type)
+            fillFields(e)
+        }
+    })
+
+    function fillFields(entity) {
+        // fill entity to form
+        document.getElementById('id').value = entity.imdb_id
+        document.getElementById('title').value = entity.title
+        document.getElementById('title_en').value = entity.title_en
+        document.getElementById('media-type').value = entity.media_type
+        document.getElementById('rating').value = entity.imdb_rating
+        entity = entity
+        // clean content
+        document.getElementById('content').value = ''
+
+    }
+
+
+    document.getElementById("find").addEventListener('click', async () => {
+        const imdb_id = document.getElementById('id').value
+        const entity = await findEntity(imdb_id)
+        fillFields(entity)
+    })
+    let entity = null;
+
+    function getEditedEntity() {
+        //imdb_id	title	title_en	media_type	imdb_rating	rating	release_date	rated_date	moments_id
+        return {
+            moments_id: null,
+            imdb_id: document.getElementById('id').value || entity.imdb_id,
+            imdb_rating: entity ? entity.imdb_rating : null,
+            rated_date: new Date().toISOString(),
+            release_date: entity ? entity.release_date : null,
+            title: document.getElementById('title').value,
+            title_en: document.getElementById('title_en').value,
+            media_type: document.getElementById('media-type').value,
+            rating: document.getElementById('rating').value,
+            content: document.getElementById('content').value
+        }
+
+    }
+    document.getElementById('submit').addEventListener('click', async () => {
+        try {
+            let lastRowId = document.getElementById('moment-id').value
+            if (!lastRowId){
+                const tag = "影评"
+                // handle tag change
+                const content = document.getElementById('content').value
+                // send data to api
+                const momentResponse = await fetch(momentApiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + secret
+                    },
+                    body: JSON.stringify({
+                        tags: tag,
+                        body: content
+                    })
+                })
+                lastRowId = await momentResponse.text()
+            }
+            if (!lastRowId) {
+                updateNotificationMessage('Failed to find or create moment')
+                return
+            }
+            const editedEntity = getEditedEntity()
+            editedEntity.moments_id = lastRowId as any
+            const {status} = await fetch(reviewApiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + secret
+                },
+                body: JSON.stringify(editedEntity)
+            })
+
+            if (status === 201) {
+                updateNotificationMessage(`Success to create review link moment ${lastRowId}`)
+            } else {
+                updateNotificationMessage('Failed to create review')
+            }
+        } catch (e) {
+            updateNotificationMessage(e.toString())
+        }
+    })
+</script>
+<style>
+    .flex-row-or-col {
+        /** flex row on large screen, flex col on small screen */
+        display: flex;
+        flex-direction: row;
+        @media (max-width: 640px) {
+            flex-direction: column;
+        }
+    }
+</style>
