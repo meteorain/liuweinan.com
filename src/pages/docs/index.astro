@@ -1,19 +1,21 @@
 ---
 import {useLocale} from "@utils/locale";
 import Layout from '@layouts/Layout.astro';
-import {getCollection} from "astro:content";
+import {getCollection, getEntry, render} from "astro:content";
 
 export const prerender = true;
 
-const clips = await getCollection('docs',(i)=>{
+const clips = await getCollection('docs', (i) => {
     return i.slug.includes('read/clips/')
 })
 const clipsList = clips.map((clip) => {
     return {
-            link: clip.slug,
-            label: clip.data.title
+        link: clip.slug,
+        label: clip.data.title
     };
 });
+const home = await getEntry('docs', 'home')
+const {Content} = await render(home);
 
 
 const {path, t, locale} = useLocale(Astro.url)
@@ -34,7 +36,7 @@ const menubar = [
     },
     {
         label: 'Read N Write',
-        link : '/read/',
+        link: '/read/',
         collapsed: true,
         items: [
             // Each item here is one entry in the navigation menu.
@@ -46,7 +48,7 @@ const menubar = [
     },
     {
         label: 'Haphazard Living',
-        link : '/life/',
+        link: '/life/',
         collapsed: true,
         items: [
             // Each item here is one entry in the navigation menu.
@@ -58,7 +60,7 @@ const menubar = [
     },
     {
         label: 'Have Fun',
-        link : '/have-fun/',
+        link: '/have-fun/',
         collapsed: true,
         items: [
             // Each item here is one entry in the navigation menu.
@@ -68,30 +70,32 @@ const menubar = [
             {label: 'Music', link: '/have-fun/music/'},
             {label: 'Gaming', link: '/have-fun/gaming/'},
         ],
-    },
+    }
 
-    {label: "What's O.P.E.N. ", link: '/'},
-    {label: 'Tech Stack', link: '/overview/tech-stack/'},
-    {label: 'Whois', link: '/overview/about-me/'},
 
 ]
 ---
 
 <Layout title={t('nav.docs')} navbar={true}>
     <main class="pl-0 mt-8">
+        <article class="prose dark:prose-invert prose-stone max-w-prose mt-6">
+            <Content/>
+            <div data-orientation="horizontal" role="separator" class="bg-stone-200 w-full h-px my-8"></div>
+        </article>
+
         <ul style="padding-inline-start: 0;">
             {
 
-                <ul >
+                <ul>
                     {menubar.map((node) => (
-                            <li class="py-2" >
+                            <li class="py-2">
                                 <a class="panda-link italic font-bold"
                                    href={'/docs' + (node.link ?? '')}>{node.label}</a>
                                 {node.items && node.items.length > 0 && (
                                         <ul class="mt-2">
                                             {
                                                 node.items.map((child) => (
-                                                        <li  class="py-1">
+                                                        <li class="py-1">
                                                             <a class="panda-link-static text-normal"
                                                                href={'/docs' + (child.link ?? '')}>{child.label}</a>
                                                         </li>

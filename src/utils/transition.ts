@@ -2,8 +2,8 @@ import { customSwing } from "astro-vtbot/animations/swing";
 
 //@ts-ignore
 export const swingOption = {
-    keyframes: { axis: { y: 1 }, angle: { leave: '90deg', enter: '-90deg' } },
-    base: { duration: '300ms' },
+    keyframes: { axis: { y: 2 }, angle: { leave: '50deg', enter: '-50deg' } },
+    base: { duration: '200ms' },
     extensions: {
         forwards: {
             old: { 'transform-origin': 'center left' },
