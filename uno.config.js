@@ -15,8 +15,8 @@ export default defineConfig({
                     textDecoration: 'none',
                     'font-size': '.9em',
                     // add underline offset
-                    textDecorationThickness: '0.1em',
-                    textDecorationColor: 'rgb(var(--color-text-link))'
+                    textDecorationThickness: '0.2em',
+                    textDecorationColor: 'rgb(var(--color-primary-main))',
                 },
                 'a:hover': {
                     color: 'rgb(var(--color-text-link-hover))'

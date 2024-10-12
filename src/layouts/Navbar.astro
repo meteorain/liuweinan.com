@@ -15,12 +15,12 @@ const items = [
 ]
 // function page in root path
 function isRootPage() {
-    return !items.some((item) => url.toString().includes(item))
+    return url.pathname === '/' || ['categories/', 'tags/', 'posts/'].some((i) => url.pathname.includes(i))
 }
 
 ---
 
-<nav class={url.toString().includes('/posts/') ? 'hidden' : ''} >
+<nav >
     <a
             rel="prefetch"
             href={path('/')}

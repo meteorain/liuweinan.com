@@ -50,7 +50,7 @@ const content = new MarkdownIt('commonmark',{
         <div class="panda-link text-sm flex">
             {tags && <span class="mr-auto"> #{tags}#</span>}
             {
-                review_title &&  <a href={`https://www.imdb.com/title/${imdb_id}`} class="panda-link mr-2">
+                review_title &&  <a href={`https://www.imdb.com/title/${imdb_id}`} class="prose panda-link external-link mr-2">
                         <span class="text-sm font-bold font-italic underline">{review_title}</span>
                     </a>
             }

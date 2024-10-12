@@ -27,6 +27,7 @@ message:
     404-content: Page not found
     back-later: Work not finished yet, please come back later
     loading: Loading...
+    more-about: More about
 pagination:
     previous: Previous
     next: Next

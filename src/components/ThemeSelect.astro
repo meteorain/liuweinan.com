@@ -12,10 +12,10 @@ const id = `moon-mask-`
             class="sl-flex"
             title="ok"
     >
-        <svg aria-hidden="true" height="16" viewBox="0 0 24 24" width="16">
-            <mask class="moon" id={id}>
+        <svg aria-hidden="true" height="20" viewBox="0 0 24 24" width="20" class="dark:stroke-white dark:fill-white">
+            <mask class="moon" id={id} fill="yellow" stroke="red">
                 <rect x="0" y="0" width="100%" height="100%" fill="white"></rect>
-                <circle cx="24" cy="10" r="6" fill="black"></circle>
+                <circle cx="24" cy="10" r="6" fill="black" ></circle>
             </mask>
             <circle class="sun" cx="12" cy="12" r="6" mask={`url(#${id})`}></circle>
             <g class="sun-beams" stroke="black" >
@@ -60,37 +60,40 @@ const id = `moon-mask-`
         transform-origin: center;
     }
 
-    svg :is(.moon, .sun) {
-        fill: var(--color-secondary-main);
-    }
+    //svg :is(.sun) {
+    //    fill: var(--color-secondary-main);
+    //}
+    //svg :is(.moon ) {
+    //    fill: whitesmoke;
+    //}
 
-    svg .sun-beams  line{
-        stroke: var(--color-primary-main) ;
-        stroke-width: 2px;
-    }
+    //svg .sun-beams  line{
+    //    //stroke: var(--color-primary-main) ;
+    //    stroke-width: 2px;
+    //}
 
-    button:is(:hover, :focus-visible) svg :is(.moon, .sun) {
-        fill: var(--color-primary-main);
-    }
+    //button:is(:hover, :focus-visible) svg :is(.moon, .sun) {
+    //    fill: var(--color-primary-main);
+    //}
+    //
+    //button:is(:hover, :focus-visible) svg .sun-beams line {
+    //    stroke: var(--color-secondary-main);
+    //}
 
-    button:is(:hover, :focus-visible) svg .sun-beams line {
-        stroke: var(--color-secondary-main);
-    }
-
-    :global([data-theme='dark']) svg .sun {
+    :global(.dark) svg .sun {
         transform: scale(1.75);
     }
 
-    :global([data-theme='dark']) svg .sun-beams {
+    :global(.dark) svg .sun-beams {
         opacity: 0;
     }
 
-    :global([data-theme='dark']) svg .moon circle {
+    :global(.dark) svg .moon circle {
         transform: translateX(-7px);
     }
 
     @supports (cx: 1) {
-        :global([data-theme='dark']) svg .moon circle {
+        :global(.dark) svg .moon circle {
             cx: 17;
             transform: translateX(0);
         }
@@ -117,18 +120,18 @@ const id = `moon-mask-`
             }
         }
 
-        :global([data-theme='dark']) svg .sun {
+        :global(.dark) svg .sun {
             transform: scale(1.75);
             transition-duration: calc(var(--sl-rapide-theme-select-animation-duration) / 2);
             transition-timing-function: ease;
         }
 
-        :global([data-theme='dark']) svg .sun-beams {
+        :global(.dark)  svg .sun-beams {
             transform: rotateZ(-25deg);
             transition-duration: calc(var(--sl-rapide-theme-select-animation-duration) / 4);
         }
 
-        :global([data-theme='dark']) svg .moon circle {
+        :global(.dark)  svg .moon circle {
             transition-delay: calc(var(--sl-rapide-theme-select-animation-duration) / 4);
             transition-duration: var(--sl-rapide-theme-select-animation-duration);
         }
@@ -170,9 +173,13 @@ const id = `moon-mask-`
     /** Update select menu UI, document theme, and local storage state. */
     function onThemeChange(theme: Theme): void {
         document.documentElement.dataset['theme'] = theme === 'auto' ? getPreferredColorScheme() : theme
+
+        if (theme === 'dark') {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
         storeTheme(theme)
-        // const element = document.documentElement
-        // element.classList.toggle('dark')
     }
 
     // React to changes in system color scheme.

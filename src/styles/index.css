@@ -119,12 +119,15 @@ a.animated.active:after {
  * prose link
  */
 .prose :where(a):not(:where([data-footnote-ref], [data-footnote-backref], .not-prose, .not-prose *)) {
-    @apply underline px-1
-    underline-offset-4
-    hover: underline;
+    text-decoration-color: var(--color-primary-main);
+    @apply mx-1;
 }
 
 /*prose link add arrow when class not have 'internal'*/
+
+.external-link {
+    @apply after:content-['↗'] after:ml-0;
+}
 
 .prose :where(a):not(:where([data-footnote-ref], [data-footnote-backref], .not-prose, .not-prose *)):not(.internal) {
     @apply after:content-['↗'] after:ml-0;
@@ -156,6 +159,11 @@ a.animated.active:after {
     rounded-l-sm
     pl-4 p-2;
     border-left: 6px solid rgb(var(--color-primary-main)) !important;
+}
+
+
+.prose blockquote p {
+    @apply m-0 text-sm;
 }
 
 .prose :where(ol > li):not(:where(.not-prose, .not-prose *))::marker,

@@ -15,6 +15,7 @@ import {remarkModifiedTime} from './src/plugins/remark-modified-time.mjs'
 import remarkDirective from 'remark-directive'
 import {RDNotePlugin, RDBilibiliPlugin} from "./src/plugins/remark-directive.mjs";
 import {InternalLinkPlugin} from "./src/plugins/remark-internal-link.mjs";
+import mdx from "@astrojs/mdx";
 
 
 // https://astro.build/config
@@ -73,6 +74,7 @@ export default defineConfig({
                 return '.' + theme.type
             }
         }),
+        mdx(),
     ], output: 'server',
     adapter: vercel({
         // functionPerRoute: false

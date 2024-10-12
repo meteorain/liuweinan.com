@@ -8,15 +8,16 @@ import AnimationStyle from "astro-vtbot/animations/AnimationStyle.astro";
 import {customSwing} from "astro-vtbot/animations/swing";
 import {swingOption} from "@utils/transition";
 import {useLocale} from '@utils/locale'
+import {formatDateYMD} from "../../utils/format";
 const {path, t} = useLocale(Astro.url)
 const {slug} = Astro.params
 const note = await getEntry('docs', slug);
 if (!note) {
     return new Response(null, {status: 404});
 }
-const swing1Scope = customSwing('swing1',swingOption);
+const swing1Scope = customSwing('swing1', swingOption);
 
-const {title} = note.data
+const {title,lastModified} = note.data
 const {Content} = await render(note);
 export const prerender = true;
 export async function getStaticPaths() {
@@ -68,6 +69,15 @@ export async function getStaticPaths() {
         </div>
         <article class="prose dark:prose-invert prose-stone max-w-prose mt-6">
             <Content/>
+            {
+
+                <div class="mt-9 flex text-sm font-italic opacity-80">
+                <span class="ml-auto">
+                    {t('post.last_modified_at')} {formatDateYMD(lastModified)}
+                </span>
+                </div>
+
+            }
         </article>
     </main>
 </Layout>

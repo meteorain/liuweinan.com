@@ -43,6 +43,10 @@ const menubar = [
             {
                 label: 'Clips',
                 link: '/read/clips/',
+            },
+            {
+                label: 'review',
+                link: '/read/review/',
             }
         ],
     },
@@ -86,9 +90,9 @@ const menubar = [
         <ul style="padding-inline-start: 0;">
             {
 
-                <ul>
+                <ul class="grid grid-cols-3 gap-4">
                     {menubar.map((node) => (
-                            <li class="py-2">
+                            <li class="py-2 grid">
                                 <a class="panda-link italic font-bold"
                                    href={'/docs' + (node.link ?? '')}>{node.label}</a>
                                 {node.items && node.items.length > 0 && (

@@ -10,8 +10,12 @@ import {getAllPosts} from "@utils/content";
 
 
 const {path, t, locale} = useLocale(Astro.url)
-let {tag, category} = Astro.props
+const {tag, category} = Astro.props
 const {posts, tags} = await getAllPosts(locale, tag, category)
+
+const filterType = tag ? 'tags' : 'categories'
+const filterName = tag || category
+
 
 function getTitle(post: any) {
     if (!locale || locale === 'zh') return post.title
@@ -23,6 +27,16 @@ function getTitle(post: any) {
 
 <Layout title={t('nav.posts')}  >
 
+    {
+        filterName && (
+                <div class="mt-8 ">
+                    <!--<span class=" font-normal">{t('message.more-about')}: </span>-->
+                    <span class="text-xl font-bold italic ml-2" >
+                   " {t(`${filterType}.` + filterName)} "
+                    </span>
+                </div>
+        )
+    }
     <main class="mt-8" >
         {
             posts.map((yearItem) => {
