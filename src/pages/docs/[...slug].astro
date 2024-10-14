@@ -1,6 +1,7 @@
 ---
 import Layout from '@layouts/Layout.astro'
 import {getCollection} from "astro:content";
+import ObsidianEdit from "@components/ObsidianEdit.astro";
 
 import {getEntry, render} from 'astro:content';
 
@@ -17,7 +18,7 @@ if (!note) {
 }
 const swing1Scope = customSwing('swing1', swingOption);
 
-const {title,lastModified} = note.data
+const {title, lastModified} = note.data
 const {Content} = await render(note);
 export const prerender = true;
 export async function getStaticPaths() {
@@ -40,7 +41,7 @@ export async function getStaticPaths() {
         <AnimationStyle name="swing1"/>
 
         <div class="mt-6">
-            <h1 class="text-4xl">{title}</h1>
+            <h1 class="text-4xl">{title} </h1>
             <div class="flex sm:flex-row flex-col rounded-lg bg-stone-100 dark:bg-stone-600 p-2 px-4">
 
                 <a rel="prefetch">
@@ -72,7 +73,9 @@ export async function getStaticPaths() {
             {
 
                 <div class="mt-9 flex text-sm font-italic opacity-80">
-                <span class="ml-auto">
+                    <ObsidianEdit/>
+
+                    <span class="ml-auto">
                     {t('post.last_modified_at')} {formatDateYMD(lastModified)}
                 </span>
                 </div>

@@ -1,0 +1,10 @@
+---
+import StudioMomentEditor from "@components/StudioMomentEditor.astro";
+import Layout from "@layouts/Layout.astro";
+import StudioNavbar from "@layouts/StudioNavbar.astro";
+const {id} = Astro.params
+---
+<Layout navbar={false} title={"Studio Moment" + `#${id}`}>
+    <StudioNavbar ></StudioNavbar>
+    <StudioMomentEditor id={id}></StudioMomentEditor>
+</Layout>

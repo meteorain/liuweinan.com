@@ -1,0 +1,21 @@
+---
+const {slug} = Astro.params
+
+const obsidianSchemaUrl = `obsidian://open?vault=content&file=${slug}`;
+---
+<script is:inline>
+    const editAvailable = localStorage.getItem("edit");
+    const enableEdit = document.getElementById("enable-edit");
+    if (editAvailable === "true") {
+        enableEdit.style.display = "block";
+    }
+
+
+</script>
+
+<div>
+
+    <a class="panda-link-static" href={obsidianSchemaUrl}>
+        <span class="display:none" id="enable-edit">编辑</span>
+    </a>
+</div>
