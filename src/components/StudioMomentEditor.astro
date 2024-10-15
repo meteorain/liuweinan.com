@@ -11,9 +11,11 @@ const tags = ['影视','影评','音乐','叽叽喳喳']
 ---
 <div id="moment-editor" data-moment-id={id} data-api={apiUrl} data-api-secret={secret}>
     <div class="mt-4 flex flex-col">
-        <label for="moment-id">
-            <h2 id="moment-id" class="mb-2">#{id}</h2>
-        </label>
+        {
+            id && <label for="moment-id">
+                    <h2 id="moment-id" class="mb-2">#{id}</h2>
+                </label>
+        }
         <label for="tag">
             <h3>Tags</h3>
             <select id="tag" class="p-1 pr-5">

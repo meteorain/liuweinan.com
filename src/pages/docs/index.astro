@@ -87,10 +87,9 @@ const menubar = [
             <div data-orientation="horizontal" role="separator" class="bg-stone-200 w-full h-px my-8"></div>
         </article>
 
-        <ul style="padding-inline-start: 0;">
             {
 
-                <ul class="grid grid-cols-3 gap-4">
+                <ul class="ml-0 grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-4 " style="padding-inline-start: 0">
                     {menubar.map((node) => (
                             <li class="py-2 grid">
                                 <a class="panda-link italic font-bold"
@@ -113,6 +112,5 @@ const menubar = [
                 </ul>
             }
 
-        </ul>
     </main>
 </Layout>
