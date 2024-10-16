@@ -3,6 +3,7 @@ import {useLocale} from "../../utils/locale";
 import {getEntry, render} from 'astro:content'
 import Layout from "../../layouts/Layout.astro";
 const {path, t, locale} = useLocale(Astro.url)
+export const prerender = true;
 
 const content = await getEntry('whois', 'index')
 

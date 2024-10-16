@@ -2,25 +2,17 @@
 import Layout from '@layouts/Layout.astro'
 import {getCollection} from "astro:content";
 import ObsidianEdit from "@components/ObsidianEdit.astro";
-
+export const prerender = true;
 import {getEntry, render} from 'astro:content';
-
-import AnimationStyle from "astro-vtbot/animations/AnimationStyle.astro";
-import {customSwing} from "astro-vtbot/animations/swing";
-import {swingOption} from "@utils/transition";
 import {useLocale} from '@utils/locale'
 import {formatDateYMD} from "../../utils/format";
 const {path, t} = useLocale(Astro.url)
 const {slug} = Astro.params
 const note = await getEntry('docs', slug);
-if (!note) {
-    return new Response(null, {status: 404});
-}
-const swing1Scope = customSwing('swing1', swingOption);
+
 
 const {title, lastModified} = note.data
 const {Content} = await render(note);
-export const prerender = true;
 export async function getStaticPaths() {
     const docs = await getCollection('docs');
     const paths = docs.map((note) => {
@@ -36,9 +28,8 @@ export async function getStaticPaths() {
 
 <Layout title={title} navbar={true}>
 
-    <main data-astro-transition-scope={swing1Scope}>
+    <main >
 
-        <AnimationStyle name="swing1"/>
 
         <div class="mt-6">
             <h1 class="text-4xl">{title} </h1>
