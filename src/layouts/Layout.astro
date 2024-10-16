@@ -5,7 +5,6 @@ import Navbar from './Navbar.astro'
 import Footer from './Footer.astro'
 import {useLocale} from '@utils/locale'
 
-import {ViewTransitions} from 'astro:transitions';
 
 const {t, locale} = useLocale(Astro.url)
 
@@ -29,14 +28,13 @@ const fullTitle = `${title} - ${t('layout.title')}`
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width"/>
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
-    <ViewTransitions/>
     <title>{fullTitle}</title>
 </head>
 <body class="max-width dark:bg-stone-700">
 <Header/>
 {navbar &&
         <Navbar/>}
-<main transition:animate="slide">
+<main>
     <slot/>
 </main>
 <Footer/>
