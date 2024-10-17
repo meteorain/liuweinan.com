@@ -1,0 +1,42 @@
+---
+export const prerender = true
+import {placesLoader} from "../loaders/places";
+const loader = placesLoader();
+const places = await loader.load();
+const location = places.map(({latitude, longitude}) => ({
+    location: [latitude, longitude],
+    size: 0.03
+}));
+---
+<canvas
+        id="cobe"
+        style="width: 400px; height: 400px;"
+        width="800"
+        height="800"
+        data-location={JSON.stringify(location)}
+></canvas>
+
+<script>
+    import createGlobe from "cobe";
+    let canvas = document.getElementById("cobe") as HTMLCanvasElement;
+    const location = JSON.parse(canvas.dataset.location);
+
+    createGlobe(canvas, {
+        devicePixelRatio: 2,
+        width: 400 * 2,
+        height: 400 * 2,
+        phi: Math.PI -0.1,
+        theta: 0.7,
+        dark: 0,
+        diffuse: 0,
+        mapSamples: 26000,
+        mapBrightness: 3,
+        baseColor: [0.8, 0.8, 0.8], // 更改为深蓝色
+        markerColor: [0.9, 0.1, 0.1], // 更改为红色
+        glowColor: [0.5, 0.5, 0.5], // 更改
+        markers:location,
+        onRender: (state) => {
+        }
+    });
+</script>
+

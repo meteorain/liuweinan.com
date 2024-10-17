@@ -10,6 +10,7 @@ nav:
     ping: ping
     reviews: reviews
     docs: docs
+    footprints: footprint
 footer:
     home: home
     rss: rss

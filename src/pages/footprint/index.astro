@@ -1,0 +1,11 @@
+---
+import {useLocale} from "../../utils/locale";
+import Layout from "@layouts/Layout.astro";
+import Cobe from "@components/Cobe.astro";
+
+const {t, locale} = useLocale(Astro.url)
+---
+
+<Layout title={t('nav.footprint')} navbar={true}>
+    <Cobe></Cobe>
+</Layout>
