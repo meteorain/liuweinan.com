@@ -22,7 +22,7 @@ const {path, t, locale} = useLocale(Astro.url)
 
 const menubar = [
     {
-        label: 'Tech Notes',
+        label: '折腾笔记',
         collapsed: true,
         link: '/tech/',
 
@@ -35,44 +35,44 @@ const menubar = [
         ],
     },
     {
-        label: 'Read N Write',
+        label: '阅读印象',
         link: '/read/',
         collapsed: true,
         items: [
             // Each item here is one entry in the navigation menu.
             {
-                label: 'Clips',
+                label: '书摘辑录',
                 link: '/read/clips/',
             },
             {
-                label: 'review',
+                label: '装模做样',
                 link: '/read/review/',
             }
         ],
     },
     {
-        label: 'Haphazard Living',
+        label: '潦草生活',
         link: '/life/',
         collapsed: true,
         items: [
             // Each item here is one entry in the navigation menu.
-            {label: 'City Walk', link: '/life/city-walk/'},
-            {label: 'Eat Eat', link: '/life/delicious/'},
-            {label: 'Travel', link: '/life/travel/'},
-            {label: 'Photography', link: '/life/photography/'},
+            {label: '城市印象', link: '/life/city-walk/'},
+            {label: '吃吃喝喝', link: '/life/delicious/'},
+            {label: '走南闯北', link: '/life/travel/'},
+            {label: '影像', link: '/life/photography/'},
         ],
     },
     {
-        label: 'Have Fun',
+        label: '不懂艺术',
         link: '/have-fun/',
         collapsed: true,
         items: [
             // Each item here is one entry in the navigation menu.
-            {label: 'Movie', link: '/have-fun/movie/'},
-            {label: 'TV', link: '/have-fun/tv/'},
+            // {label: 'Movie', link: '/have-fun/movie/'},
+            // {label: 'TV', link: '/have-fun/tv/'},
             // {label: 'Anime', link: '/have-fun/anime/'},
-            {label: 'Music', link: '/have-fun/music/'},
-            {label: 'Gaming', link: '/have-fun/gaming/'},
+            {label: '动次打次', link: '/have-fun/music/'},
+            {label: '吃苦随记', link: '/have-fun/gaming/'},
         ],
     }
 

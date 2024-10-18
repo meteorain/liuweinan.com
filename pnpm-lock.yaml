@@ -66,12 +66,18 @@ importers:
       hastscript:
         specifier: ^9.0.0
         version: 9.0.0
+      mdast-util-to-string:
+        specifier: ^4.0.0
+        version: 4.0.0
       mdast-util-wiki-link:
         specifier: ^0.1.2
         version: 0.1.2
       micromark-util-symbol:
         specifier: ^2.0.0
         version: 2.0.0
+      remark-obsidian-callout:
+        specifier: ^1.5.0
+        version: 1.5.0
       unist-util-visit:
         specifier: ^5.0.0
         version: 5.0.0
@@ -2316,6 +2322,9 @@ packages:
 
   remark-mdx@3.0.1:
     resolution: {integrity: sha512-3Pz3yPQ5Rht2pM5R+0J2MrGoBSrzf+tJG94N+t/ilfdh8YLyyKYtidAYwTveB20BoHAcwIopOUqhcmh2F7hGYA==}
+
+  remark-obsidian-callout@1.5.0:
+    resolution: {integrity: sha512-6WMQLc2WCe6mQtWs7Lu0H/XpkDnViLDAtzF9hNYpPXujmhmNHXaKUMgKmhPeOR2qOX37xK8J5JzmXLFbOLzXvw==}
 
   remark-parse@11.0.0:
     resolution: {integrity: sha512-FCxlKLNGknS5ba/1lmpYijMUzX2esxW5xQqjWxw2eHFfS2MSdaHVINFmhjo+qN1WhZhNimq0dZATN9pH0IDrpA==}
@@ -5652,6 +5661,11 @@ snapshots:
       micromark-extension-mdxjs: 3.0.0
     transitivePeerDependencies:
       - supports-color
+
+  remark-obsidian-callout@1.5.0:
+    dependencies:
+      mdast-util-to-string: 4.0.0
+      unist-util-visit: 5.0.0
 
   remark-parse@11.0.0:
     dependencies:

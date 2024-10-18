@@ -13,8 +13,9 @@ import nightOwlLight from './src/styles/expressive-code/night-owl-light.json'
 
 import {remarkModifiedTime} from './src/plugins/remark-modified-time.mjs'
 import remarkDirective from 'remark-directive'
-import {RDNotePlugin, RDBilibiliPlugin} from "./src/plugins/remark-directive.mjs";
+import { RDBilibiliPlugin} from "./src/plugins/remark-directive.mjs";
 import {InternalLinkPlugin} from "./src/plugins/remark-internal-link.mjs";
+import remarkObsidianCallout from './src/plugins/callout/index.js'
 import mdx from "@astrojs/mdx";
 
 
@@ -48,7 +49,17 @@ export default defineConfig({
             footnoteLabel: ' '
         },
         remarkPlugins: [
-            remarkDirective, RDNotePlugin,
+            remarkDirective,
+            // RDNotePlugin,
+            [
+                remarkObsidianCallout,
+                {
+                    blockquoteClass:'callout',
+                    titleTextTagName: "span",
+                    iconTagName: "span",
+                    // ...
+                },
+            ],
             RDBilibiliPlugin,
             InternalLinkPlugin,
                 [remarkWikiLink, {
@@ -61,7 +72,7 @@ export default defineConfig({
                     return href;
                 }
             }],
-            remarkModifiedTime
+            remarkModifiedTime,
 
         ]
     },

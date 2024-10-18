@@ -1,5 +1,5 @@
 // uno.config.ts
-import { defineConfig, presetMini, presetTypography, transformerDirectives } from 'unocss'
+import { defineConfig, presetMini,presetUno, presetTypography, transformerDirectives } from 'unocss'
 
 export default defineConfig({
     injectReset: false,
@@ -7,7 +7,7 @@ export default defineConfig({
     injectEntry: process.env['NODE_ENV'] === 'development',
     transformers: [transformerDirectives()],
     presets: [
-        presetMini(),
+        presetUno(),
         presetTypography({
             cssExtend: {
                 a: {

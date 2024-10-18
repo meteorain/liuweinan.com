@@ -33,14 +33,13 @@ export async function getStaticPaths() {
 
         <div class="mt-6">
             <h1 class="text-4xl">{title} </h1>
-            <div class="flex sm:flex-row flex-col rounded-lg bg-stone-100 dark:bg-stone-600 p-2 px-4">
+            <div class="flex sm:flex-row  flex-col rounded-lg bg-stone-100 dark:bg-stone-600 p-2 px-4">
 
-                <a rel="prefetch">
+                <!--<a rel="prefetch">-->
                     {
 
-                        <span>
+                        <span class="mr-2">
                                     <a class="panda-link" href={`/docs/`} rel="prefetch">home </a>
-                        <span>&nbsp;</span>
                                 </span>
                     }
                     {
@@ -49,13 +48,12 @@ export async function getStaticPaths() {
                             return (
                                     <span class="mr-2">
                                     <a class="panda-link" href={`/docs/${url}/`} rel="prefetch">
-                                       <span>/</span>
-                                        {part}</a>
+                                       / {part}</a>
                                 </span>
                             );
                         })
                     }
-                </a>
+                <!--</a>-->
                 <!--<span class="ml-auto mr-4 text-sm font-normal"> {t('post.post_at')} </span>-->
             </div>
         </div>

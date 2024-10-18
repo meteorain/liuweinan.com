@@ -33,74 +33,16 @@ export async function getStaticPaths() {
 ---
 
 <Layout title={title} navbar={false}>
-    <style is:inline>
-
-        .notification p {
-            margin-top: 0;
-            margin-bottom: 0;
-            padding: 0.5rem 1rem;
-            font-size: small;
-        }
 
 
-        .notification-warning {
-            background-color: #fff3cd;
-            border-color: #ffeeba;
-            color: #856404;
-        }
 
-        .notification-danger {
-            background-color: #f8d7da;
-            border-color: #f5c6cb;
-            color: #721c24;
-        }
+    <a rel="prefetch" class="panda-link mt-6" href={path('/')} >{t('post.back')}</a>
 
-        .notification-success {
-            background-color: #d4edda;
-            border-color: #c3e6cb;
-            color: #155724;
-        }
-
-        .notification-info {
-            background-color: #d1ecf1;
-            border-color: #bee5eb;
-            color: #0c5460;
-        }
-
-        .dark .notification-warning {
-            background-color: #856404;
-            border-color: #ffeeba;
-            color: #fff3cd;
-        }
-
-        .dark .notification-danger {
-            background-color: #721c24;
-            border-color: #f5c6cb;
-            color: #f8d7da;
-        }
-
-        .dark .notification-success {
-            background-color: #155724;
-            border-color: #c3e6cb;
-            color: #d4edda;
-        }
-
-        .dark .notification-info {
-            background-color: #0c5460;
-            border-color: #bee5eb;
-            color: #d1ecf1;
-        }
-
-    </style>
-
-
-    <a rel="prefetch" class="panda-link mt-6" href={path('/')} transition:animate="none">{t('post.back')}</a>
-
-    <main transition:animate="fade">
+    <main >
 
         <div class="mt-6">
 
-            <h1 class="text-4xl">{title} </h1>
+            <h1 class="text-4xl ">{title} </h1>
             <div class="flex sm:flex-row flex-col rounded-lg bg-stone-100 dark:bg-stone-600 p-2 px-4">
                 <div>
                     {
@@ -117,7 +59,7 @@ export async function getStaticPaths() {
                 <span class="ml-auto mr-4 text-sm font-normal"> {t('post.post_at')} {formatDateYMD(pubDate)}</span>
             </div>
         </div>
-        <article class="prose dark:prose-invert prose-stone max-w-prose mt-6">
+        <article class="prose dark:prose-invert prose-stone dark:prose-gray max-w-prose mt-6">
             <Content/>
         </article>
         <div class="mt-9 flex text-sm font-italic opacity-80">

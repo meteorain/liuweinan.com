@@ -47,7 +47,7 @@ function getTitle(post: any) {
                                 {yearItem.list.map((post: any) => {
                                     return (
                                             <li class="my-1 flex  transition-all duration-300">
-                                        <span style={{flex: '0 0 5rem'}}>
+                                        <span style={{flex: '0 0 5rem'}} class="text-gray-500">
                                             <time class="mr-2">{formatDateMD(post.pubDate)}</time>
                                         </span>
                                                 <a rel="prefetch-intent" href={path(post.url)}
