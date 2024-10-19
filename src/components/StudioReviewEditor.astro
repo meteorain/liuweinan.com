@@ -68,7 +68,7 @@ const secret = API_SECRET
     </div>
 </div>
 
-<script>
+<script is:inline>
     // get api url from element
     const apiUrl = document.getElementById('review-editor').getAttribute('data-api')
     const momentApiUrl = apiUrl + '/moments'
@@ -150,19 +150,19 @@ const secret = API_SECRET
 
     }
 
-    document.getElementById('item-selector').addEventListener('change', async (e: Event) => {
-        const target = e.target as HTMLSelectElement;
+    document.getElementById('item-selector').addEventListener('change', async (e) => {
+        const target = e.target
         const id = target.value
         const type = target.options[target.selectedIndex].innerText.split('[')[1].split(']')[0].toLowerCase()
         const entity = await findEntityByTMDBId(id, type)
         fillFields(entity)
     })
     document.getElementById('btn-search').addEventListener('click', async () => {
-        const target = document.getElementById('search') as HTMLInputElement
+        const target = document.getElementById('search')
         const keyword = target.value
         const results = await search(keyword)
         // add options to select
-        const select = document.getElementById('item-selector') as HTMLSelectElement
+        const select = document.getElementById('item-selector')
         select.innerHTML = ''
         results.forEach(({id, title, name, media_type, release_date, first_air_date}) => {
             const _title = title ? title : name
@@ -180,13 +180,13 @@ const secret = API_SECRET
         }
     })
     const setValue = (id, value) => {
-        const el = document.getElementById(id) as HTMLInputElement
+        const el = document.getElementById(id)
         if (el) {
             el.value = value
         }
     }
     const getValue = (id) => {
-        const el = document.getElementById(id) as HTMLInputElement
+        const el = document.getElementById(id)
         if (el) {
             return el.value
         }
@@ -218,7 +218,7 @@ const secret = API_SECRET
 
 
     document.getElementById("find").addEventListener('click', async () => {
-        const imdb_id = (document.getElementById('id')as HTMLInputElement).value
+        const imdb_id = document.getElementById('id').value
         const entity = await findEntity(imdb_id)
         fillFields(entity)
     })
@@ -275,7 +275,7 @@ const secret = API_SECRET
                 return
             }
             const editedEntity = getEditedEntity()
-            editedEntity.moments_id = lastRowId as any
+            editedEntity.moments_id = lastRowId
             const {status} = await fetch(reviewApiUrl, {
                 method: 'POST',
                 headers: {

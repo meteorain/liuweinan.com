@@ -2,17 +2,19 @@
 import Layout from '@layouts/Layout.astro'
 import {getCollection} from "astro:content";
 import ObsidianEdit from "@components/ObsidianEdit.astro";
-export const prerender = true;
 import {getEntry, render} from 'astro:content';
 import {useLocale} from '@utils/locale'
-import {formatDateYMD} from "../../utils/format";
+import {formatDateYMD} from "@utils/format";
+export const prerender = true;
 const {path, t} = useLocale(Astro.url)
 const {slug} = Astro.params
 const note = await getEntry('docs', slug);
 
 
-const {title, lastModified} = note.data
-const {Content} = await render(note);
+const {title} = note.data
+const {Content,remarkPluginFrontmatter} = await render(note);
+const {lastModified} = remarkPluginFrontmatter
+
 export async function getStaticPaths() {
     const docs = await getCollection('docs');
     const paths = docs.map((note) => {
@@ -35,11 +37,11 @@ export async function getStaticPaths() {
             <h1 class="text-4xl">{title} </h1>
             <div class="flex sm:flex-row  flex-col rounded-lg bg-stone-100 dark:bg-stone-600 p-2 px-4">
 
-                <!--<a rel="prefetch">-->
+                <!--<a >-->
                     {
 
                         <span class="mr-2">
-                                    <a class="panda-link" href={`/docs/`} rel="prefetch">home </a>
+                                    <a class="panda-link" href={`/docs/`} >home </a>
                                 </span>
                     }
                     {
@@ -47,7 +49,7 @@ export async function getStaticPaths() {
                             const url = array.slice(0, index + 1).join('/');
                             return (
                                     <span class="mr-2">
-                                    <a class="panda-link" href={`/docs/${url}/`} rel="prefetch">
+                                    <a class="panda-link" href={`/docs/${url}/`} >
                                        / {part}</a>
                                 </span>
                             );

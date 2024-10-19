@@ -4,7 +4,7 @@ const { t, path } = useLocale(Astro.url)
 ---
 
 <footer class="mt-12 mb-6 text-sm">
-    <div class="mb-1">
+    <div class="mb-2">
         <a href="https://github.com/yuhangch" class="panda-link">{t('footer.contact')}</a>
         <span class="mx-1">|</span>
         <a rel="prefetch-intent" href="/rss.xml" class="panda-link">{t('footer.rss')}</a>
@@ -17,6 +17,9 @@ const { t, path } = useLocale(Astro.url)
     </div>
     <div class="mb-1">
         <span>2016-{new Date().getFullYear()}</span>
+    </div>
+    <div class="mb-1">
+        <a class="panda-link text-sm" href="https://creativecommons.org/licenses/by-nc-nd/3.0/deed.en/">CC BY-NC-ND 4.0</a>
     </div>
     <div class="text-sm">
         {t('footer.built-with')}

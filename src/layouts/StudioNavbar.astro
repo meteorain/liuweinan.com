@@ -17,7 +17,7 @@ const isActive = (item) => (url.toString().endsWith("studio/") && item === 'mome
         items.map((item) => {
             return (
                     <a
-                            rel="prefetch"
+                            
                             href={routePath(item)}
                             class="panda-link mr-4 animated hover:no-underline"
                             class:list={isActive(item)}

@@ -3,15 +3,14 @@ const {slug} = Astro.params
 
 const obsidianSchemaUrl = `obsidian://open?vault=content&file=${slug}`;
 ---
-<!--<script is:inline>-->
-<!--    const editAvailable = localStorage.getItem("edit");-->
-<!--    const enableEdit = document.getElementById("enable-edit");-->
-<!--    if (editAvailable === "true") {-->
-<!--        enableEdit.style.display = "block";-->
-<!--    }-->
+<script is:inline>
+    const editAvailable = localStorage.getItem("edit");
+    const enableEdit = document.getElementById("enable-edit");
+    if (editAvailable === "true") {
+        enableEdit.style.display = "block";
+    }
 
-
-<!--</script>-->
+</script>
 
 <div>
 

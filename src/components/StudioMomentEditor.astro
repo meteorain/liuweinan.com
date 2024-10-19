@@ -36,7 +36,7 @@ const tags = ['影视','影评','音乐','叽叽喳喳']
     </div>
 </div>
 
-<script>
+<script is:inline>
     function updateNotificationMessage(msg) {
         document.getElementById('notification').innerText = msg
     }
@@ -53,8 +53,8 @@ const tags = ['影视','影评','音乐','叽叽喳喳']
 
                 const v = await response.json()
                 const {tags,body} = v;
-                (document.getElementById('tag') as HTMLSelectElement).value = tags;
-                (document.getElementById('content') as HTMLInputElement).value = body;
+                document.getElementById('tag').value = tags;
+                document.getElementById('content').value = body;
             } else {
                 updateNotificationMessage('get moment info Failed:'+ momentId )
             }
@@ -65,9 +65,9 @@ const tags = ['影视','影评','音乐','叽叽喳喳']
     const secret = document.getElementById('moment-editor').getAttribute('data-api-secret')
     const momentId = document.getElementById('moment-editor').getAttribute('data-moment-id')
     document.querySelector('.btn').addEventListener('click', async () => {
-        let tag = (document.getElementById('tag') as HTMLInputElement).value
+        let tag = document.getElementById('tag').value
         // handle tag change
-        let content = (document.getElementById('content') as HTMLInputElement).value
+        let content = document.getElementById('content').value
         // send data to api
         const data = {
             tags: tag,

@@ -3,9 +3,8 @@ import Layout from '@layouts/Layout.astro'
 import {useLocale} from '@utils/locale'
 import {formatDateYMD} from "@utils/format";
 import ObsidianEdit from "@components/ObsidianEdit.astro";
-
-
 import {getCollection, getEntry, render} from 'astro:content';
+
 export const prerender = true;
 const {path, t, locale} = useLocale(Astro.url)
 let {slug} = Astro.params
@@ -36,7 +35,7 @@ export async function getStaticPaths() {
 
 
 
-    <a rel="prefetch" class="panda-link mt-6" href={path('/')} >{t('post.back')}</a>
+    <a  class="panda-link mt-6" href={path('/')} >{t('post.back')}</a>
 
     <main >
 

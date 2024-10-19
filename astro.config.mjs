@@ -22,8 +22,12 @@ import mdx from "@astrojs/mdx";
 // https://astro.build/config
 export default defineConfig({
     vite: {
-        plugins: [yaml()]
+        plugins: [yaml()],
+        build:{
+            assets: 'assets',
+        }
     },
+    compressHTML:false,
     experimental: {
         env: {
             schema: {
@@ -35,7 +39,7 @@ export default defineConfig({
         serverIslands: true,
     },
 
-    prefetch: true,
+    // prefetch: true,
     site: 'https://yuhang.ch',
     scopedStyleStrategy: 'class',
     // trailingSlash: 'always',

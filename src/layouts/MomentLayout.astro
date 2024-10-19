@@ -45,7 +45,7 @@ const pageHref = (page) => {
             <span>
                 {
                     prev && (
-                                <a rel="prefetch" href={pageHref(prev)} class="panda-link">
+                                <a  href={pageHref(prev)} class="panda-link">
                                     {t('pagination.previous')}
                                 </a>
                     )
@@ -54,7 +54,7 @@ const pageHref = (page) => {
             <span class="float-right">
                 {
                     next && (
-                                <a rel="prefetch" href={pageHref(next)} class="panda-link">
+                                <a  href={pageHref(next)} class="panda-link">
                                     {t('pagination.next')}
                                 </a>
                     )

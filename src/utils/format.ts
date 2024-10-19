@@ -17,7 +17,8 @@ export function formatDateMD(dateStr: string | Date | undefined, locale: string 
 }
 
 export function formatDateYMD(dateStr: string | Date | undefined, locale: string = 'zh') {
-    const date = dateStr instanceof String ? DateTime.fromISO(dateStr as string) : DateTime.fromJSDate(dateStr as Date)
+    console.log(typeof dateStr)
+    const date = (dateStr instanceof String || typeof dateStr === 'string') ? DateTime.fromISO(dateStr as string) : DateTime.fromJSDate(dateStr as Date)
     if (locale === 'en') {
         return date.setLocale(locale).toFormat('dd, MMM, yyyy')
     }
