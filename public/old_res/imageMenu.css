@@ -1,0 +1,68 @@
+
+/**************************************************************
+
+	Image Menu
+	v 2.2
+
+**************************************************************/
+
+
+#imageMenu {
+	position: relative;
+	width: 500px;
+	height: 200px;
+	overflow: hidden;
+}
+
+
+
+#imageMenu ul {
+	list-style: none;
+	margin: 0px;
+	display: block;
+	height: 200px;
+	width: 1000px;
+	
+	}
+
+#imageMenu ul li {
+	float: left;
+}
+
+#imageMenu ul li a {
+	text-indent: -1000px;
+	background:#FFFFFF none repeat scroll 0%;
+	border-right: 2px solid #fff;
+	cursor:pointer;
+	display:block;
+	overflow:hidden;
+	width:98px;
+	height: 200px;
+}
+
+#imageMenu ul li.about a {
+	background: url(about.jpg) repeat scroll 0%;
+}
+
+#imageMenu ul li.blog a {
+	background: url(blog.jpg) repeat scroll 0%;
+}
+
+#imageMenu ul li.twitter a {
+	background: url(twitter.jpg) repeat scroll 0%;
+}
+
+#imageMenu ul li.photo a {
+	background: url(photo.jpg) repeat scroll 0%;
+}
+
+#imageMenu ul li.spaces a {
+	background: url(spaces.jpg) repeat scroll 0%;
+}
+
+.clear {
+	clear: both;
+}
+
+/*************************************************************/
+
