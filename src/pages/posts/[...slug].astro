@@ -64,7 +64,7 @@ export async function getStaticPaths() {
         <div class="mt-9 flex text-sm font-italic opacity-80">
             <ObsidianEdit/>
             {
-                lastModified && pubDate !== lastModified && formattedLastModified && (
+                lastModified && pubDate !== lastModified && (
                             <span class="ml-auto">
                     {t('post.last_modified_at')} {formatDateYMD(lastModified)}
                 </span>
