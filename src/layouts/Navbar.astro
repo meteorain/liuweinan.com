@@ -6,7 +6,8 @@ const {url} = Astro
 const {path, t, locale} = useLocale(url)
 
 const items = [
-    'moments',
+    // 'moments',
+    'posts',
     'docs',
     // 'reviews',
     'whois'
@@ -15,7 +16,11 @@ const items = [
 ]
 // function page in root path
 function isRootPage() {
-    return url.pathname === '/' || ['categories/', 'tags/', 'posts/'].some((i) => url.pathname.includes(i))
+    return url.pathname === '/'
+}
+
+function isPostsPage(item) {
+    return item === 'posts' && ['categories/', 'tags/'].some((i) => url.pathname.includes(i))
 }
 
 ---
@@ -25,7 +30,7 @@ function isRootPage() {
 
             href={path('/')}
             class="panda-link mr-4 animated hover:no-underline"
-            class:list={isRootPage() ? 'active' : ''}>{t('nav.posts')}</a
+            class:list={isRootPage() ? 'active' : ''}>{t('nav.home')}</a
     >
     {
         items.map((item) => {
@@ -34,7 +39,7 @@ function isRootPage() {
 
                             href={path(`/${item}`)}
                             class="panda-link mr-4 animated hover:no-underline"
-                            class:list={url.toString().includes(item) ? 'active' : ''}
+                            class:list={url.toString().includes(item) || isPostsPage(item) ? 'active' : ''}
                     >{t(`nav.${item}`)}</a>
             )
         })

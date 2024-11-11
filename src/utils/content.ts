@@ -8,7 +8,7 @@ export const getAllPosts = async (locale: string, tag: string, category: string)
     const filteredPosts = allPosts
         .map( i=>({
             ...i.data,
-            url : `/posts/${i.slug}/`
+            url : `/posts/${i.slug}`
         }))
         .filter((d) => {
             if (!d) return false

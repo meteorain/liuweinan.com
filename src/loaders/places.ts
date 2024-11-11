@@ -9,29 +9,29 @@ interface Place {
 
 const places: Place[] = [
     {
-        name: '北京',
-        location: '北京市',
+        name: 'Scottsdale',
+        location: '美国斯科茨代爾',
         longitude: 116.405285,
         latitude: 39.904989
     },
     // 南昌，济南，石家庄，广州，深圳，长沙，武汉，郑州，西安，哈尔滨，合肥，青岛
     {
-        name: '南昌',
-        location: '江西省南昌市',
-        longitude: 115.892151,
-        latitude: 28.676493
+        name: 'London',
+        location: '英国伦敦',
+        longitude: -0.118092,
+        latitude: 51.509865
     },
     {
-        name: '济南',
-        location: '山东省济南市',
-        longitude: 117.000923,
-        latitude: 36.675807
+        name: 'Paris',
+        location: '法国巴黎',
+        longitude: 2.349014,
+        latitude: 48.864716
     },
     {
-        name: '石家庄',
-        location: '河北省石家庄市',
-        longitude: 114.51486,
-        latitude: 38.042307
+        name: 'Bamako',
+        location: '马里巴马科',
+        longitude: -7.971547,
+        latitude: 12.635898
     },
     {
         name: '广州',

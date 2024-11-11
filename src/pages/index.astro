@@ -1,7 +1,182 @@
----
-import PostLayout from '@layouts/PostsLayout.astro'
-export const prerender = true;
----
-<PostLayout tag="" category="" />
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Ubuntu:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="reset.css">
+    <!-- CSS reset -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Resource style -->
+    <script is:inline src="modernizr.js"></script>
+    <!-- Modernizr -->
+    <script type="text/javascript">
+      var ticks,thisTick,nextTick,state,current=0,delay=2000;speed=20;value=1;stop=false;
 
+      function rotateNews() {
+        var ticker = document.getElementById("front_news_text");
+        ticks = ticker.getElementsByTagName("li");
+        for (var i = 0; i < ticks.length; i++) {
+          if (i == 0) {
+            ticks[i].style.opacity = 1;
+          } else {
+            ticks[i].style.opacity = 0;
+            ticks[i].style.filter = "alpha(opacity=0)";
+            ticks[i].style.display = 'none';
+          }
+        }
+        loopNews();
+      }
 
+      function loopNews() {
+        if (current >= ticks.length) current = 0;
+        thisTick = (nextTick) ? nextTick : ticks[current];
+        nextTick = (ticks[++current]) ? ticks[current] : ticks[current = 0];
+        thisTick.style.display = "block";
+        state = 'on';
+        value = 1;
+        window.setTimeout(fader, delay);
+      }
+
+      function fader() {
+        if (stop) {
+          window.setTimeout(fader, speed);
+        } else {
+          if (state == 'on') {
+            value = value - 0.1;
+            value = parseInt(value * 100) / 100;
+            if (value >= 0) {
+              thisTick.style.opacity = value;
+              thisTick.style.filter = "alpha(opacity=" + (value * 100) + ")";
+              window.setTimeout(fader, speed);
+            } else {
+              thisTick.style.display = "none";
+              nextTick.style.display = "block";
+              state = 'off';
+              window.setTimeout(fader, speed);
+            }
+          } else if (state == 'off') {
+            value = value + 0.1;
+            value = parseInt(value * 100) / 100;
+            if (value <= 1) {
+              nextTick.style.opacity = value;
+              nextTick.style.filter = "alpha(opacity=" + (value * 100) + ")";
+              window.setTimeout(fader, speed);
+            } else {
+              loopNews();
+            }
+          }
+        }
+      }
+      // event listener
+      if (window.addEventListener) window.addEventListener('load', rotateNews, false); // gecko, safari, konqueror and standard
+      else if (document.addEventListener) document.addEventListener('load', rotateNews, false); // opera 7
+      else if (window.attachEvent) { // win/ie
+        window.attachEvent('onload', rotateNews);
+      } else { // mac/ie5
+        if (typeof window.onload == 'function') {
+          var existing = onload;
+          window.onload = function() {
+            existing();
+            rotateNews();
+          }
+        } else {
+          window.onload = function() {
+            rotateNews();
+          }
+        }
+      }
+      var tlist = '';
+
+      function showitems(nooftweets) {
+          tlist += '<li id="tick0" style="display:none"><a href="https://dabr.co.uk/status/" target="_blank" onmouseover="javascript:stop=true" onmouseout="javascript:stop=false"><\/a> about 20036d ago<\/li>';
+          tlist += '<li id="tick' + nooftweets + '" style="display:none">Powered by <a href="mailto:liuweinan85[a]gmail.com" target="_self" onmouseover="javascript:stop=true" onmouseout="javascript:stop=false"><b>Vivian Liu<\/b><\/a> \&copy; 2006-' + new Date().getFullYear() + ' <\/li>';
+          document.getElementById("front_news_text").innerHTML = tlist;
+      }
+    </script>
+    <title>LiuWeinan.Com - Vivian Liu - Meteorain</title>
+  </head>
+  <body>
+    <main id="cd-main-content">
+      <section id="cd-intro">
+        <h1>
+          <span class="rainbow">Liu Weinan .com</span>
+        </h1>
+        <header class="cd-header">
+          <div id="cd-logo">
+            <ul id="front_news_text" style="list-style-type:none"> getting tweets from Twitter.... </ul>
+          </div>
+          <a class="cd-menu-trigger" href="#main-nav">Navi <span></span>
+          </a>
+        </header>
+        <div class="cd-blurred-bg"></div>
+      </section>
+      <!-- cd-intro -->
+    </main>
+    <div class="cd-shadow-layer"></div>
+    <nav id="main-nav">
+      <ul>
+        <li>
+          <a href="posts">
+            <span>Blog</span>
+          </a>
+        </li>
+        <li>
+          <a href="https://www.instagram.com/liuweinan/">
+            <span>Instagram</span>
+          </a>
+        </li>
+        <li>
+          <a href="https://spaces.liuweinan.com">
+            <span>Spaces</span>
+          </a>
+        </li>
+        <li>
+          <a href="footprint">
+            <span>Footpring</span>
+          </a>
+        </li>
+        <li>
+          <a href="whois">
+            <span>About</span>
+          </a>
+        </li>
+      </ul>
+      <a href="#0" class="cd-close-menu">Close <span></span>
+      </a>
+    </nav>
+    <script is:inline src="jquery.min.js"></script>
+    <script type="text/javascript">
+      jQuery(document).ready(function($) {
+        //open menu
+        $('.cd-menu-trigger').on('click', function(event) {
+          event.preventDefault();
+          $('#cd-main-content').addClass('move-out');
+          $('#main-nav').addClass('is-visible');
+          $('.cd-shadow-layer').addClass('is-visible');
+        });
+        //close menu
+        $('.cd-close-menu').on('click', function(event) {
+          event.preventDefault();
+          $('#cd-main-content').removeClass('move-out');
+          $('#main-nav').removeClass('is-visible');
+          $('.cd-shadow-layer').removeClass('is-visible');
+        });
+        //clipped image - blur effect
+        set_clip_property();
+        $(window).on('resize', function() {
+          set_clip_property();
+        });
+
+        function set_clip_property() {
+          var $header_height = $('.cd-header').height(),
+            $window_height = $(window).height(),
+            $header_top = $window_height - $header_height,
+            $window_width = $(window).width();
+          $('.cd-blurred-bg').css('clip', 'rect(' + $header_top + 'px, ' + $window_width + 'px, ' + $window_height + 'px, 0px)');
+        }
+      });
+      showitems(6);
+    </script>
+  </body>
+</html>

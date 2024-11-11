@@ -2,6 +2,7 @@ layout:
     title: 陈昱行博客
     description: 陈昱行的个人博客，在没人看到的地方写写画画。少些技术，多些生活。这里自己的学习生活，偶尔分享一下自己对这个世界的看法。
 nav:
+    home: 首页
     posts: 随笔
     moments: 闲话
     now: 最近

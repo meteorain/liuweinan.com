@@ -12,7 +12,6 @@ const useLocalePath = (lang: string) => {
     const start = lang ? '/en' : ''
     return (path: string) => {
         let url = start + path
-        if (!url.endsWith('/')) url += '/'
         return url
     }
 }

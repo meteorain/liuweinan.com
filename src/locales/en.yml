@@ -2,6 +2,7 @@ layout:
     title: Yuhang Chen's Blog
     description: Chen Yuhang's personal blog, writing and drawing in places where no one sees. Less technology, more life. This is where he records his learning and life, and occasionally shares his views on the world.
 nav:
+    home: home
     posts: posts
     moments: moments
     now: now
