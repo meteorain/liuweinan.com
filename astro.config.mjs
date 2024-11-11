@@ -38,9 +38,9 @@ export default defineConfig({
         },
         serverIslands: true,
     },
-
+    trailingSlash: 'never',
     // prefetch: true,
-    site: 'https://yuhang.ch',
+    site: 'https://liuweinancom.vercel.app',
     scopedStyleStrategy: 'class',
     // trailingSlash: 'always',
     build: {
