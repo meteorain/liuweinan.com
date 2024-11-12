@@ -1,6 +1,6 @@
 layout:
-    title: 陈昱行博客
-    description: 陈昱行的个人博客，在没人看到的地方写写画画。少些技术，多些生活。这里自己的学习生活，偶尔分享一下自己对这个世界的看法。
+    title: LiuWeinan.Com
+    description: 在南纬六十五°的冰天雪地上……
 nav:
     home: 首页
     posts: 随笔
@@ -20,7 +20,7 @@ footer:
     drafts: 草稿本
     contact: 联络
     built-with: 基于
-    inspired-by: 灵感来自
+    powered-by: Powered by
 post:
     back: 返回
     post_at: 发布于

@@ -23,9 +23,9 @@ export async function GET({ params }) {
     return new Response(
         (
             await rss({
-                title: '陈昱行博客',
-                description: '在没人看到的地方写写画画',
-                site: 'https://yuhang.ch',
+                title: 'LiuWeinan.Com',
+                description: '在南纬六十五°的冰天雪地上……',
+                site: 'https://liuweinan.com',
                 items: posts,
             })
         ).body,
