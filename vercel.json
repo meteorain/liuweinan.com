@@ -12,7 +12,7 @@
     },
     {
       "source": "/([0-9]{4})/([0-9]{2})",
-      "destination": "https://liuweinan.com/posts/$1",
+      "destination": "https://liuweinan.com/posts/$1/$2",
       "has": [
         {
           "type": "host",
