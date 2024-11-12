@@ -65,12 +65,9 @@ tags:
     'wedding': 'wedding'
     'game': 'game'
 categories:
-    shares: shares
-    thought: thought
-    story: story
-    stories: stories
-    comment: comment
-    map: map
-    translation: translation
+    live: LIVE
+    mood: MOOD
+    love: LOVE
+    music: MUSIC
 reviews:
     review: review

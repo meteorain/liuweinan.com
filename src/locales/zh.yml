@@ -66,12 +66,9 @@ tags:
     'wedding': '婚礼'
     'game': '游戏'
 categories:
-    shares: 分享
-    thought: 想法
-    story: 轶事
-    stories: 轶事
-    comment: 评论
-    map: 地图
-    translation: 翻译
+    live: 生活
+    mood: 心情
+    love: 感情
+    music: 音乐
 reviews:
     review: 评论
