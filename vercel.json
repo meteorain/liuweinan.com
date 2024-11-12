@@ -1,0 +1,38 @@
+{
+  "rewrites": [
+    {
+      "source": "/([0-9]{4})/([0-9]{2})/(.*)\\.html",
+      "destination": "https://liuweinan.com/posts/$1/$2/$3",
+      "has": [
+        {
+          "type": "host",
+          "value": "blog.liuweinan.com"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "https://www.liuweinan.com/Picture/",
+      "permanent": true,
+      "has": [
+        {
+          "type": "host",
+          "value": "spaces.liuweinan.com"
+        }
+      ]
+    },
+    {
+      "source": "/",
+      "destination": "https://www.liuweinan.com/posts",
+      "permanent": true,
+      "has": [
+        {
+          "type": "host",
+          "value": "blog.liuweinan.com"
+        }
+      ]
+    }
+  ]
+}
