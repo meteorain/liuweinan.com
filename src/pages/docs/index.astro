@@ -21,8 +21,8 @@ const {Content} = await render(home);
 const {path, t, locale} = useLocale(Astro.url)
 
 const menubar = [
-    {
-/*        label: '折腾笔记',
+/*    {
+        label: '折腾笔记',
         collapsed: true,
         link: '/tech/',
 
@@ -49,19 +49,18 @@ const menubar = [
                 link: '/read/review/',
             }
         ],
-    },
+    },*/
     {
         label: '潦草生活',
-        link: '/life/',
+        link: '/../categories',
         collapsed: true,
         items: [
             // Each item here is one entry in the navigation menu.
-            {label: '城市印象', link: '/life/city-walk/'},
-            {label: '吃吃喝喝', link: '/life/delicious/'},
-            {label: '走南闯北', link: '/life/travel/'},
-            {label: '影像', link: '/life/photography/'},
+            {label: 'LIVE', link: '/../categories/live'},
+            {label: 'MOOD', link: '/../categories/mood'},
+            {label: 'LOVE', link: '/../categories/love'}
         ],
-    },
+    }/*,
     {
         label: '不懂艺术',
         link: '/have-fun/',
@@ -73,10 +72,8 @@ const menubar = [
             // {label: 'Anime', link: '/have-fun/anime/'},
             {label: '动次打次', link: '/have-fun/music/'},
             {label: '吃苦随记', link: '/have-fun/gaming/'},
-        ],*/
-    }
-
-
+        ],
+    }*/
 ]
 ---
 
@@ -90,28 +87,25 @@ const menubar = [
             {
 
                 <ul class="ml-0 grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-4 " style="padding-inline-start: 0">
-                    {menubar && menubar.length > 0 ? (
-                        menubar.map((node) => (
-                                node ? (
-                                    <li class="py-2 grid">
-                                        <a class="panda-link italic font-bold"
-                                           href={'/docs' + (node.link ?? '')}>{node.label}</a>
-                                        {node.items && node.items.length > 0 && (
-                                                <ul class="mt-2">
-                                                    {
-                                                        node.items.map((child) => (
-                                                                <li class="py-1">
-                                                                    <a class="panda-link-static text-normal"
-                                                                       href={'/docs' + (child.link ?? '')}>{child.label}</a>
-                                                                </li>
-                                                        ))
+                    {menubar.map((node) => (
+                            <li class="py-2 grid">
+                                <a class="panda-link italic font-bold"
+                                   href={'/docs' + (node.link ?? '')}>{node.label}</a>
+                                {node.items && node.items.length > 0 && (
+                                        <ul class="mt-2">
+                                            {
+                                                node.items.map((child) => (
+                                                        <li class="py-1">
+                                                            <a class="panda-link-static text-normal"
+                                                               href={'/docs' + (child.link ?? '')}>{child.label}</a>
+                                                        </li>
+                                                ))
 
-                                                    }
-                                                </ul>
-                                        )}
-                                    </li>
-                                ) : null
-                        ))) : ''}
+                                            }
+                                        </ul>
+                                )}
+                            </li>
+                    ))}
                 </ul>
             }
 
