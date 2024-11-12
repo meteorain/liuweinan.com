@@ -9,6 +9,46 @@
           "value": "blog.liuweinan.com"
         }
       ]
+    },
+    {
+      "source": "/([0-9]{4})/([0-9]{2})",
+      "destination": "https://liuweinan.com/posts/$1/$2",
+      "has": [
+        {
+          "type": "host",
+          "value": "blog.liuweinan.com"
+        }
+      ]
+    },
+    {
+      "source": "/([0-9]{4})",
+      "destination": "https://liuweinan.com/posts/$1",
+      "has": [
+        {
+          "type": "host",
+          "value": "blog.liuweinan.com"
+        }
+      ]
+    },
+    {
+      "source": "/",
+      "destination": "https://liuweinan.com/posts",
+      "has": [
+        {
+          "type": "host",
+          "value": "blog.liuweinan.com"
+        }
+      ]
+    },
+    {
+      "source": "/category/(.*)",
+      "destination": "https://liuweinan.com/categories/$1",
+      "has": [
+        {
+          "type": "host",
+          "value": "blog.liuweinan.com"
+        }
+      ]
     }
   ],
   "redirects": [
@@ -20,17 +60,6 @@
         {
           "type": "host",
           "value": "spaces.liuweinan.com"
-        }
-      ]
-    },
-    {
-      "source": "/",
-      "destination": "https://www.liuweinan.com/posts",
-      "permanent": true,
-      "has": [
-        {
-          "type": "host",
-          "value": "blog.liuweinan.com"
         }
       ]
     }
