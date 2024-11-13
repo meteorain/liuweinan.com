@@ -20,7 +20,7 @@ const {t, path, locale} = useLocale(Astro.url)
 const {id, author, text, created, uri, title, title_en, likes, dislikes} = Astro.props.content
 
 const review_title = locale === 'en' ? title_en : title
-const ratedDateISO = new Date(created * 1000).toISOString()
+const ratedDateISO = new Date(Number(created) * 1000).toISOString()
 
 const content = new MarkdownIt('commonmark',{
     breaks: true,
