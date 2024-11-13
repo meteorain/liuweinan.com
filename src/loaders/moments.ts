@@ -26,7 +26,7 @@ export function momentsLoader(): any {
     const url = `${API_URL}/latest?limit=1000`;
 
     const moments = fetch(url).then(res => res.json()).then(data => 
-        data.filter((moment: Moment) => moment.uri && moment.uri.startsWith('/posts'))
+        data.filter((moment: Moment) => moment.uri && (moment.uri.startsWith('/posts') || moment.uri.startsWith('/moments')))
     );
 
     return {
