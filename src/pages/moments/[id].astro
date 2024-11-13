@@ -1,20 +1,26 @@
 ---
-import {momentLoader} from "../../loaders/moments";
+import { momentsLoader } from "../../loaders/moments";
+import Layout from '@layouts/Layout.astro';
+import MomentCard from '@components/MomentCard.astro';
+import { useLocale } from '@utils/locale';
 
-import Layout from '@layouts/Layout.astro'
-import MomentCard from '@components/MomentCard.astro'
-import { useLocale } from '@utils/locale'
 export const prerender = false;
-const {id} = Astro.params;
-const loader = momentLoader(id)
-const moment = await loader.load()
+const { id } = Astro.params;
+const loader = momentsLoader();
+let result = await loader.load();
 
+const moment = (await result.moments).find((m) => m.id == id) ?? null;
 
-const { t } = useLocale(Astro.url)
-let result = moment
-
+const { t } = useLocale(Astro.url);
 ---
 
 <Layout title={t('nav.moments') + ' #' + id}>
-    <MomentCard content={moment} />
+    {moment ? <MomentCard content={moment} />
+    <script data-isso="https://argo.liuweinan.com/"
+            src="//argo.liuweinan.com/js/embed.min.js"></script>
+
+    <section id="isso-thread">
+        <noscript>Javascript needs to be activated to view comments.</noscript>
+    </section>
+    : <p>Moment not found.</p>}
 </Layout>

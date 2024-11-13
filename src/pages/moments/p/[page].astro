@@ -11,7 +11,7 @@ if (pageIndex === undefined) {
 }
 const pageOptions = {
     currentPage: pageIndex,
-    pageSize: 10,
+    pageSize: 20,
     url: {
         prev: pageIndex > 1 ? `/moments/p/${pageIndex - 1}` : '',
         next: '/moments/p/' + (pageIndex + 1)
