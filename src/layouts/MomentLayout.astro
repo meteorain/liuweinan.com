@@ -66,12 +66,16 @@ const pageHref = (pageNum) => {
                     <MomentCard content={c} />
                 )
             }
-            <script data-isso="https://argo.liuweinan.com/"
-                    src="//argo.liuweinan.com/js/embed.min.js"></script>
+            {
+                Astro.url.pathname && Astro.url.pathname.startsWith('/moments') && (
+                    <script data-isso="https://argo.liuweinan.com/"
+                            src="//argo.liuweinan.com/js/embed.min.js"></script>
 
-            <section id="isso-thread">
-                <noscript>Javascript needs to be activated to view comments.</noscript>
-            </section>
+                    <section id="isso-thread">
+                        <noscript>Javascript needs to be activated to view comments.</noscript>
+                    </section>
+                )
+            }
             {!momentsWithTitles.length && <BackLater />}
         </div>
         <div class="mt-4">

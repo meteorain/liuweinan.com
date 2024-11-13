@@ -15,7 +15,7 @@ const { t } = useLocale(Astro.url);
 ---
 
 <Layout title={t('nav.moments') + ' #' + id}>
-    {moment ? <MomentCard content={moment} />
+    {moment && Astro.url.pathname && Astro.url.pathname.startsWith('/moments') ? <MomentCard content={moment} />
     <script data-isso="https://argo.liuweinan.com/"
             src="//argo.liuweinan.com/js/embed.min.js"></script>
 
