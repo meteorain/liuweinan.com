@@ -10,6 +10,18 @@ export interface MomentsLoaderOptions {
     requestOptions?: RequestInit;
 }
 
+export interface Moment {
+    id: string,
+    author: string,
+    text: string,
+    created: string,
+    title: string,
+    title_en: string,
+    uri: string,
+    likes: number,
+    dislikes: number
+}
+
 export function momentsLoader(): any {
     const url = `${API_URL}/latest?limit=1000`;
 
