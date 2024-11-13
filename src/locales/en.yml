@@ -31,8 +31,8 @@ message:
     loading: Loading...
     more-about: More about
 pagination:
-    previous: Previous
-    next: Next
+    previous: < Previous
+    next: Next >
 tags:
     'ogc': 'ogc'
     'web tile map': 'web tile map'

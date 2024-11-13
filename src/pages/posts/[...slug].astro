@@ -1,4 +1,5 @@
 ---
+import {API_URL} from 'astro:env/server'
 import Layout from '@layouts/Layout.astro'
 import {useLocale} from '@utils/locale'
 import {formatDateYMD} from "@utils/format";
@@ -71,8 +72,8 @@ export async function getStaticPaths() {
                 )
             }
         </div>
-        <script data-isso="https://argo.liuweinan.com/"
-                src="//argo.liuweinan.com/js/embed.min.js"></script>
+        <script data-isso={API_URL}
+                src=`${API_URL}/js/embed.min.js`></script>
 
         <section id="isso-thread">
             <noscript>Javascript needs to be activated to view comments.</noscript>
