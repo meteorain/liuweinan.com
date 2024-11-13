@@ -88,12 +88,16 @@ const pageHref = (pageNum) => {
                     )
                 }
             </span>
-            <script data-isso={API_URL}
-                    src=`${API_URL}/js/embed.min.js`></script>
+            {
+                !Astro.url.pathname.startsWith('/moments/p/') && (
+                    <script data-isso={API_URL}
+                            src=`${API_URL}/js/embed.min.js`></script>
 
-            <section id="isso-thread">
-                <noscript>Javascript needs to be activated to view comments.</noscript>
-            </section>
+                    <section id="isso-thread">
+                        <noscript>Javascript needs to be activated to view comments.</noscript>
+                    </section>
+                )
+            }
         </div>
     </div>
 </Layout>
