@@ -15,12 +15,12 @@ const { t } = useLocale(Astro.url);
 ---
 
 <Layout title={t('nav.moments') + ' #' + id}>
-    {moment && Astro.url.pathname && Astro.url.pathname.startsWith('/moments') ? <MomentCard content={moment} />
-    <script data-isso="https://argo.liuweinan.com/"
-            src="//argo.liuweinan.com/js/embed.min.js"></script>
+    {moment && Astro.url.hostname == "liuweinan.com" ? <MomentCard content={moment} />
+        <script data-isso="https://argo.liuweinan.com/"
+                src="//argo.liuweinan.com/js/embed.min.js"></script>
 
-    <section id="isso-thread">
-        <noscript>Javascript needs to be activated to view comments.</noscript>
-    </section>
+        <section id="isso-thread">
+            <noscript>Javascript needs to be activated to view comments.</noscript>
+        </section>
     : <p>Moment not found.</p>}
 </Layout>
