@@ -38,7 +38,7 @@ function stringLikeToHeart(likes, dislikes) {
         <!--<div class="p-4 border border-blue-500 dark:border-stone-400 border-solid">-->
         <div class="text-sm grid grid-cols-7">
             <div class="min-w-[2.5rem] align-left">
-                <a href={/\/moments\/\d+/.test(uri) ? `${uri}#isso-${id}` : '#'} class="panda-link">
+                <a href={/\/posts\/\d+/.test(uri) ? `${uri}#isso-${id}` : `${uri}/${id}`} class="panda-link">
                     <span class="text-sm font-bold w-full">#{id}</span>
                 </a>
 
