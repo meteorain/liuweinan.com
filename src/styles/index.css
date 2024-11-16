@@ -175,6 +175,7 @@ a.animated.active:after {
 
 .external-link {
     @apply after:content-['↗'] after:ml-0;
+    max-width: 39%;
 }
 
 .prose :where(a):not(:where([data-footnote-ref], [data-footnote-backref], .not-prose, .not-prose *)):not(.internal) {
