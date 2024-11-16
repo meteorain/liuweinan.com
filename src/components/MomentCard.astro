@@ -1,4 +1,6 @@
 ---
+// MemoryCard.astro
+
 import {relativeTo} from '@utils/format'
 import {useLocale} from '@utils/locale'
 import MarkdownIt from 'markdown-it'
@@ -29,31 +31,45 @@ const content = new MarkdownIt('commonmark',{
 
 function stringLikeToHeart(likes, dislikes) {
   let rate = Math.min(5, Math.max(0, 3 + likes - dislikes));
-  return '❤️'.repeat(rate) + '🤍'.repeat(5 - rate);
+  return Array.from({ length: 5 }, (_, i) => ({
+    emoji: i < rate ? '❤️' : '🤍',
+    type: i < rate ? 'like' : 'dislike'
+  }));
 }
 ---
 
 <div class="mt-8">
-    <div class="p-4 rounded-xl bg-stone-100  dark:bg-stone-600">
-        <!--<div class="p-4 border border-blue-500 dark:border-stone-400 border-solid">-->
+    <div class="p-4 rounded-xl bg-stone-100 dark:bg-stone-600">
         <div class="text-sm grid grid-cols-7">
             <div class="min-w-[2.5rem] align-left">
                 <a href={/\/moments$/.test(uri) ? `${uri}/${id}` : `${uri}#isso-${id}`} class="panda-link">
                     <span class="text-sm font-bold w-full">#{id}</span>
                 </a>
-
             </div>
             <div class="panda-link col-start-2 col-span-3 flex"></div>
-
             <div class="text-amber-400 font-medium italic col-span-1"></div>
-
             <div class="col-span-2 flex">
                 <time class="italic opacity-70 ml-auto mr-4">{relativeTo(ratedDateISO, locale)}</time>
             </div>
         </div>
         <div class="prose prose-stone dark:prose-invert px-2 py-0" set:html={content}/>
         <div class="panda-link text-sm flex">
-            {author && <span class="mr-auto"> {author} | {stringLikeToHeart(likes, dislikes)}</span>}
+            {author && (
+                <span class="mr-2">
+                    {author} |
+                </span>
+            )}
+            <div class="emoji-container flex gap-0">
+                {stringLikeToHeart(likes, dislikes).map((item, index) => (
+                    <span
+                        id=`emoji-container-${id}-${index}`
+                        class="cursor-pointer"
+                        data-type={item.type}
+                    >
+                        {item.emoji}
+                    </span>
+                ))}
+            </div>
             <a href={/\/moments$/.test(uri) ? `${uri}/${id}` : `${uri}#isso-${id}`} class="prose panda-link external-link mr-2">
                 <span class="text-sm font-bold font-italic underline">{review_title ? review_title.slice(0, 24) : `#${t('nav.reviews')}#`}</span>
             </a>
