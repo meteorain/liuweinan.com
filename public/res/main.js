@@ -92,7 +92,7 @@ async function fetchAndProcessData(nooftweets) {
     const sortedReplies = replies.sort((a, b) => b.created - a.created);
     return sortedReplies.slice(0, nooftweets).map(({ id, text, created }) => `
       <li id="tick${id}" style="display:none">
-        <a href="/moments/${id}" target="_blank" onmouseover="stop=true" onmouseout="stop=false">${text}</a>
+        <a href="/moments/${id}" target="_blank" onmouseover="stop=true" onmouseout="stop=false">${text.replace(/<[^>]*>/g, '')}</a>
         ${getTimePeriod(created * 1000)}
       </li>
     `).join("");
