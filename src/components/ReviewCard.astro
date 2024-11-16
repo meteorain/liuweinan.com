@@ -1,36 +1,36 @@
 ---
 import { useLocale } from '@utils/locale'
-import {formatDateYMD} from "../utils/format";
+import { formatDateYMD } from "../utils/format";
 const { t, locale } = useLocale(Astro.url)
-const { imdb_id, title, title_en, rating, rated_date, moments_id } = Astro.props.body
+const { author, text, title_en, id, created, uri } = Astro.props.body
 
-const ratedDateISO = new Date(rated_date)
+const ratedDateISO = new Date(created * 1000)
 
-const imdb_url = `https://www.imdb.com/title/${imdb_id}`
-function stringRateToStarString(rating) {
-    const rate = parseFloat(rating) / 2
-    const fullStar = Math.floor(rate)
-    const halfStar = rate - fullStar > 0.5 ? 1 : 0
-    const emptyStar = 5 - fullStar - halfStar
-    return '★'.repeat(fullStar) + '☆'.repeat(halfStar) + '☆'.repeat(emptyStar)
+const imdb_url = `https://www.imdb.com/title/`
+
+// Function to remove HTML tags
+function removeHtmlTags(input) {
+    return input.replace(/<\/?[^>]+(>|$)/g, ""); // Removes all HTML tags
 }
+
+// Clean the text by removing HTML tags
+const cleanedText = removeHtmlTags(text);
 ---
 
 <div class="mb-2 mr-2">
     <div class="p-3 rounded-xl bg-stone-100 dark:bg-stone-600">
         <div class="mb-2 flex flex-row">
-            <span class="accent-auto dark:accent-auto font-bold">{locale === 'en' ? title_en : title}</span>
+            <span class="accent-auto dark:accent-auto font-bold">{locale === 'en' ? title_en : cleanedText}</span>
             <span class="font-light italic text-xs ml-auto">{formatDateYMD(ratedDateISO)}</span>
         </div>
         <div class="text-sm">
-            <span class="text-amber-400"> {stringRateToStarString(rating)}</span> |
-            <a class="panda-link" href={imdb_url}> IMDB</a>
+            <span class="panda-link font-bold"> {author} </span>
             {
-                moments_id && (
+                uri && (
                     <span>
                         {' '}
                         |{' '}
-                        <a class="panda-link" aria-disabled="true" href={`/moments/${moments_id}/`}>
+                        <a class="panda-link" aria-disabled="true" href={`${uri}#isso-${id}`}>
                             {t('reviews.review')}
                         </a>
                     </span>
