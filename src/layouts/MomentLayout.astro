@@ -109,7 +109,7 @@ const pageHref = (pageNum) => {
         const target = event.target;
         if (target && target.closest('.emoji-container')) {
             const id = target.id.split('-')[2];
-            const type = target.getAttribute('data-type') === 'like' ? 'dislike' : 'like';
+            let type = target.getAttribute('data-type') === 'like' ? 'dislike' : 'like';
             if (target.getAttribute('data-type') == 'like' && target.id.split('-')[3] == '4') type = 'like';
             if (target.getAttribute('data-type') == 'dislike' && target.id.split('-')[3] == '0') type = 'dislike';
             try {
