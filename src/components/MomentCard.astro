@@ -70,7 +70,7 @@ function stringLikeToHeart(likes, dislikes) {
                     </span>
                 ))}
             </div>
-            <a href={/\/moments$/.test(uri) ? `${uri}/${id}` : `${uri}#isso-${id}`} class="prose panda-link external-link mr-2">
+            <a href={/\/moments$/.test(uri) ? `${uri}/${id}` : `${uri}#isso-${id}`} class="prose panda-link external-link ml-auto">
                 <span class="text-sm font-bold font-italic underline">{review_title ? review_title.slice(0, 24) : `#${t('nav.reviews')}#`}</span>
             </a>
         </div>
