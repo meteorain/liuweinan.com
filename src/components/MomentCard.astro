@@ -55,7 +55,7 @@ function stringLikeToHeart(likes, dislikes) {
         <div class="panda-link text-sm flex">
             {author && <span class="mr-auto"> {author} | {stringLikeToHeart(likes, dislikes)}</span>}
             <a href={/\/moments$/.test(uri) ? `${uri}/${id}` : `${uri}#isso-${id}`} class="prose panda-link external-link mr-2">
-                <span class="text-sm font-bold font-italic underline">{review_title ? review_title.slice(0, 24) : t('nav.reviews')}</span>
+                <span class="text-sm font-bold font-italic underline">{review_title ? review_title.slice(0, 24) : `#${t('nav.reviews')}#`}</span>
             </a>
         </div>
     </div>
