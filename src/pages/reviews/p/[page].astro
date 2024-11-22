@@ -1,15 +1,22 @@
 ---
 import ReviewLayout from '@layouts/ReviewLayout.astro'
 export const prerender = false;
+
 const {page} = Astro.params
+
+const pageIndex = parseInt(page, 10)
+
+if (pageIndex === undefined) {
+    throw new Error('Slug is required')
+}
 const pageOptions = {
-    currentPage: page,
+    currentPage: pageIndex,
+    pageSize: 20,
     url: {
-        current: '/reviews/p/1',
-        next: '/reviews/p/2',
-        prev: null
+        prev: pageIndex > 1 ? `/reviews/p/${pageIndex - 1}` : '',
+        next: '/reviews/p/' + (pageIndex + 1)
     }
 }
 ---
 
-<ReviewLayout page={pageOptions} />
+<ReviewLayout page={pageOptions}/>

@@ -1,13 +1,13 @@
 ---
 import ReviewLayout from '@layouts/ReviewLayout.astro'
-const page = {
+const pageOptions = {
     currentPage: 1,
+    pageSize: 20,
     url: {
-        current: '/reviews/p/1',
         next: '/reviews/p/2',
         prev: null
     }
 }
 ---
 
-<ReviewLayout page={page} />
+<ReviewLayout page={pageOptions}/>

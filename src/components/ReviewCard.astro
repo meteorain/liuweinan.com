@@ -2,11 +2,9 @@
 import { useLocale } from '@utils/locale'
 import { formatDateYMD } from "../utils/format";
 const { t, locale } = useLocale(Astro.url)
-const { author, text, title_en, id, created, uri } = Astro.props.body
+const {id, author, text, created, uri, title, title_en, likes, dislikes} = Astro.props.content
 
 const ratedDateISO = new Date(created * 1000)
-
-const imdb_url = `https://www.imdb.com/title/`
 
 // Function to remove HTML tags
 function removeHtmlTags(input) {
@@ -15,16 +13,35 @@ function removeHtmlTags(input) {
 
 // Clean the text by removing HTML tags
 const cleanedText = removeHtmlTags(text);
+
+function stringLikeToHeart(likes, dislikes) {
+  let rate = Math.min(5, Math.max(0, 3 + likes - dislikes));
+  return Array.from({ length: 5 }, (_, i) => ({
+    emoji: i < rate ? '❤️' : '🤍',
+    type: i < rate ? 'like' : 'dislike'
+  }));
+}
 ---
 
 <div class="mb-2 mr-2">
     <div class="p-3 rounded-xl bg-stone-100 dark:bg-stone-600">
         <div class="mb-2 flex flex-row">
-            <span class="accent-auto dark:accent-auto font-bold">{locale === 'en' ? title_en : cleanedText}</span>
+            <span class="accent-auto dark:accent-auto">{cleanedText}</span>
             <span class="font-light italic text-xs ml-auto">{formatDateYMD(ratedDateISO)}</span>
         </div>
-        <div class="text-sm">
-            <span class="panda-link font-bold"> {author} </span>
+        <div class="panda-link text-sm flex">
+            <div class="emoji-container flex gap-0">
+                {stringLikeToHeart(likes, dislikes).map((item, index) => (
+                    <span
+                        id=`emoji-container-${id}-${index}`
+                        class="cursor-pointer"
+                        data-type={item.type}
+                    >
+                        {item.emoji}
+                    </span>
+                ))}
+            </div>
+            <span class="mr-2">| {author} </span>
             {
                 uri && (
                     <span>
