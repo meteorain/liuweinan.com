@@ -12,6 +12,10 @@ div {
     color: rgb(var(--color-text-heading));
 }
 
+.break-words {
+    word-break: break-word;
+}
+
 .panda-link-static {
     @apply hover:cursor-pointer no-underline
     hover:underline

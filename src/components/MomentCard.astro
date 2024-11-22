@@ -52,7 +52,7 @@ function stringLikeToHeart(likes, dislikes) {
                 <time class="italic opacity-70 ml-auto mr-4">{relativeTo(ratedDateISO, locale)}</time>
             </div>
         </div>
-        <div class="prose prose-stone dark:prose-invert px-2 py-0" set:html={content}/>
+        <div class="prose prose-stone dark:prose-invert px-2 py-0 break-words" set:html={content}/>
         <div class="panda-link text-sm flex">
             {author && (
                 <span class="mr-2">
