@@ -29,7 +29,7 @@ function stringLikeToHeart(likes, dislikes) {
             <span class="accent-auto dark:accent-auto">{cleanedText}</span>
             <span class="font-light italic text-xs ml-auto">{formatDateYMD(ratedDateISO)}</span>
         </div>
-        <div class="panda-link text-sm flex">
+        <div class="panda-link text-sm flex flex-wrap">
             <div class="emoji-container flex gap-0">
                 {stringLikeToHeart(likes, dislikes).map((item, index) => (
                     <span
@@ -41,7 +41,7 @@ function stringLikeToHeart(likes, dislikes) {
                     </span>
                 ))}
             </div>
-            <span class="mr-2">| {author} </span>
+            <span class="mr-2">| {author.slice(0, 10)} </span>
             {
                 uri && (
                     <span>

@@ -76,7 +76,7 @@ const groupedReviews = pagedReviews.reduce((acc, review) => {
                             <h2 class="text-2xl italic font-bold">{k}</h2>
                             <div class="grid grid-cols-2">
                                 {
-                                    g.filter(i => i.uri && i.uri.startsWith('/posts')).map((i) => {
+                                    g.map((i) => {
                                         return <ReviewCard content={i} />
                                     })
                                 }
