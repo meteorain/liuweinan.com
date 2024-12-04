@@ -29,15 +29,16 @@ export default defineConfig({
     },
     compressHTML:false,
     experimental: {
-        env: {
-            schema: {
-                API_URL: envField.string({context: "server", access: "secret"}),
-                API_SECRET: envField.string({context: "server", access: "secret"}),
-                STUDIO_SECRET: envField.string({context: "server", access: "secret"}),
-            }
-        },
-        serverIslands: true,
+
     },
+    env: {
+        schema: {
+            API_URL: envField.string({context: "server", access: "secret"}),
+            API_SECRET: envField.string({context: "server", access: "secret"}),
+            STUDIO_SECRET: envField.string({context: "server", access: "secret"}),
+        }
+    },
+    serverIslands: true,
 
     // prefetch: true,
     site: 'https://yuhang.ch',

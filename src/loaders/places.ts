@@ -14,6 +14,13 @@ const places: Place[] = [
         longitude: 116.405285,
         latitude: 39.904989
     },
+    // 上海
+    {
+      name: '上海',
+      location: '上海市',
+      longitude: 121.472644,
+      latitude: 31.231706
+    },
     // 南昌，济南，石家庄，广州，深圳，长沙，武汉，郑州，西安，哈尔滨，合肥，青岛
     {
         name: '南昌',

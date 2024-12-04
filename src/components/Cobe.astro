@@ -1,6 +1,6 @@
 ---
 export const prerender = true
-import {placesLoader} from "../loaders/places";
+import {placesLoader} from "@loaders/places";
 const loader = placesLoader();
 const places = await loader.load();
 const location = places.map(({latitude, longitude}) => ({
@@ -8,9 +8,13 @@ const location = places.map(({latitude, longitude}) => ({
     size: 0.03
 }));
 ---
+<div class="my-8">
+    沿着此线前行，但见大江大川。
+</div>
+
 <canvas
         id="cobe"
-        style="width: 400px; height: 400px;"
+        style="width: 400px; height: 400px;margin: 0 auto;display: block;"
         width="800"
         height="800"
         data-location={JSON.stringify(location)}
@@ -39,4 +43,3 @@ const location = places.map(({latitude, longitude}) => ({
         }
     });
 </script>
-
