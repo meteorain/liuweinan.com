@@ -6,11 +6,11 @@ import {getCollection, getEntry, render} from "astro:content";
 export const prerender = true;
 
 const clips = await getCollection('docs', (i) => {
-    return i.slug.includes('read/clips/')
+    return i.id.includes('read/clips/')
 })
 const clipsList = clips.map((clip) => {
     return {
-        link: clip.slug,
+        link: clip.id,
         label: clip.data.title
     };
 });

@@ -17,7 +17,6 @@ const posts = defineCollection({
     })
 });
 
-//@ts-ignore
 const docs = defineCollection({
     type: 'content',
     schema: z.object({
