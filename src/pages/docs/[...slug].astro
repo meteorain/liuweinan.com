@@ -5,10 +5,13 @@ import ObsidianEdit from "@components/ObsidianEdit.astro";
 import {getEntry, render} from 'astro:content';
 import {useLocale} from '@utils/locale'
 import {formatDateYMD} from "@utils/format";
+import '../../styles/content.css'
 export const prerender = true;
 const {path, t} = useLocale(Astro.url)
 const {slug} = Astro.params
 const note = await getEntry('docs', slug);
+
+
 
 
 const {title} = note.data
@@ -35,7 +38,7 @@ export async function getStaticPaths() {
 
         <div class="mt-6">
             <h1 class="text-4xl">{title} </h1>
-            <div class="flex sm:flex-row  flex-col rounded-lg bg-stone-100 dark:bg-stone-600 p-2 px-4">
+            <div class="flex sm:flex-row  flex-col rounded-lg bg-stone-100 dark:bg-stone-800 p-2 px-4">
 
                 <!--<a >-->
                     {
@@ -48,7 +51,7 @@ export async function getStaticPaths() {
                         slug.split('/').map((part, index, array) => {
                             const url = array.slice(0, index + 1).join('/');
                             return (
-                                    <span class="mr-2">
+                                    <span class="mr-2  sm:mt-0 mt-1">
                                     <a class="panda-link" href={`/docs/${url}/`} >
                                        / {part}</a>
                                 </span>
@@ -59,7 +62,7 @@ export async function getStaticPaths() {
                 <!--<span class="ml-auto mr-4 text-sm font-normal"> {t('post.post_at')} </span>-->
             </div>
         </div>
-        <article class="prose dark:prose-invert prose-stone max-w-prose mt-6">
+        <article class="prose dark:prose-invert prose-neutral max-w-prose mt-6">
             <Content/>
             {
 

@@ -1,0 +1,74 @@
+---
+import {getCollection, getEntry} from 'astro:content';
+
+export const prerender = false;  // Use SSR mode
+
+// Get the filename and extension from the request
+const pathname = Astro.url.pathname;
+const slugParts = pathname.split('/').filter(Boolean);
+const fullSlug = slugParts.slice(2).join('/'); // Remove 'raw' and 'posts'
+const fileExtension = fullSlug.endsWith('.md') ? 'md' : 'mdx';
+const postSlug = fullSlug.replace(/\.(md|mdx)$/, '');
+
+try {
+    // Find matching entry in the collection
+    const collection = await getCollection('posts');
+    const entry = collection.find(note => 
+        note.slug === postSlug || 
+        note.slug.endsWith(`/${postSlug}`)
+    );
+    
+    if (!entry) {
+        return new Response(`Entry not found for slug: ${postSlug}`, { status: 404 });
+    }
+    
+    const { body, data: frontmatter } = entry;
+    
+    if (!body) {
+        return new Response('Content not found', { status: 404 });
+    }
+    
+    // Build complete Markdown content with frontmatter
+    const frontmatterYaml = Object.entries(frontmatter)
+        .map(([key, value]) => {
+            // Handle array type
+            if (Array.isArray(value)) {
+                return `${key}: [${value.map(v => `"${v}"`).join(', ')}]`;
+            }
+            // Handle date type
+            else if (value instanceof Date) {
+                return `${key}: "${value.toISOString()}"`;
+            }
+            // Handle string type (add quotes)
+            else if (typeof value === 'string') {
+                return `${key}: "${value}"`;
+            }
+            // Handle other types directly
+            else {
+                return `${key}: ${value}`;
+            }
+        })
+        .join('\n');
+
+    const fullContent = `---
+${frontmatterYaml}
+---
+
+${body}`;
+
+    // Set content type based on extension
+    const contentType = fileExtension === 'md' ? 'text/markdown' : 'text/mdx';
+
+    // Return direct response, bypassing Astro's HTML rendering
+    return new Response(fullContent, {
+        headers: {
+            'Content-Type': `${contentType}; charset=utf-8`,
+            'Content-Disposition': `inline; filename="${postSlug}.${fileExtension}"`,
+            'Cache-Control': 'max-age=300'
+        }
+    });
+} catch (error) {
+    console.error('Error in raw content endpoint:', error);
+    return new Response(`Error: ${error.message}`, { status: 500 });
+}
+---

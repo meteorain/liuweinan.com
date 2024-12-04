@@ -11,7 +11,7 @@ export async function GET({ params }) {
         .sort((a, b) => (a.data.pubDate < b.data.pubDate ? 1 : -1))
         .map((post) => {
             const content = post.description || post.body
-            const html = parser.render(content)
+            const html = typeof content === 'string' ? parser.render(content) : ''
             return {
                 ...post.data,
                 link: `/posts/${post.slug}/`,

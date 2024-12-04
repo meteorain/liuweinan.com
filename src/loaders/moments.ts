@@ -1,6 +1,5 @@
 
-//@ts-ignore
-import {API_URL} from 'astro:env/server'
+import {API_URL,API_SECRET} from 'astro:env/server'
 
 export interface MomentsLoaderOptions {
     /** URL of the feed */

@@ -12,6 +12,7 @@ nav:
     reviews: reviews
     docs: docs
     footprints: footprint
+    gallery: gallery
 footer:
     home: home
     rss: rss

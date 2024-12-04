@@ -2,15 +2,16 @@
 import {useLocale} from "@utils/locale";
 import Layout from '@layouts/Layout.astro';
 import {getCollection, getEntry, render} from "astro:content";
+import '../../styles/content.css'
 
 export const prerender = true;
 
 const clips = await getCollection('docs', (i) => {
-    return i.slug.includes('read/clips/')
+    return i.id.includes('read/clips/')
 })
 const clipsList = clips.map((clip) => {
     return {
-        link: clip.slug,
+        link: clip.id,
         label: clip.data.title
     };
 });
@@ -79,7 +80,7 @@ const menubar = [
 
 <Layout title={t('nav.docs')} navbar={true}>
     <main class="pl-0 mt-8">
-        <article class="prose dark:prose-invert prose-stone max-w-prose mt-6">
+        <article class="prose dark:prose-invert prose-netrual max-w-prose mt-6">
             <Content/>
             <div data-orientation="horizontal" role="separator" class="bg-stone-200 w-full h-px my-8"></div>
         </article>

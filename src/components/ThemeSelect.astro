@@ -1,11 +1,8 @@
 ---
-
 const id = `moon-mask-`
-
-
 ---
 
-<starlight-rapide-theme-select>
+<panda-theme-select>
     <button
             aria-label="ok"
             aria-live="polite"
@@ -15,11 +12,11 @@ const id = `moon-mask-`
         <svg aria-hidden="true" height="20" viewBox="0 0 24 24" width="20" class="dark:stroke-white dark:fill-white">
             <mask class="moon" id={id} fill="yellow" stroke="red">
                 <rect x="0" y="0" width="100%" height="100%" fill="white"></rect>
-                <circle cx="24" cy="10" r="6" fill="black" ></circle>
+                <circle cx="24" cy="10" r="6" fill="black"></circle>
             </mask>
             <circle class="sun" cx="12" cy="12" r="6" mask={`url(#${id})`}></circle>
-            <g class="sun-beams" stroke="black" >
-                <line  x1="12" y1="1" x2="12" y2="3"></line>
+            <g class="sun-beams" stroke="black">
+                <line x1="12" y1="1" x2="12" y2="3"></line>
                 <line x1="12" y1="21" x2="12" y2="23"></line>
                 <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
                 <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
@@ -30,15 +27,12 @@ const id = `moon-mask-`
             </g>
         </svg>
     </button>
-</starlight-rapide-theme-select>
+</panda-theme-select>
 
 <style>
-
-
-    starlight-rapide-theme-select {
-        --sl-rapide-theme-select-animation-duration: 400ms;
-        --sl-rapide-theme-select-ease-elastic: cubic-bezier(0.5, 1.25, 0.75, 1.25);
-
+    panda-theme-select {
+        --panda-theme-select-animation-duration: 400ms;
+        --panda-theme-select-ease-elastic: cubic-bezier(0.5, 1.25, 0.75, 1.25);
         align-self: stretch;
     }
 
@@ -59,26 +53,6 @@ const id = `moon-mask-`
     svg :is(.moon, .sun, .sun-beams) {
         transform-origin: center;
     }
-
-    //svg :is(.sun) {
-    //    fill: var(--color-secondary-main);
-    //}
-    //svg :is(.moon ) {
-    //    fill: whitesmoke;
-    //}
-
-    //svg .sun-beams  line{
-    //    //stroke: var(--color-primary-main) ;
-    //    stroke-width: 2px;
-    //}
-
-    //button:is(:hover, :focus-visible) svg :is(.moon, .sun) {
-    //    fill: var(--color-primary-main);
-    //}
-    //
-    //button:is(:hover, :focus-visible) svg .sun-beams line {
-    //    stroke: var(--color-secondary-main);
-    //}
 
     :global(.dark) svg .sun {
         transform: scale(1.75);
@@ -101,103 +75,119 @@ const id = `moon-mask-`
 
     @media (prefers-reduced-motion: no-preference) {
         svg .sun {
-            transition: transform var(--sl-rapide-theme-select-animation-duration) var(--sl-rapide-theme-select-ease-elastic);
+            transition: transform var(--panda-theme-select-animation-duration) var(--panda-theme-select-ease-elastic);
         }
 
         svg .sun-beams {
-            transition:
-                    opacity var(--sl-rapide-theme-select-animation-duration) ease,
-                    transform var(--sl-rapide-theme-select-animation-duration) var(--sl-rapide-theme-select-ease-elastic);
+            transition: opacity var(--panda-theme-select-animation-duration) ease,
+            transform var(--panda-theme-select-animation-duration) var(--panda-theme-select-ease-elastic);
         }
 
         svg .moon circle {
-            transition: transform calc(var(--sl-rapide-theme-select-animation-duration) / 2) ease-out;
+            transition: transform calc(var(--panda-theme-select-animation-duration) / 2) ease-out;
         }
 
         @supports (cx: 1) {
             svg .moon circle {
-                transition: cx calc(var(--sl-rapide-theme-select-animation-duration) / 2) ease-out;
+                transition: cx calc(var(--panda-theme-select-animation-duration) / 2) ease-out;
             }
         }
 
         :global(.dark) svg .sun {
             transform: scale(1.75);
-            transition-duration: calc(var(--sl-rapide-theme-select-animation-duration) / 2);
+            transition-duration: calc(var(--panda-theme-select-animation-duration) / 2);
             transition-timing-function: ease;
         }
 
-        :global(.dark)  svg .sun-beams {
+        :global(.dark) svg .sun-beams {
             transform: rotateZ(-25deg);
-            transition-duration: calc(var(--sl-rapide-theme-select-animation-duration) / 4);
+            transition-duration: calc(var(--panda-theme-select-animation-duration) / 4);
         }
 
-        :global(.dark)  svg .moon circle {
-            transition-delay: calc(var(--sl-rapide-theme-select-animation-duration) / 4);
-            transition-duration: var(--sl-rapide-theme-select-animation-duration);
+        :global(.dark) svg .moon circle {
+            transition-delay: calc(var(--panda-theme-select-animation-duration) / 4);
+            transition-duration: var(--panda-theme-select-animation-duration);
         }
     }
 </style>
 
+<script is:inline>
+
+    const storedTheme =
+        typeof localStorage !== 'undefined' && localStorage.getItem('panda-theme');
+    const theme =
+        storedTheme ||
+        (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+    } else {
+        document.documentElement.classList.remove('dark');
+    }
+
+</script>
+
 
 <script>
-    type Theme = 'auto' | 'dark' | 'light'
+type Theme = 'auto' | 'dark' | 'light'
 
-    /** Key in `localStorage` to store color theme preference at. */
-    const storageKey = 'panda-theme'
+/** Key in `localStorage` to store color theme preference at. */
+const storageKey = 'panda-theme'
 
-    /** Get a typesafe theme string from any JS value (unknown values are coerced to `'auto'`). */
-    function parseTheme(theme: unknown): Theme {
-        return theme === 'auto' || theme === 'dark' || theme === 'light' ? theme : 'auto'
+/** Get a typesafe theme string from any JS value (unknown values are coerced to `'auto'`). */
+function parseTheme(theme: unknown): Theme {
+    return theme === 'auto' || theme === 'dark' || theme === 'light' ? theme : 'auto'
     }
 
-    /** Load the user’s preference from `localStorage`. */
-    function loadTheme(): Theme {
-        return parseTheme(typeof localStorage !== 'undefined' && localStorage.getItem(storageKey))
+/** Load the user’s preference from `localStorage`. */
+function loadTheme(): Theme {
+    return parseTheme(typeof localStorage !== 'undefined' && localStorage.getItem(storageKey))
     }
 
-    /** Store the user’s preference in `localStorage`. */
-    function storeTheme(theme: Theme): void {
-        if (typeof localStorage !== 'undefined') {
-            localStorage.setItem(storageKey, theme === 'light' || theme === 'dark' ? theme : '')
-        }
+/** Store the user’s preference in `localStorage`. */
+function storeTheme(theme: Theme): void {
+    if (typeof localStorage !== 'undefined') {
+    localStorage.setItem(storageKey, theme === 'light' || theme === 'dark' ? theme : '')
+    }
     }
 
-    /** Get the preferred system color scheme. */
-    function getPreferredColorScheme(): Theme {
-        return matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
+/** Get the preferred system color scheme. */
+function getPreferredColorScheme(): Theme {
+    return matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
     }
 
-    /** Update select menu UI, document theme, and local storage state. */
-    function onThemeChange(theme: Theme): void {
-        document.documentElement.dataset['theme'] = theme === 'auto' ? getPreferredColorScheme() : theme
+/** Update select menu UI, document theme, and local storage state. */
+function onThemeChange(theme: Theme): void {
+    document.documentElement.dataset['theme'] = theme === 'auto' ? getPreferredColorScheme() : theme
 
-        if (theme === 'dark') {
-            document.documentElement.classList.add('dark')
-        } else {
-            document.documentElement.classList.remove('dark')
-        }
-        storeTheme(theme)
+    if (theme === 'dark') {
+    document.documentElement.classList.add('dark')
+    } else {
+    document.documentElement.classList.remove('dark')
+    }
+    storeTheme(theme)
     }
 
-    // React to changes in system color scheme.
-    matchMedia(`(prefers-color-scheme: light)`).addEventListener('change', () => {
-        if (loadTheme() === 'auto') onThemeChange('auto')
+
+// React to changes in system color scheme.
+matchMedia(`(prefers-color-scheme: light)`).addEventListener('change', () => {
+    if (loadTheme() === 'auto') onThemeChange('auto')
     })
 
-    customElements.define(
-        'starlight-rapide-theme-select',
-        class StarlightRapideThemeSelect extends HTMLElement {
-            constructor() {
-                super()
-                onThemeChange(loadTheme())
-                const button = this.querySelector('button')
-                button?.addEventListener('click', () => {
-                    const theme = parseTheme(document.documentElement.dataset['theme'])
-                    const newTheme = theme === 'dark' ? 'light' : theme === 'light' ? 'dark' : 'auto'
-                    onThemeChange(newTheme)
-                    button?.setAttribute('aria-label', `${newTheme} theme`)
-                })
-            }
-        },
-    )
+customElements.define(
+'panda-theme-select',
+class PandaThemeSelect extends HTMLElement {
+    constructor() {
+    super()
+
+    onThemeChange(loadTheme())
+    const button = this.querySelector('button')
+    button?.addEventListener('click', () => {
+        const theme = parseTheme(document.documentElement.dataset['theme'])
+        const newTheme = theme === 'dark' ? 'light' : theme === 'light' ? 'dark' : 'auto'
+        onThemeChange(newTheme)
+        button?.setAttribute('aria-label', `${newTheme} theme`)
+        })
+    }
+    },
+)
 </script>

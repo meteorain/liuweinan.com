@@ -12,7 +12,7 @@ export default defineConfig({
             cssExtend: {
                 a: {
                     // no underline
-                    textDecoration: 'none',
+                    'text-decoration': 'none',
                     'font-size': '.9em',
                     // add underline offset
                     textDecorationThickness: '0.2em',
@@ -36,7 +36,13 @@ export default defineConfig({
                     content: 'none'
                 },
                 'a:hover': {
-                    color: 'rgb(var(--color-text-link-hover))'
+                    color: 'rgb(var(--color-text-link-hover))',
+
+                    'text-decoration': 'none',
+                    'font-size': '.9em',
+                    // add underline offset
+                    'text-decoration-thickness': '0.2em',
+                    'text-decoration-color': 'rgb(var(--color-primary-main))',
                 },
                 'pre,code': {
                     'white-space': 'pre-wrap',
@@ -54,6 +60,8 @@ export default defineConfig({
                 },
                 'blockquote p': {
                     'word-break': 'break-all',
+                    'margin': '0',
+                    'font-size': '0.875rem',
                 },
                 'blockquote code': {
                     'white-space': 'pre-wrap',

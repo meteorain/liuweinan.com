@@ -1,6 +1,6 @@
-// @ts-check
+
 import {defineConfig, envField} from 'astro/config';
-import vercel from '@astrojs/vercel/serverless'
+import vercel from '@astrojs/vercel'
 
 import UnoCSS from 'unocss/astro'
 import remarkWikiLink from "./src/plugins/wiki-link/index.ts";
@@ -8,43 +8,44 @@ import {getPermalinks} from "./src/plugins/wiki-link/getPermalinks.ts";
 import yaml from '@rollup/plugin-yaml'
 import expressiveCode from 'astro-expressive-code'
 
-import nightOwlDark from './src/styles/expressive-code/night-owl-dark.json'
-import nightOwlLight from './src/styles/expressive-code/night-owl-light.json'
+// import nightOwlDark from './src/styles/expressive-code/night-owl-dark.json'
+// import nightOwlLight from './src/styles/expressive-code/night-owl-light.json'
 
 import {remarkModifiedTime} from './src/plugins/remark-modified-time.mjs'
 import remarkDirective from 'remark-directive'
+// rehype-figure
 import { RDBilibiliPlugin} from "./src/plugins/remark-directive.mjs";
 import {InternalLinkPlugin} from "./src/plugins/remark-internal-link.mjs";
 import remarkObsidianCallout from './src/plugins/callout/index.js'
 import mdx from "@astrojs/mdx";
+import remarkFigureCaption from "@microflash/remark-figure-caption";
 
 
 // https://astro.build/config
 export default defineConfig({
     vite: {
         plugins: [yaml()],
-        build:{
-            assets: 'assets',
-        }
     },
     compressHTML:false,
     experimental: {
-        env: {
-            schema: {
-                API_URL: envField.string({context: "server", access: "secret"}),
-                API_SECRET: envField.string({context: "server", access: "secret"}),
-                STUDIO_SECRET: envField.string({context: "server", access: "secret"}),
-            }
-        },
-        serverIslands: true,
+
     },
-    trailingSlash: 'never',
+    env: {
+        schema: {
+            API_URL: envField.string({context: "server", access: "secret"}),
+            API_SECRET: envField.string({context: "server", access: "secret"}),
+            STUDIO_SECRET: envField.string({context: "server", access: "secret"}),
+        }
+    },
+    serverIslands: true,
+
     // prefetch: true,
     site: 'https://liuweinancom.vercel.app',
     scopedStyleStrategy: 'class',
     // trailingSlash: 'always',
     build: {
-        format: 'directory'
+        format: 'directory',
+        assets: 'assets',
     },
     markdown: {
 
@@ -52,8 +53,12 @@ export default defineConfig({
         remarkRehype: {
             footnoteLabel: ' '
         },
+
+
         remarkPlugins: [
+            remarkModifiedTime,
             remarkDirective,
+            remarkFigureCaption,
             // RDNotePlugin,
             [
                 remarkObsidianCallout,
@@ -76,7 +81,6 @@ export default defineConfig({
                     return href;
                 }
             }],
-            remarkModifiedTime,
 
         ]
     },
@@ -84,7 +88,7 @@ export default defineConfig({
     integrations: [
         UnoCSS(),
         expressiveCode({
-            themes: [nightOwlDark, nightOwlLight],
+            themes: [ 'dracula-soft','snazzy-light' ],
             themeCssSelector: (theme) => {
                 return '.' + theme.type
             }

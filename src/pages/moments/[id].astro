@@ -16,7 +16,10 @@ const { t } = useLocale(Astro.url);
 ---
 
 <Layout title={t('nav.moments') + ' #' + id}>
-    {moment ? <MomentCard content={moment} />
+    {moment ?
+        <div class="mt-8">
+            <MomentCard  content={moment} />
+        </div>
         <script data-isso={API_URL}
                 src=`${API_URL}/js/embed.min.js`></script>
 
