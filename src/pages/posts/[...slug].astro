@@ -43,7 +43,7 @@ export async function getStaticPaths() {
         <div class="mt-6">
 
             <h1 class="text-4xl ">{title} </h1>
-            <div class="flex sm:flex-row flex-col rounded-lg bg-stone-100 dark:bg-stone-600 p-2 px-4">
+            <div class="flex sm:flex-row flex-col rounded-lg bg-stone-100 dark:bg-stone-800 p-2 px-4">
                 <div>
                     {
                         categories &&
@@ -59,7 +59,7 @@ export async function getStaticPaths() {
                 <span class="ml-auto mr-4 text-sm font-normal"> {t('post.post_at')} {formatDateYMD(pubDate)}</span>
             </div>
         </div>
-        <article class="prose dark:prose-invert prose-stone dark:prose-gray max-w-prose mt-6">
+        <article class="prose dark:prose-invert prose-netrual max-w-prose mt-6">
             <Content/>
         </article>
         <div class="mt-9 flex text-sm font-italic opacity-80">

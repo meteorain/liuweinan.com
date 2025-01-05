@@ -28,7 +28,7 @@ const content = new MarkdownIt('commonmark',{
 ---
 
 <div class="my-4">
-    <div class="p-4 rounded-xl bg-stone-100  dark:bg-stone-600">
+    <div class="p-4 rounded-xl bg-stone-100  dark:bg-stone-800">
         <!--<div class="p-4 border border-blue-500 dark:border-stone-400 border-solid">-->
         <div class="text-sm grid grid-cols-7">
             <div class="min-w-[2.5rem] align-left">
@@ -46,7 +46,7 @@ const content = new MarkdownIt('commonmark',{
                 <time class="italic opacity-70 ml-auto mr-4">{relativeTo(created_at, locale)}</time>
             </div>
         </div>
-        <div class="prose prose-stone dark:prose-invert px-2 py-0" set:html={content}/>
+        <div class="prose prose-netrual dark:prose-invert px-2 py-0" set:html={content}/>
         <div class="panda-link text-sm flex">
             {tags && <span class="mr-auto"> #{tags}#</span>}
             {

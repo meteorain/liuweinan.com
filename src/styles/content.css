@@ -59,6 +59,15 @@
     --color-code-bg : #1a202c;
 
     scroll-behavior: smooth;
+
+
+}
+
+
+
+.dark .dark\:prose-invert {
+    --un-prose-body: rgb(var(--color-text-body));
+    --un-prose-headings: rgb(var(--color-text-heading));
 }
 
 /*
@@ -102,7 +111,7 @@
  * blockquote
  */
 .prose :where(blockquote):not(:where(.not-prose,.callout, .not-prose *)) {
-    @apply bg-gray-100 dark:bg-stone-600
+    @apply bg-gray-100 dark:bg-stone-800
     text-base m-0
     border-l-solid
     font-normal rounded-lg

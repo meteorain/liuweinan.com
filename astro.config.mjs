@@ -83,7 +83,7 @@ export default defineConfig({
     integrations: [
         UnoCSS(),
         expressiveCode({
-            themes: [nightOwlDark, nightOwlLight],
+            themes: [ 'dracula-soft','snazzy-light' ],
             themeCssSelector: (theme) => {
                 return '.' + theme.type
             }
