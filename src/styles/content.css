@@ -1,0 +1,271 @@
+:root {
+    --color-red-rgb: 233, 49, 71;
+    --color-red: #e93147;
+    --color-orange-rgb: 236, 117, 0;
+    --color-orange: #ec7500;
+    --color-yellow-rgb: 224, 172, 0;
+    --color-yellow: #e0ac00;
+    --color-green-rgb: 8, 185, 78;
+    --color-green: #08b94e;
+    --color-cyan-rgb: 0, 191, 188;
+    --color-cyan: #00bfbc;
+    --color-blue-rgb: 8, 109, 221;
+    --color-blue: #086ddd;
+    --color-purple-rgb: 120, 82, 238;
+    --color-purple: #7852ee;
+
+
+
+    --callout-border-width: 0px;
+    --callout-border-opacity: 0.25;
+    --callout-padding: .5rem 1rem;
+    --callout-radius: 0.5rem;
+    --callout-title-color: inherit;
+    --callout-title-padding: 0;
+    --callout-title-size: inherit;
+    --callout-title-weight: 600;
+    --callout-content-padding: 0;
+    --callout-content-background: transparent;
+    --callout-bug: var(--color-red-rgb);
+    --callout-default: var(--color-blue-rgb);
+    --callout-error: var(--color-red-rgb);
+    --callout-example: var(--color-purple-rgb);
+    --callout-fail: var(--color-red-rgb);
+    --callout-important: var(--color-cyan-rgb);
+    --callout-info: var(--color-blue-rgb);
+    --callout-question: var(--color-orange-rgb);
+    --callout-success: var(--color-green-rgb);
+    --callout-summary: var(--color-cyan-rgb);
+    --callout-tip: var(--color-cyan-rgb);
+    --callout-todo: var(--color-blue-rgb);
+    --callout-warning: var(--color-orange-rgb);
+    --callout-quote: 158, 158, 158;
+
+
+    scroll-behavior: smooth;
+}
+
+:root.dark {
+    color-scheme: dark;
+    --color-primary-main: 235 153 161; /* #eb99a1 */
+    --color-secondary-main: 226 111 122; /* #e26f7a */
+    /*--color-primary-main: 138 92 245; !* #eb99a1 *!*/
+    /*--color-secondary-main:168 130 255; !* #e26f7a *!*/
+    --color-text-body: 214 211 209;
+    --color-text-heading: 200 200 200;
+    --color-text-link: var(--color-primary-main);
+    --color-text-link-hover: var(--color-secondary-main);
+    --color-border: var(--color-primary-main);
+    --color-code-bg : #1a202c;
+
+    scroll-behavior: smooth;
+}
+
+/*
+ * prose link
+ */
+.prose :where(a):not(:where([data-footnote-ref], [data-footnote-backref], .not-prose, .not-prose *)) {
+    text-decoration-color: var(--color-primary-main);
+    text-underline-offset : 0.3em;
+    color :rgb(var(--color-primary-main));
+    @apply mx-1;
+
+}
+
+/*prose link add arrow when class not have 'internal'*/
+
+.external-link {
+    @apply after:content-['↗'] after:ml-0;
+}
+
+.prose :where(a):not(:where([data-footnote-ref], [data-footnote-backref], .not-prose, .not-prose *)):not(.internal) {
+    @apply after:content-['↗'] after:ml-0;
+}
+
+/*prose link add ' [[ link ]] ' when class have 'internal'*/
+
+.prose :where(a):not(:where([data-footnote-ref], [data-footnote-backref], .not-prose, .not-prose *)):where(.internal)::after {
+    content: ']';
+    margin-right: 0;
+    margin-left: 0;
+    text-decoration: none;
+}
+
+.prose :where(a):not(:where([data-footnote-ref], [data-footnote-backref], .not-prose, .not-prose *)):where(.internal)::before {
+    content: '[';
+    margin-right: 0;
+    text-decoration: none;
+}
+
+
+/*
+ * blockquote
+ */
+.prose :where(blockquote):not(:where(.not-prose,.callout, .not-prose *)) {
+    @apply bg-gray-100 dark:bg-stone-600
+    text-base m-0
+    border-l-solid
+    font-normal rounded-lg
+    rounded-l-sm
+    pl-4 p-2;
+    border-left: 6px solid rgb(var(--color-primary-main)) !important;
+}
+
+
+.prose blockquote p {
+    @apply m-0 text-sm;
+}
+
+.prose :where(ol > li):not(:where(.not-prose, .not-prose *))::marker,
+.prose :where(ul > li):not(:where(.not-prose, .not-prose *))::marker,
+.prose :where(summary):not(:where(.not-prose, .not-prose *))::marker {
+    color: rgb(var(--color-primary-main));
+    @apply mr-4 font-semibold;
+}
+
+/*
+* footnotes
+*/
+
+[data-footnote-ref]::before {
+    content: ' [';
+}
+
+[data-footnote-ref]::after {
+    content: '] ';
+}
+
+[data-footnote-backref] {
+    text-decoration: none;
+}
+
+[data-footnote-ref] {
+    @apply font-normal no-underline;
+}
+
+.transition-all {
+    transition-property: all;
+    transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+    transition-duration: .15s;
+}
+
+.duration-300 {
+    transition-duration: .3s;
+}
+
+
+.callout {
+    --callout-color: var(--callout-default);
+    --callout-icon: lucide-pencil;
+}
+.callout[data-callout="abstract"],
+.callout[data-callout="summary"],
+.callout[data-callout="tldr"] {
+    --callout-color: var(--callout-summary);
+    --callout-icon: lucide-clipboard-list;
+}
+.callout[data-callout="info"] {
+    --callout-color: var(--callout-info);
+    --callout-icon: lucide-info;
+}
+.callout[data-callout="todo"] {
+    --callout-color: var(--callout-todo);
+    --callout-icon: lucide-check-circle-2;
+}
+.callout[data-callout="important"] {
+    --callout-color: var(--callout-important);
+    --callout-icon: lucide-flame;
+}
+.callout[data-callout="tip"],
+.callout[data-callout="hint"] {
+    --callout-color: var(--callout-tip);
+    --callout-icon: lucide-flame;
+}
+.callout[data-callout="success"],
+.callout[data-callout="check"],
+.callout[data-callout="done"] {
+    --callout-color: var(--callout-success);
+    --callout-icon: lucide-check;
+}
+.callout[data-callout="question"],
+.callout[data-callout="help"],
+.callout[data-callout="faq"] {
+    --callout-color: var(--callout-question);
+    --callout-icon: help-circle;
+}
+.callout[data-callout="warning"],
+.callout[data-callout="caution"],
+.callout[data-callout="attention"] {
+    --callout-color: var(--callout-warning);
+    --callout-icon: lucide-alert-triangle;
+}
+.callout[data-callout="failure"],
+.callout[data-callout="fail"],
+.callout[data-callout="missing"] {
+    --callout-color: var(--callout-fail);
+    --callout-icon: lucide-x;
+}
+.callout[data-callout="danger"],
+.callout[data-callout="error"] {
+    --callout-color: var(--callout-error);
+    --callout-icon: lucide-zap;
+}
+.callout[data-callout="bug"] {
+    --callout-color: var(--callout-bug);
+    --callout-icon: lucide-bug;
+}
+.callout[data-callout="example"] {
+    --callout-color: var(--callout-example);
+    --callout-icon: lucide-list;
+}
+.callout[data-callout="quote"],
+.callout[data-callout="cite"] {
+    --callout-color: var(--callout-quote);
+    --callout-icon: quote-glyph;
+}
+.callout {
+    overflow: hidden;
+    border-style: solid;
+    border-color: rgba(var(--callout-color), var(--callout-border-opacity));
+    border-width: var(--callout-border-width);
+    border-radius: var(--callout-radius);
+    margin: 1em 0;
+    background-color: rgba(var(--callout-color), 0.1);
+    padding: var(--callout-padding);
+
+}
+.callout.is-collapsible .callout-title {
+    cursor: pointer;
+}
+.callout-title {
+    padding: var(--callout-title-padding);
+    display: flex;
+    gap: .25rem;
+    font-style: normal;
+    color: rgb(var(--callout-color));
+    line-height: 1rem;
+    align-items: center;
+    font-weight: 600;
+}
+.callout-content {
+    overflow-x: auto;
+    margin-top: .6rem;
+    padding: var(--callout-content-padding);
+    background-color: var(--callout-content-background);
+    font-size: small;
+}
+.callout-content .callout {
+    margin-top: 20px;
+}
+.callout-title-icon {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    scale: 0.7;
+}
+.callout-title-icon .svg-icon {
+    color: rgb(var(--callout-color));
+}
+.callout-title-icon::after {
+    content: "\200B";
+}

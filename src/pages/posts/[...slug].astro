@@ -4,6 +4,7 @@ import {useLocale} from '@utils/locale'
 import {formatDateYMD} from "@utils/format";
 import ObsidianEdit from "@components/ObsidianEdit.astro";
 import {getCollection, getEntry, render} from 'astro:content';
+import '../../styles/content.css'
 
 export const prerender = true;
 const {path, t, locale} = useLocale(Astro.url)

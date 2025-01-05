@@ -23,9 +23,6 @@ import mdx from "@astrojs/mdx";
 export default defineConfig({
     vite: {
         plugins: [yaml()],
-        build:{
-            assets: 'assets',
-        }
     },
     compressHTML:false,
     experimental: {
@@ -45,7 +42,8 @@ export default defineConfig({
     scopedStyleStrategy: 'class',
     // trailingSlash: 'always',
     build: {
-        format: 'directory'
+        format: 'directory',
+        assets: 'assets',
     },
     markdown: {
 

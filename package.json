@@ -29,7 +29,7 @@
     "@types/lodash": "latest",
     "@types/luxon": "latest",
     "@types/markdown-it": "latest",
-    "@types/node": "^22.10.1",
+    "@types/node": "^22.10.5",
     "hastscript": "latest",
     "mdast-util-to-string": "latest",
     "mdast-util-wiki-link": "latest",
