@@ -54,6 +54,8 @@ export default defineConfig({
                 },
                 'blockquote p': {
                     'word-break': 'break-all',
+                    'margin': '0',
+                    'font-size': '0.875rem',
                 },
                 'blockquote code': {
                     'white-space': 'pre-wrap',

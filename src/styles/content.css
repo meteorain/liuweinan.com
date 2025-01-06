@@ -41,7 +41,6 @@
     --callout-warning: var(--color-orange-rgb);
     --callout-quote: 158, 158, 158;
 
-
     scroll-behavior: smooth;
 }
 
@@ -69,6 +68,14 @@
     --un-prose-body: rgb(var(--color-text-body));
     --un-prose-headings: rgb(var(--color-text-heading));
 }
+.prose {
+    --un-prose-body: rgb(var(--color-text-body));
+    --un-prose-headings: rgb(var(--color-text-heading));
+}
+
+article p {
+    @apply text-justify indent-8;
+}
 
 /*
  * prose link
@@ -79,6 +86,24 @@
     color :rgb(var(--color-primary-main));
     @apply mx-1;
 
+}
+
+/*
+ * prose image
+ */
+
+
+.prose figure {
+    @apply flex flex-col items-center justify-center my-6 mx-auto text-center;
+}
+
+.prose figure img {
+    @apply rounded-lg shadow-md max-w-full h-auto max-h-64;
+}
+
+.prose figcaption {
+    @apply mt-2 text-sm italic;
+    color: rgb(var(--color-text-heading));
 }
 
 /*prose link add arrow when class not have 'internal'*/
@@ -120,10 +145,6 @@
     border-left: 6px solid rgb(var(--color-primary-main)) !important;
 }
 
-
-.prose blockquote p {
-    @apply m-0 text-sm;
-}
 
 .prose :where(ol > li):not(:where(.not-prose, .not-prose *))::marker,
 .prose :where(ul > li):not(:where(.not-prose, .not-prose *))::marker,

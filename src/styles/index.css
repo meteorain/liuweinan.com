@@ -3,10 +3,6 @@ body {
     overflow-y: scroll;
 }
 
-img {
-    @apply max-w-md mx-h-[20%];
-}
-
 time,
 div {
     color: rgb(var(--color-text-heading));
@@ -96,7 +92,6 @@ a.animated.active:after {
     --color-text-link: var(--color-primary-main);
     --color-text-link-hover: var(--color-secondary-main);
     --color-border: var(--color-primary-main);
-    --color-code-bg : #f3f4f6;
 
     scroll-behavior: smooth;
 }
@@ -112,7 +107,5 @@ a.animated.active:after {
     --color-text-link: var(--color-primary-main);
     --color-text-link-hover: var(--color-secondary-main);
     --color-border: var(--color-primary-main);
-    --color-code-bg : #1a202c;
 
-    scroll-behavior: smooth;
 }

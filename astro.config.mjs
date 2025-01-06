@@ -8,11 +8,13 @@ import {getPermalinks} from "./src/plugins/wiki-link/getPermalinks.ts";
 import yaml from '@rollup/plugin-yaml'
 import expressiveCode from 'astro-expressive-code'
 
-import nightOwlDark from './src/styles/expressive-code/night-owl-dark.json'
-import nightOwlLight from './src/styles/expressive-code/night-owl-light.json'
+// import nightOwlDark from './src/styles/expressive-code/night-owl-dark.json'
+// import nightOwlLight from './src/styles/expressive-code/night-owl-light.json'
 
 import {remarkModifiedTime} from './src/plugins/remark-modified-time.mjs'
 import remarkDirective from 'remark-directive'
+// rehype-figure
+import rehypeFigure from '@microflash/rehype-figure'
 import { RDBilibiliPlugin} from "./src/plugins/remark-directive.mjs";
 import {InternalLinkPlugin} from "./src/plugins/remark-internal-link.mjs";
 import remarkObsidianCallout from './src/plugins/callout/index.js'
@@ -51,6 +53,13 @@ export default defineConfig({
         remarkRehype: {
             footnoteLabel: ' '
         },
+
+        rehypePlugins:[
+            rehypeFigure({
+                className:""
+            }),
+
+        ],
         remarkPlugins: [
             remarkDirective,
             // RDNotePlugin,
