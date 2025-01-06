@@ -14,11 +14,11 @@ import expressiveCode from 'astro-expressive-code'
 import {remarkModifiedTime} from './src/plugins/remark-modified-time.mjs'
 import remarkDirective from 'remark-directive'
 // rehype-figure
-import rehypeFigure from '@microflash/rehype-figure'
 import { RDBilibiliPlugin} from "./src/plugins/remark-directive.mjs";
 import {InternalLinkPlugin} from "./src/plugins/remark-internal-link.mjs";
 import remarkObsidianCallout from './src/plugins/callout/index.js'
 import mdx from "@astrojs/mdx";
+import remarkFigureCaption from "@microflash/remark-figure-caption";
 
 
 // https://astro.build/config
@@ -54,14 +54,10 @@ export default defineConfig({
             footnoteLabel: ' '
         },
 
-        rehypePlugins:[
-            rehypeFigure({
-                className:""
-            }),
 
-        ],
         remarkPlugins: [
             remarkDirective,
+            remarkFigureCaption,
             // RDNotePlugin,
             [
                 remarkObsidianCallout,

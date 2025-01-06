@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "@expressive-code/core": "latest",
+    "@microflash/remark-figure-caption": "latest",
     "@rollup/plugin-yaml": "latest",
     "@types/lodash": "latest",
     "@types/luxon": "latest",
@@ -34,7 +35,6 @@
     "mdast-util-to-string": "latest",
     "mdast-util-wiki-link": "latest",
     "micromark-util-symbol": "latest",
-    "@microflash/rehype-figure": "latest",
     "remark-obsidian-callout": "latest",
     "unist-util-visit": "latest",
     "unocss": "latest"
