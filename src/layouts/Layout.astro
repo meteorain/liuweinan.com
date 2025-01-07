@@ -5,7 +5,6 @@ import Navbar from './Navbar.astro'
 import Footer from './Footer.astro'
 import {useLocale} from '@utils/locale'
 
-
 const {t, locale} = useLocale(Astro.url)
 
 export const prerender = true
@@ -16,9 +15,7 @@ export interface Props {
     description?: string
 }
 
-let {title, navbar, description} = Astro.props
-if (navbar === undefined) navbar = true
-if (!description) description = t('layout.description')
+let {title, navbar = true, description = t('layout.description')} = Astro.props
 const fullTitle = `${title} - ${t('layout.title')}`
 ---
 
@@ -31,12 +28,11 @@ const fullTitle = `${title} - ${t('layout.title')}`
     <title>{fullTitle}</title>
 </head>
 <body class="max-width dark:bg-stone-900 bg-[#FBFBFBFF]">
-<Header/>
-{navbar &&
-        <Navbar/>}
-<main>
-    <slot/>
-</main>
-<Footer/>
+    <Header/>
+    {navbar && <Navbar/>}
+    <main>
+        <slot/>
+    </main>
+    <Footer/>
 </body>
 </html>

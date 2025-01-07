@@ -52,7 +52,7 @@ export async function getStaticPaths() {
                     {
                         categories &&
                         categories.map((category) => (
-                                <span class="ml-2">
+                                <span class="ml-1">
                                 <a href={path('/categories/' + category)} class="text-sm mr-2 panda-link">
                                     #{t('categories.' + category)}#
                                 </a>
@@ -60,7 +60,7 @@ export async function getStaticPaths() {
                         ))
                     }
                 </div>
-                <span class="ml-auto mr-4 text-sm font-normal"> {t('post.post_at')} {formatDateYMD(pubDate)}</span>
+                <span class="sm:ml-auto ml-0 mt-1 sm:mt-0 pl-1 text-sm font-normal"> {t('post.post_at')} {formatDateYMD(pubDate)}</span>
             </div>
         </div>
         <article class="prose dark:prose-invert prose-netrual max-w-prose mt-6">

@@ -11,10 +11,10 @@ const moment = await loader.load()
 
 
 const { t } = useLocale(Astro.url)
-let result = moment
-
 ---
 
 <Layout title={t('nav.moments') + ' #' + id}>
-    <MomentCard content={moment} />
+    <div class="mt-8">
+        <MomentCard  content={moment} />
+    </div>
 </Layout>

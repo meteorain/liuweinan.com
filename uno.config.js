@@ -36,7 +36,13 @@ export default defineConfig({
                     content: 'none'
                 },
                 'a:hover': {
-                    color: 'rgb(var(--color-text-link-hover))'
+                    color: 'rgb(var(--color-text-link-hover))',
+
+                    'text-decoration': 'none',
+                    'font-size': '.9em',
+                    // add underline offset
+                    'text-decoration-thickness': '0.2em',
+                    'text-decoration-color': 'rgb(var(--color-primary-main))',
                 },
                 'pre,code': {
                     'white-space': 'pre-wrap',

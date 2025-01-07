@@ -17,10 +17,9 @@ const items = [
 function isRootPage() {
     return url.pathname === '/' || ['categories/', 'tags/', 'posts/'].some((i) => url.pathname.includes(i))
 }
-
 ---
 
-<nav >
+<nav>
     <a
 
             href={path('/')}

@@ -51,7 +51,7 @@ export async function getStaticPaths() {
                         slug.split('/').map((part, index, array) => {
                             const url = array.slice(0, index + 1).join('/');
                             return (
-                                    <span class="mr-2">
+                                    <span class="mr-2  sm:mt-0 mt-1">
                                     <a class="panda-link" href={`/docs/${url}/`} >
                                        / {part}</a>
                                 </span>

@@ -73,7 +73,7 @@
     --un-prose-headings: rgb(var(--color-text-heading));
 }
 
-article p {
+article > p {
     @apply text-justify indent-8;
 }
 
