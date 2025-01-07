@@ -12,7 +12,7 @@ export default defineConfig({
             cssExtend: {
                 a: {
                     // no underline
-                    textDecoration: 'none',
+                    'text-decoration': 'none',
                     'font-size': '.9em',
                     // add underline offset
                     textDecorationThickness: '0.2em',

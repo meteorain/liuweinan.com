@@ -8,12 +8,13 @@ import '../../styles/content.css'
 
 export const prerender = true;
 const {path, t, locale} = useLocale(Astro.url)
-let {slug} = Astro.params
-const post = await getEntry('posts', slug);
+const { entry } = Astro.props;
+const { Content, remarkPluginFrontmatter } = await entry.render();
 
+const {lastModified} = remarkPluginFrontmatter
 
-const {categories, title, tags, pubDate, lastModified, notificationTypes} = post.data;
-const {Content} = await render(post);
+const {categories, title,  pubDate  } = entry.data;
+// const {Content} = await render(post);
 export async function getStaticPaths() {
     const notes = await getCollection('posts',
         (i) =>
@@ -23,6 +24,9 @@ export async function getStaticPaths() {
         return {
             params: {
                 slug: note.slug,
+            },
+            props: {
+                entry: note,
             },
         };
     });

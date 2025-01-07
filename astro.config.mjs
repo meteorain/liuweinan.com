@@ -56,6 +56,7 @@ export default defineConfig({
 
 
         remarkPlugins: [
+            remarkModifiedTime,
             remarkDirective,
             remarkFigureCaption,
             // RDNotePlugin,
@@ -80,7 +81,6 @@ export default defineConfig({
                     return href;
                 }
             }],
-            remarkModifiedTime,
 
         ]
     },
