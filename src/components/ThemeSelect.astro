@@ -2,7 +2,7 @@
 const id = `moon-mask-`
 ---
 
-<starlight-rapide-theme-select>
+<panda-theme-select>
     <button
             aria-label="ok"
             aria-live="polite"
@@ -27,15 +27,12 @@ const id = `moon-mask-`
             </g>
         </svg>
     </button>
-</starlight-rapide-theme-select>
+</panda-theme-select>
 
 <style>
-
-
-    starlight-rapide-theme-select {
-        --sl-rapide-theme-select-animation-duration: 400ms;
-        --sl-rapide-theme-select-ease-elastic: cubic-bezier(0.5, 1.25, 0.75, 1.25);
-
+    panda-theme-select {
+        --panda-theme-select-animation-duration: 400ms;
+        --panda-theme-select-ease-elastic: cubic-bezier(0.5, 1.25, 0.75, 1.25);
         align-self: stretch;
     }
 
@@ -78,38 +75,38 @@ const id = `moon-mask-`
 
     @media (prefers-reduced-motion: no-preference) {
         svg .sun {
-            transition: transform var(--sl-rapide-theme-select-animation-duration) var(--sl-rapide-theme-select-ease-elastic);
+            transition: transform var(--panda-theme-select-animation-duration) var(--panda-theme-select-ease-elastic);
         }
 
         svg .sun-beams {
-            transition: opacity var(--sl-rapide-theme-select-animation-duration) ease,
-            transform var(--sl-rapide-theme-select-animation-duration) var(--sl-rapide-theme-select-ease-elastic);
+            transition: opacity var(--panda-theme-select-animation-duration) ease,
+            transform var(--panda-theme-select-animation-duration) var(--panda-theme-select-ease-elastic);
         }
 
         svg .moon circle {
-            transition: transform calc(var(--sl-rapide-theme-select-animation-duration) / 2) ease-out;
+            transition: transform calc(var(--panda-theme-select-animation-duration) / 2) ease-out;
         }
 
         @supports (cx: 1) {
             svg .moon circle {
-                transition: cx calc(var(--sl-rapide-theme-select-animation-duration) / 2) ease-out;
+                transition: cx calc(var(--panda-theme-select-animation-duration) / 2) ease-out;
             }
         }
 
         :global(.dark) svg .sun {
             transform: scale(1.75);
-            transition-duration: calc(var(--sl-rapide-theme-select-animation-duration) / 2);
+            transition-duration: calc(var(--panda-theme-select-animation-duration) / 2);
             transition-timing-function: ease;
         }
 
         :global(.dark) svg .sun-beams {
             transform: rotateZ(-25deg);
-            transition-duration: calc(var(--sl-rapide-theme-select-animation-duration) / 4);
+            transition-duration: calc(var(--panda-theme-select-animation-duration) / 4);
         }
 
         :global(.dark) svg .moon circle {
-            transition-delay: calc(var(--sl-rapide-theme-select-animation-duration) / 4);
-            transition-duration: var(--sl-rapide-theme-select-animation-duration);
+            transition-delay: calc(var(--panda-theme-select-animation-duration) / 4);
+            transition-duration: var(--panda-theme-select-animation-duration);
         }
     }
 </style>
@@ -177,8 +174,8 @@ matchMedia(`(prefers-color-scheme: light)`).addEventListener('change', () => {
     })
 
 customElements.define(
-'starlight-rapide-theme-select',
-class StarlightRapideThemeSelect extends HTMLElement {
+'panda-theme-select',
+class PandaThemeSelect extends HTMLElement {
     constructor() {
     super()
 

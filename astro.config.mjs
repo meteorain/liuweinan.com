@@ -1,6 +1,6 @@
-// @ts-check
+
 import {defineConfig, envField} from 'astro/config';
-import vercel from '@astrojs/vercel/serverless'
+import vercel from '@astrojs/vercel'
 
 import UnoCSS from 'unocss/astro'
 import remarkWikiLink from "./src/plugins/wiki-link/index.ts";

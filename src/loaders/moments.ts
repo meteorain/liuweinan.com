@@ -1,5 +1,4 @@
 
-//@ts-ignore
 import {API_URL,API_SECRET} from 'astro:env/server'
 
 export interface MomentsLoaderOptions {

@@ -9,11 +9,13 @@ import '../../styles/content.css'
 export const prerender = true;
 const {path, t, locale} = useLocale(Astro.url)
 const { entry } = Astro.props;
+const {filePath} = entry
 const { Content, remarkPluginFrontmatter } = await entry.render();
 
 const {lastModified} = remarkPluginFrontmatter
 
 const {categories, title,  pubDate  } = entry.data;
+const ext = filePath.split('.').pop()
 // const {Content} = await render(post);
 export async function getStaticPaths() {
     const notes = await getCollection('posts',
@@ -71,10 +73,14 @@ export async function getStaticPaths() {
             {
                 pubDate !== lastModified && (
                             <span class="ml-auto">
-                    {t('post.last_modified_at')} {formatDateYMD(lastModified)}
-                </span>
+                    {t('post.last_modified_at')} {formatDateYMD(lastModified)} |
+                </span> 
                 )
             }
+              <a class="panda-link ml-2" href={`/raw/posts/${entry.slug}.${ext}`} >
+             
+              {ext === 'md' ? 'Markdown' : 'MDX'}
+            </a>
         </div>
     </main>
 </Layout>

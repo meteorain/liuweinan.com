@@ -26,6 +26,12 @@ const docs = defineCollection({
     })
 });
 
+const whois = defineCollection({
+    type: 'content',
+});
+
+const templates = defineCollection({})
+
 
 const now = defineCollection({
     type: 'content',
@@ -36,5 +42,7 @@ const now = defineCollection({
 export const collections = {
     'posts': posts,
     'docs': docs,
-    'now': now,
+    // 'now': now,
+    'whois': whois,
+    'templates': templates
 };
