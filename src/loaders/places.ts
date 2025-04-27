@@ -136,6 +136,24 @@ const places: Place[] = [
         latitude: 37.98817
     },
     {
+        name: 'Milano',
+        location: '意大利米兰',
+        longitude: 9.18145,
+        latitude: 45.46791
+    },
+    {
+        name: 'Lago di Como',
+        location: '意大利科莫湖',
+        longitude: 9.28635,
+        latitude: 46.01491
+    },
+    {
+        name: 'Roma',
+        location: '意大利罗马',
+        longitude: 12.478028,
+        latitude: 41.904779
+    },
+    {
         name: 'București',
         location: '罗马尼亚布加勒斯特',
         longitude: 26.16234,
