@@ -41,10 +41,10 @@ const { t, locale } = useLocale(Astro.url);
                      data-coordinates={place.coordinates}>
                     <div class="p-3 rounded-xl bg-stone-100 dark:bg-stone-800">
                         <div class="mb-2 flex flex-row">
-                            <span class="accent-auto dark:accent-auto font-bold">{place.name}</span>
+                            <span class="accent-auto dark:accent-auto font-bold truncate block max-w-[60%]" title={place.name}>{place.name}</span>
                             <span class="ml-auto px-2 py-0.5 rounded bg-blue-100 text-blue-600 text-xs">{typeMap[place.type] || place.type}</span>
                         </div>
-                        <div class="text-sm text-gray-500">{place.location}</div>
+                        <div class="text-sm text-gray-500 truncate block" title={place.location}>{place.location}</div>
                         <div class="text-sm">
                             {place.rating && (
                                 <span class="text-amber-400">★ {place.rating}</span>
@@ -154,9 +154,9 @@ const { t, locale } = useLocale(Astro.url);
                         'interpolate',
                         ['linear'],
                         ['zoom'],
-                        8, 6,
-                        12, 10,
-                        16, 14
+                        8, 4,
+                        12, 7,
+                        16, 10
                     ],
                     'circle-color': [
                         'match',
@@ -174,31 +174,38 @@ const { t, locale } = useLocale(Astro.url);
                 }
             });
             
-            // 添加标签图层
-            map.addLayer({
-                id: 'places-labels',
-                type: 'symbol',
-                source: 'places',
-                layout: {
-                    'text-field': ['get', 'name'],
-                    'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
-                    'text-offset': [0, 1.5],
-                    'text-anchor': 'top',
-                    'text-size': [
-                        'interpolate',
-                        ['linear'],
-                        ['zoom'],
-                        8, 10,
-                        12, 12,
-                        16, 14
-                    ]
-                },
-                paint: {
-                    'text-color': '#374151', // gray-700
-                    'text-halo-color': '#ffffff',
-                    'text-halo-width': 2
-                }
-            });
+                                        // 添加标签图层
+                            map.addLayer({
+                                id: 'places-labels',
+                                type: 'symbol',
+                                source: 'places',
+                                layout: {
+                                    'text-field': [
+                                        'concat',
+                                        ['slice', ['get', 'name'], 0, ['index-of', '(', ['get', 'name']]],
+                                        ' ',
+                                        ['case',
+                                            ['has', 'rating'], ['concat', '(', ['to-string', ['get', 'rating']], ')'], ''
+                                        ]
+                                    ],
+                                    'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
+                                    'text-offset': [0, 1.5],
+                                    'text-anchor': 'top',
+                                    'text-size': [
+                                        'interpolate',
+                                        ['linear'],
+                                        ['zoom'],
+                                        8, 10,
+                                        12, 12,
+                                        16, 14
+                                    ]
+                                },
+                                paint: {
+                                    'text-color': '#374151', // gray-700
+                                    'text-halo-color': '#ffffff',
+                                    'text-halo-width': 2
+                                }
+                            });
             
             // 创建悬浮 popup
             let hoveredPopup = null;
@@ -290,9 +297,9 @@ const { t, locale } = useLocale(Astro.url);
                                         'interpolate',
                                         ['linear'],
                                         ['zoom'],
-                                        8, 6,
-                                        12, 10,
-                                        16, 14
+                                        8, 4,
+                                        12, 7,
+                                        16, 10
                                     ],
                                     'circle-color': [
                                         'match',
@@ -316,7 +323,14 @@ const { t, locale } = useLocale(Astro.url);
                                 type: 'symbol',
                                 source: 'places',
                                 layout: {
-                                    'text-field': ['get', 'name'],
+                                    'text-field': [
+                                        'concat',
+                                        ['slice', ['get', 'name'], 0, ['index-of', '(', ['get', 'name']]],
+                                        ' ',
+                                        ['case',
+                                            ['has', 'rating'], ['concat', '(', ['to-string', ['get', 'rating']], ')'], ''
+                                        ]
+                                    ],
                                     'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
                                     'text-offset': [0, 1.5],
                                     'text-anchor': 'top',
@@ -373,7 +387,7 @@ const { t, locale } = useLocale(Astro.url);
                             <div class="mb-2 mr-2">
                                 <div class="p-3 rounded-xl bg-stone-100 dark:bg-stone-800">
                                     <div class="mb-2 flex flex-row">
-                                        <span class="accent-auto dark:accent-auto font-bold">${properties.name}</span>
+                                        <span class="accent-auto dark:accent-auto font-bold truncate block max-w-[60%]" title="${properties.name}">${properties.name}</span>
                                         <span class="ml-auto px-2 py-0.5 rounded bg-blue-100 text-blue-600 text-xs">${typeName}</span>
                                     </div>
                                     <div class="text-sm text-gray-500">${properties.location || ''}</div>
@@ -418,7 +432,7 @@ const { t, locale } = useLocale(Astro.url);
                             <div class="mb-2 mr-2">
                                 <div class="p-3 rounded-xl bg-stone-100 dark:bg-stone-800">
                                     <div class="mb-2 flex flex-row">
-                                        <span class="accent-auto dark:accent-auto font-bold">${properties.name}</span>
+                                        <span class="accent-auto dark:accent-auto font-bold truncate block max-w-[60%]" title="${properties.name}">${properties.name}</span>
                                         <span class="ml-auto px-2 py-0.5 rounded bg-blue-100 text-blue-600 text-xs">${typeName}</span>
                                     </div>
                                     <div class="text-sm text-gray-500">${properties.location || ''}</div>

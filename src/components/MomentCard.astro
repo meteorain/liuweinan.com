@@ -10,15 +10,19 @@ interface Props {
         tags: string,
         title: string,
         title_en: string,
-        imdb_id: string
-
+        imdb_id: string,
+        name: string,
+        name_en: string
     }
 }
 
 const {t, path, locale} = useLocale(Astro.url)
-const {id, body, created_at, tags,title,title_en,imdb_id} = Astro.props.content
+const {id, body, created_at, tags,title,title_en,imdb_id,name,name_en} = Astro.props.content
 
-const review_title = locale === 'en' ? title_en : title
+// 统一使用title字段，如果是review则使用title，如果是place则使用name
+const display_title = title || name
+const display_title_en = title_en || name_en
+const final_title = locale === 'en' ? display_title_en : display_title
 
 
 const content = new MarkdownIt('commonmark',{
@@ -50,9 +54,15 @@ const content = new MarkdownIt('commonmark',{
         <div class="panda-link text-sm flex">
             {tags && <span class="mr-auto"> #{tags}#</span>}
             {
-                review_title &&  <a href={`https://www.imdb.com/title/${imdb_id}`} class="prose panda-link external-link mr-2">
-                        <span class="text-sm font-bold font-italic underline">{review_title}</span>
-                    </a>
+                final_title && (
+                    imdb_id ? (
+                        <a href={`https://www.imdb.com/title/${imdb_id}`} class="prose panda-link external-link mr-2">
+                            <span class="text-sm font-bold font-italic underline">{final_title}</span>
+                        </a>
+                    ) : (
+                        <span class="text-sm font-bold font-italic mr-2">{final_title}</span>
+                    )
+                )
             }
         </div>
     </div>
