@@ -1,18 +1,13 @@
 ---
-
-import {API_URL,API_SECRET} from 'astro:env/server'
-
-const apiUrl = API_URL
-const secret = API_SECRET
+// Remove API imports since we're using actions now
 ---
-<div id="review-editor" data-api={apiUrl} data-api-secret={secret}>
+<div id="review-editor">
     <div class="mt-4 flex flex-col">
         <div class="">
             <label for="id">
                 <h3>Search</h3>
                 <div class="flex flex-col">
                     <div>
-
                         <input id="search" class="mr-5"/>
                         <button class="btn btn-primary " id="btn-search">Query</button>
                     </div>
@@ -20,7 +15,6 @@ const secret = API_SECRET
                     </select>
                 </div>
             </label>
-
         </div>
         <label for="btn-search">
         </label>
@@ -68,233 +62,160 @@ const secret = API_SECRET
     </div>
 </div>
 
-<script is:inline>
-    // get api url from element
-    const apiUrl = document.getElementById('review-editor').getAttribute('data-api')
-    const momentApiUrl = apiUrl + '/moments'
-    const reviewApiUrl = apiUrl + '/reviews'
-    const tmdbApiUrl = apiUrl + '/tmdb'
-    const secret = document.getElementById('review-editor').getAttribute('data-api-secret')
+<script>
+    import { actions } from 'astro:actions';
+    import { objectToFormData } from '../utils/formData';
 
-    function updateNotificationMessage(msg) {
-        document.getElementById('notification').innerText = msg
-    }
-
-    const options = {
-        method: 'GET',
-        headers: {
-            accept: 'application/json',
-            Authorization:
-                `Bearer ${secret}`
+    function updateNotificationMessage(msg: string) {
+        const notification = document.getElementById('notification');
+        if (notification) {
+            notification.innerText = msg;
         }
     }
 
-    async function search(keyword) {
-        const url = `${tmdbApiUrl}/3/search/multi?query=${keyword}&language=zh`
-        const response = await fetch(url, options)
-        const {results} = await response.json()
-        if (results.length === 0) {
-            return []
-        }
-        return results.map(({id, release_date, first_air_date, title, name, media_type}) => ({
-            id,
-            release_date,
-            first_air_date,
-            title,
-            name,
-            media_type
-        }))
+    async function search(keyword: string) {
+        const formData = new FormData();
+        formData.append('keyword', keyword);
+        const { data } = await actions.searchMedia(formData);
+        return data || [];
     }
 
-    async function findEntityByTMDBId(id, type) {
-        const url = `${tmdbApiUrl}/3/${type}/${id}/external_ids?language=zh`
-        const response = await fetch(url, options)
-        const {imdb_id} = await response.json()
-        if (imdb_id)
-            return await findEntity(imdb_id)
-
+    async function findEntityByTMDBId(id: string, type: string) {
+        const formData = new FormData();
+        formData.append('id', id);
+        formData.append('type', type);
+        const { data } = await actions.findEntityByTMDBId(formData);
+        return data;
     }
 
-    async function findEntity(id) {
-        const url = (lang) => `${tmdbApiUrl}/3/find/${id}?external_source=imdb_id&language=${lang}`
-        const getResult = async (response) => {
-            const {movie_results, tv_results, tv_episode_results, tv_season_results} = await response.json()
-            return movie_results[0] || tv_results[0] || tv_episode_results[0] || tv_season_results[0]
-        }
-        const zhResp = await fetch(url('zh'), options)
-        const enResp = await fetch(url('en'), options)
-
-        var zhResult = await getResult(zhResp)
-        if (!zhResult) {
-            return
-        }
-        let {title,name, media_type, vote_average, release_date,first_air_date} = zhResult
-        title = title || name
-        release_date = release_date || first_air_date
-        let {title: title_en,name:name_en} = await getResult(enResp)
-        title_en = title_en || name_en
-        title = title.replace(/'/g, "''")
-        title_en = title_en.replace(/'/g, "''")
-
-        return {
-            imdb_id: id,
-            title,
-            title_en,
-            media_type,
-            imdb_rating: vote_average,
-            rating: -1,
-            release_date: release_date,
-            rated_date: null
-        }
-
-
+    async function findEntity(imdb_id: string) {
+        const formData = new FormData();
+        formData.append('imdb_id', imdb_id);
+        const { data } = await actions.findEntity(formData);
+        return data;
     }
 
-    document.getElementById('item-selector').addEventListener('change', async (e) => {
-        const target = e.target
-        const id = target.value
-        const type = target.options[target.selectedIndex].innerText.split('[')[1].split(']')[0].toLowerCase()
-        const entity = await findEntityByTMDBId(id, type)
-        fillFields(entity)
-    })
-    document.getElementById('btn-search').addEventListener('click', async () => {
-        const target = document.getElementById('search')
-        const keyword = target.value
-        const results = await search(keyword)
+    document.getElementById('item-selector')?.addEventListener('change', async (e) => {
+        const target = e.target as HTMLSelectElement;
+        const id = target.value;
+        const type = target.options[target.selectedIndex].innerText.split('[')[1].split(']')[0].toLowerCase();
+        const entity = await findEntityByTMDBId(id, type);
+        if (entity) {
+            fillFields(entity);
+        }
+    });
+
+    document.getElementById('btn-search')?.addEventListener('click', async () => {
+        const searchInput = document.getElementById('search') as HTMLInputElement;
+        const keyword = searchInput.value;
+        const results = await search(keyword);
+        
         // add options to select
-        const select = document.getElementById('item-selector')
-        select.innerHTML = ''
+        const select = document.getElementById('item-selector') as HTMLSelectElement;
+        select.innerHTML = '';
         results.forEach(({id, title, name, media_type, release_date, first_air_date}) => {
-            const _title = title ? title : name
-            const _release_date = release_date ? release_date : first_air_date
-            const option = document.createElement('option')
-            option.value = id
-            option.innerText = `${_title}  [${media_type.toUpperCase()}]   ${_release_date}`
-            select.appendChild(option)
-        })
+            const _title = title ? title : name;
+            const _release_date = release_date ? release_date : first_air_date;
+            const option = document.createElement('option');
+            option.value = id.toString();
+            option.innerText = `${_title}  [${media_type.toUpperCase()}]   ${_release_date}`;
+            select.appendChild(option);
+        });
+        
         // auto select first item
-        select.selectedIndex = 0
+        select.selectedIndex = 0;
         if (results.length > 0) {
-            const e = await findEntityByTMDBId(results[0].id, results[0].media_type)
-            fillFields(e)
+            const entity = await findEntityByTMDBId(results[0].id.toString(), results[0].media_type);
+            if (entity) {
+                fillFields(entity);
+            }
         }
-    })
-    const setValue = (id, value) => {
-        const el = document.getElementById(id)
+    });
+
+    const setValue = (id: string, value: string | number) => {
+        const el = document.getElementById(id) as HTMLInputElement;
         if (el) {
-            el.value = value
+            el.value = value.toString();
         }
-    }
-    const getValue = (id) => {
-        const el = document.getElementById(id)
-        if (el) {
-            return el.value
-        }
-    }
+    };
 
-    function fillFields(entity) {
-        // fill entity to form
+    const getValue = (id: string): string => {
+        const el = document.getElementById(id) as HTMLInputElement;
+        return el ? el.value : '';
+    };
 
-
-        // document.getElementById('id').value = entity.imdb_id
-        //  document.getElementById('title').value = entity.title
-        //  document.getElementById('title_en').value = entity.title_en
-        //  document.getElementById('media-type').value = entity.media_type
-        //  document.getElementById('rating').value = entity.imdb_rating
-        //  entity = entity
-        //  // clean content
-        //  document.getElementById('content').value = ''
-
-        setValue('id', entity.imdb_id)
-        setValue('title', entity.title)
-        setValue('title_en', entity.title_en)
-        setValue('media-type', entity.media_type)
-        setValue('rating', entity.imdb_rating)
-        entity = entity
+    function fillFields(entity: any) {
+        setValue('id', entity.imdb_id);
+        setValue('title', entity.title);
+        setValue('title_en', entity.title_en);
+        setValue('media-type', entity.media_type);
+        setValue('rating', entity.imdb_rating);
         // clean content
-        setValue('content', '')
-
+        setValue('content', '');
     }
 
+    document.getElementById("find")?.addEventListener('click', async () => {
+        const imdb_id = getValue('id');
+        const entity = await findEntity(imdb_id);
+        if (entity) {
+            fillFields(entity);
+        }
+    });
 
-    document.getElementById("find").addEventListener('click', async () => {
-        const imdb_id = document.getElementById('id').value
-        const entity = await findEntity(imdb_id)
-        fillFields(entity)
-    })
-    let entity = null;
+    let entity: any = null;
 
     function getEditedEntity() {
-        //imdb_id	title	title_en	media_type	imdb_rating	rating	release_date	rated_date	moments_id
         return {
-            moments_id: null,
-            // imdb_id: document.getElementById('id').value || entity.imdb_id,
-            imdb_id: getValue('id') || entity.imdb_id ,
+            moments_id: '',
+            imdb_id: getValue('id') || (entity ? entity.imdb_id : ''),
             imdb_rating: entity ? entity.imdb_rating : null,
             rated_date: new Date().toISOString(),
             release_date: entity ? entity.release_date : null,
-            // title: document.getElementById('title').value,
-            // title_en: document.getElementById('title_en').value,
-            // media_type: document.getElementById('media-type').value,
-            // rating: document.getElementById('rating').value,
-            // content: document.getElementById('content').value
-
             title: getValue('title'),
             title_en: getValue('title_en'),
             media_type: getValue('media-type'),
             rating: getValue('rating'),
             content: getValue('content')
-
-        }
-
+        };
     }
-    document.getElementById('submit').addEventListener('click', async () => {
-        try {
-            // let lastRowId = document.getElementById('moment-id').value
-            let lastRowId = getValue('moment-id')
-            if (!lastRowId){
-                const tag = "影评"
-                // handle tag change
-                const content = getValue('content')
-                // send data to api
-                const momentResponse = await fetch(momentApiUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + secret
-                    },
-                    body: JSON.stringify({
-                        tags: tag,
-                        body: content
-                    })
-                })
-                lastRowId = await momentResponse.text()
-            }
-            if (!lastRowId) {
-                updateNotificationMessage('Failed to find or create moment')
-                return
-            }
-            const editedEntity = getEditedEntity()
-            editedEntity.moments_id = lastRowId
-            const {status} = await fetch(reviewApiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + secret
-                },
-                body: JSON.stringify(editedEntity)
-            })
 
-            if (status === 201) {
-                updateNotificationMessage(`Success to create review link moment ${lastRowId}`)
+    document.getElementById('submit')?.addEventListener('click', async () => {
+        try {
+            let lastRowId = getValue('moment-id');
+            
+            if (!lastRowId) {
+                const tag = "影评";
+                const content = getValue('content');
+                
+                const formData = new FormData();
+                formData.append('tags', tag);
+                formData.append('body', content);
+                const { data: momentId } = await actions.createMoment(formData);
+                lastRowId = momentId;
+            }
+            
+            if (!lastRowId) {
+                updateNotificationMessage('Failed to find or create moment');
+                return;
+            }
+            
+            const editedEntity = getEditedEntity();
+            editedEntity.moments_id = lastRowId;
+            
+            const formData = objectToFormData(editedEntity);
+            const { data } = await actions.createReview(formData);
+            
+            if (data?.status === 201) {
+                updateNotificationMessage(`Success to create review link moment ${lastRowId}`);
             } else {
-                updateNotificationMessage('Failed to create review')
+                updateNotificationMessage('Failed to create review');
             }
         } catch (e) {
-            updateNotificationMessage(e.toString())
+            updateNotificationMessage(e.toString());
         }
-    })
+    });
 </script>
+
 <style>
     .flex-row-or-col {
         /** flex row on large screen, flex col on small screen */

@@ -1,4 +1,3 @@
-
 import {defineConfig, envField} from 'astro/config';
 import vercel from '@astrojs/vercel'
 
@@ -35,6 +34,8 @@ export default defineConfig({
             API_URL: envField.string({context: "server", access: "secret"}),
             API_SECRET: envField.string({context: "server", access: "secret"}),
             STUDIO_SECRET: envField.string({context: "server", access: "secret"}),
+            MAPBOX_TOKEN: envField.string({context: "client", access: "public"}),
+            AMAP_KEY: envField.string({context: "client", access: "public"}),
         }
     },
     serverIslands: true,

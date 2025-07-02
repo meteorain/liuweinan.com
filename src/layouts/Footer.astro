@@ -1,6 +1,6 @@
 ---
 import { useLocale } from '@utils/locale'
-const { t, path } = useLocale(Astro.url)
+const { t } = useLocale(Astro.url)
 ---
 
 <footer class="mt-12 mb-6 text-sm">
@@ -13,7 +13,9 @@ const { t, path } = useLocale(Astro.url)
         <span class="mx-1">|</span>
         <a rel="prefetch-intent" href="/reviews/" class="panda-link">{t('nav.reviews')}</a>
         <span class="mx-1">|</span>
-        <a rel="prefetch-intent" href="/footprint/" class="panda-link">{t('nav.footprint')}</a>
+        <!-- <a rel="prefetch-intent" href="/footprint/" class="panda-link">{t('nav.footprint')}</a>
+        <span class="mx-1">|</span> -->
+        <a rel="prefetch-intent" href="/places/" class="panda-link">{t('nav.places')}</a>
     </div>
     <div class="mb-1">
         <span>2016-{new Date().getFullYear()}</span>

@@ -5,7 +5,7 @@ import BackLater from '@components/BackLater.astro'
 import { useLocale } from '@utils/locale'
 import { reviewsLoader } from '../loaders/reviews'
 import keys from 'lodash/keys'
-const { path, t, locale } = useLocale(Astro.url)
+const { path, t } = useLocale(Astro.url)
 const { page } = Astro.props
 
 
