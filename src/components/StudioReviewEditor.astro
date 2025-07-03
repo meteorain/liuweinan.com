@@ -74,24 +74,23 @@
     }
 
     async function search(keyword: string) {
-        const formData = new FormData();
-        formData.append('keyword', keyword);
-        const { data } = await actions.searchMedia(formData);
+
+        const { data } = await actions.searchMedia({keyword} as any);
         return data || [];
     }
 
     async function findEntityByTMDBId(id: string, type: string) {
-        const formData = new FormData();
-        formData.append('id', id);
-        formData.append('type', type);
-        const { data } = await actions.findEntityByTMDBId(formData);
+       
+        const { data } = await actions.findEntityByTMDBId({
+            id: id,
+            type: type
+        } as any);
         return data;
     }
 
     async function findEntity(imdb_id: string) {
-        const formData = new FormData();
-        formData.append('imdb_id', imdb_id);
-        const { data } = await actions.findEntity(formData);
+
+        const { data } = await actions.findEntity({imdb_id} as any);
         return data;
     }
 
@@ -187,10 +186,7 @@
                 const tag = "影评";
                 const content = getValue('content');
                 
-                const formData = new FormData();
-                formData.append('tags', tag);
-                formData.append('body', content);
-                const { data: momentId } = await actions.createMoment(formData);
+                const { data: momentId } = await actions.createMoment({tags:tag,body:content} as any );
                 lastRowId = momentId;
             }
             

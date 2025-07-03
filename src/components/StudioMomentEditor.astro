@@ -52,9 +52,7 @@ const tags = ['影视','影评','音乐','叽叽喳喳']
         
         if (momentId) {
             try {
-                const formData = new FormData();
-                formData.append('id', momentId);
-                const { data } = await actions.getMoment(formData);
+                const { data } = await actions.getMoment({id:momentId} as any);
                 
                 if (data) {
                     const { tags, body } = data;
@@ -86,11 +84,12 @@ const tags = ['影视','影评','音乐','叽叽喳喳']
 
             if (momentId) {
                 // Update existing moment
-                const formData = new FormData();
-                formData.append('id', momentId);
-                formData.append('tags', tag);
-                formData.append('body', content);
-                const { data } = await actions.updateMoment(formData);
+              
+                const { data } = await actions.updateMoment({
+                    id: momentId,
+                    tags: tag,
+                    body: content
+                } as any);
 
                 if (data?.status === 200 || data?.status === 201) {
                     updateNotificationMessage('Update success!');
@@ -99,10 +98,7 @@ const tags = ['影视','影评','音乐','叽叽喳喳']
                 }
             } else {
                 // Create new moment
-                const formData = new FormData();
-                formData.append('tags', tag);
-                formData.append('body', content);
-                const { data: momentId } = await actions.createMoment(formData);
+                 const { data: momentId } = await actions.createMoment({tags:tag,body:content} as any );
 
                 if (momentId) {
                     updateNotificationMessage('Post success!');
