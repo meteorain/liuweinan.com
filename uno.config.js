@@ -1,5 +1,5 @@
 // uno.config.ts
-import { defineConfig, presetMini,presetUno, presetTypography, transformerDirectives } from 'unocss'
+import { defineConfig, presetMini, presetTypography, transformerDirectives } from 'unocss'
 
 export default defineConfig({
     injectReset: false,
@@ -7,16 +7,16 @@ export default defineConfig({
     injectEntry: process.env['NODE_ENV'] === 'development',
     transformers: [transformerDirectives()],
     presets: [
-        presetUno(),
+        presetMini(),
         presetTypography({
             cssExtend: {
                 a: {
-                    // no underline
-                    'text-decoration': 'none',
                     'font-size': '.9em',
-                    // add underline offset
-                    textDecorationThickness: '0.2em',
-                    textDecorationColor: 'rgb(var(--color-primary-main))',
+                    'text-decoration': 'underline',
+                    'text-decoration-thickness': '0.05em',
+                    'text-underline-offset': '0.2em',
+                    'text-decoration-color': 'rgb(var(--color-primary-main))',
+                    'color': 'rgb(var(--color-text-link))',
                 },
                 'li':{
                     'word-break': 'break-all',
@@ -36,13 +36,8 @@ export default defineConfig({
                     content: 'none'
                 },
                 'a:hover': {
-                    color: 'rgb(var(--color-text-link-hover))',
+                    'text-decoration-thickness': '0.09em',
 
-                    'text-decoration': 'none',
-                    'font-size': '.9em',
-                    // add underline offset
-                    'text-decoration-thickness': '0.2em',
-                    'text-decoration-color': 'rgb(var(--color-primary-main))',
                 },
                 'pre,code': {
                     'white-space': 'pre-wrap',

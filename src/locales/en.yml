@@ -10,6 +10,7 @@ nav:
     timeline: timeline
     ping: ping
     reviews: reviews
+    places: places
     docs: docs
     footprints: footprint
     gallery: gallery

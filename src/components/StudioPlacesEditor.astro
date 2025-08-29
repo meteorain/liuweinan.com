@@ -1,0 +1,264 @@
+<div id="places-editor">
+    <div class="mt-4 flex flex-col">
+        <!-- POI 搜索区域 -->
+        <div class="">
+            <label for="search-keywords">
+                <h3>POI Search</h3>
+                <div class="flex flex-col">
+                    <div>
+                        <input id="search-keywords" class="mr-5" placeholder="Search place name" />
+                        <button class="btn btn-primary" id="btn-search-poi">Search</button>
+                    </div>
+                    <div class="mt-4">
+                        <input id="search-region" class="mr-5" placeholder="Search region" value="天津" />
+                        <select id="poi-selector" class="p-[2px]">
+                            <option value="">Select search result</option>
+                        </select>
+                    </div>
+                </div>
+            </label>
+        </div>
+
+        <!-- 表单字段 -->
+        <div class="flex-row-or-col">
+            <label for="name">
+                <h3>Name</h3>
+                <input id="name" class="mr-5" />
+            </label>
+            <label for="type">
+                <h3>Type</h3>
+                <select id="type" class="mr-5">
+                    <option value="restaurant">Restaurant</option>
+                    <option value="attraction">Attraction</option>
+                    <option value="hotel">Hotel</option>
+                    <option value="cafe">Cafe</option>
+                    <option value="shop">Shop</option>
+                </select>
+            </label>
+        </div>
+        <div class="flex-row-or-col">
+            <label for="rating">
+                <h3>Rating</h3>
+                <input id="rating" class="mr-5" type="number" step="0.1" />
+            </label>
+            <label for="location">
+                <h3>Location</h3>
+                <input id="location" class="mr-5" />
+            </label>
+        </div>
+        <label for="visit_date">
+            <h3>Visit Date</h3>
+            <input id="visit_date" class="mr-5" type="date" />
+        </label>
+        <label for="moments_id">
+            <h3>Moment ID</h3>
+            <input id="moments_id" class="mr-5" />
+        </label>
+        <label for="my_review">
+            <h3>My Review</h3>
+            <textarea id="my_review" rows="4" placeholder="Write your review..." style="width: 100%;"></textarea>
+        </label>
+    </div>
+    <div class="flex">
+        <span id="notification" class="mt-4"></span>
+        <button id="submit" class="btn btn-primary mt-4 ml-auto">Submit</button>
+    </div>
+</div>
+
+<script>
+    import { actions } from 'astro:actions';
+
+    function updateNotificationMessage(msg: string) {
+        const notification = document.getElementById('notification');
+        if (notification) {
+            notification.innerText = msg;
+        }
+    }
+
+    const getValue = (id: string): string => {
+        const el = document.getElementById(id) as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
+        return el ? el.value : '';
+    };
+
+    const setValue = (id: string, value: string | number) => {
+        const el = document.getElementById(id) as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
+        if (el) {
+            el.value = value.toString();
+        }
+    };
+
+    // 设置默认日期为今天
+    document.addEventListener('DOMContentLoaded', () => {
+        const today = new Date().toISOString().split('T')[0];
+        setValue('visit_date', today);
+        
+        // 初始化互斥逻辑
+        setupMutualExclusion();
+    });
+
+    // 互斥逻辑：moment_id 和 my_review 只能填写一个
+    function setupMutualExclusion() {
+        const momentIdInput = document.getElementById('moments_id') as HTMLInputElement;
+        const myReviewTextarea = document.getElementById('my_review') as HTMLTextAreaElement;
+        
+        if (momentIdInput && myReviewTextarea) {
+            // 监听 moment_id 输入
+            momentIdInput.addEventListener('input', () => {
+                if (momentIdInput.value.trim()) {
+                    myReviewTextarea.disabled = true;
+                    myReviewTextarea.value = '';
+                } else {
+                    myReviewTextarea.disabled = false;
+                }
+            });
+            
+            // 监听 my_review 输入
+            myReviewTextarea.addEventListener('input', () => {
+                if (myReviewTextarea.value.trim()) {
+                    momentIdInput.disabled = true;
+                    momentIdInput.value = '';
+                } else {
+                    momentIdInput.disabled = false;
+                }
+            });
+        }
+    }
+
+    // 隐藏的经纬度字段
+    let currentCoordinates = '';
+
+    // POI 搜索功能
+    document.getElementById('btn-search-poi')?.addEventListener('click', async () => {
+        try {
+            const keywords = getValue('search-keywords');
+            const region = getValue('search-region');
+            
+            if (!keywords.trim()) {
+                updateNotificationMessage('Please enter search keywords');
+                return;
+            }
+
+            const { data: pois } = await actions.searchPOI({ keywords, region } as any);
+            
+            const select = document.getElementById('poi-selector') as HTMLSelectElement;
+            select.innerHTML = '<option value="">Select search result</option>';
+            
+            pois.forEach((poi: any) => {
+                const option = document.createElement('option');
+                option.value = poi.id;
+                option.innerText = `${poi.name} - ${poi.address}`;
+                option.setAttribute('data-poi', JSON.stringify(poi));
+                select.appendChild(option);
+            });
+
+            if (pois.length > 0) {
+                updateNotificationMessage(`Found ${pois.length} results`);
+            } else {
+                updateNotificationMessage('No results found');
+            }
+        } catch (error) {
+            updateNotificationMessage(`Search failed: ${error}`);
+        }
+    });
+
+    // POI 选择功能
+    document.getElementById('poi-selector')?.addEventListener('change', (e) => {
+        const target = e.target as HTMLSelectElement;
+        const selectedOption = target.options[target.selectedIndex];
+        
+        if (selectedOption.value) {
+            const poi = JSON.parse(selectedOption.getAttribute('data-poi') || '{}');
+            
+            // 填充表单字段
+            setValue('name', poi.name || '');
+            setValue('location', poi.address || '');
+            setValue('rating', poi.rating || '');
+            currentCoordinates = poi.location || '';
+            
+            // 根据 POI 类型设置类型字段
+            const typeSelect = document.getElementById('type') as HTMLSelectElement;
+            if (poi.type) {
+                const poiType = poi.type.toLowerCase();
+                if (poiType.includes('餐饮') || poiType.includes('美食')) {
+                    typeSelect.value = 'restaurant';
+                } else if (poiType.includes('景点') || poiType.includes('旅游')) {
+                    typeSelect.value = 'attraction';
+                } else if (poiType.includes('酒店') || poiType.includes('住宿')) {
+                    typeSelect.value = 'hotel';
+                } else if (poiType.includes('咖啡') || poiType.includes('饮品')) {
+                    typeSelect.value = 'cafe';
+                } else if (poiType.includes('购物') || poiType.includes('商店')) {
+                    typeSelect.value = 'shop';
+                }
+            }
+        }
+    });
+
+    // 提交功能
+    document.getElementById('submit')?.addEventListener('click', async () => {
+        try {
+            let momentId = getValue('moments_id');
+            
+            // 如果没有提供 moment ID，创建新的 moment
+            if (!momentId) {
+                const myReview = getValue('my_review');
+                if (myReview.trim()) {
+                    const { data: newMomentId } = await actions.createMoment({
+                        tags: '吃喝玩乐',
+                        body: myReview
+                    } as any);
+                    momentId = newMomentId;
+                }
+            }
+            
+            const data = {
+                name: getValue('name'),
+                name_en: '',
+                type: getValue('type'),
+                location: getValue('location'),
+                coordinates: currentCoordinates,
+                rating: parseFloat(getValue('rating')) || 0,
+                visit_date: getValue('visit_date'),
+                description: '',
+                photos: '',
+                moments_id: momentId || ''
+            };
+            
+            const { data: result } = await actions.createPlace(data as any);
+            if (result?.status === 201) {
+                updateNotificationMessage('Created successfully');
+                // 清空表单
+                ['name', 'location', 'rating', 'visit_date', 'my_review'].forEach(id => {
+                    setValue(id, '');
+                });
+                currentCoordinates = '';
+                // 重新设置默认日期
+                const today = new Date().toISOString().split('T')[0];
+                setValue('visit_date', today);
+                
+                // 重置互斥状态
+                const momentIdInput = document.getElementById('moments_id') as HTMLInputElement;
+                const myReviewTextarea = document.getElementById('my_review') as HTMLTextAreaElement;
+                if (momentIdInput && myReviewTextarea) {
+                    momentIdInput.disabled = false;
+                    myReviewTextarea.disabled = false;
+                }
+            } else {
+                updateNotificationMessage('Creation failed');
+            }
+        } catch (error) {
+            updateNotificationMessage(`Error: ${error}`);
+        }
+    });
+</script>
+
+<style>
+    .flex-row-or-col {
+        /** flex row on large screen, flex col on small screen */
+        display: flex;
+        flex-direction: row;
+        @media (max-width: 640px) {
+            flex-direction: column;
+        }
+    }
+</style> 

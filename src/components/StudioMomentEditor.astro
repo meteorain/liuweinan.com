@@ -9,7 +9,7 @@ const secret = API_SECRET
 const {id} = Astro.props
 const tags = ['影视','影评','音乐','叽叽喳喳']
 ---
-<div id="moment-editor" data-moment-id={id} data-api={apiUrl} data-api-secret={secret}>
+<div id="moment-editor" data-moment-id={id}>
     <div class="mt-4 flex flex-col">
         {
             id && <label for="moment-id">
@@ -36,63 +36,81 @@ const tags = ['影视','影评','音乐','叽叽喳喳']
     </div>
 </div>
 
-<script is:inline>
-    function updateNotificationMessage(msg) {
-        document.getElementById('notification').innerText = msg
-    }
-    async function InitIfEdit(){
-        if(momentId){
-            const response = await fetch(apiUrl + '/' + momentId, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + secret
-                }
-            })
-            if (200 === response.status) {
+<script>
+    import { actions } from 'astro:actions';
 
-                const v = await response.json()
-                const {tags,body} = v;
-                document.getElementById('tag').value = tags;
-                document.getElementById('content').value = body;
-            } else {
-                updateNotificationMessage('get moment info Failed:'+ momentId )
+    function updateNotificationMessage(msg: string) {
+        const notification = document.getElementById('notification');
+        if (notification) {
+            notification.innerText = msg;
+        }
+    }
+
+    async function initIfEdit() {
+        const momentEditor = document.getElementById('moment-editor');
+        const momentId = momentEditor?.getAttribute('data-moment-id');
+        
+        if (momentId) {
+            try {
+                const { data } = await actions.getMoment({id:momentId} as any);
+                
+                if (data) {
+                    const { tags, body } = data;
+                    const tagSelect = document.getElementById('tag') as HTMLSelectElement;
+                    const contentTextarea = document.getElementById('content') as HTMLTextAreaElement;
+                    
+                    if (tagSelect) tagSelect.value = tags;
+                    if (contentTextarea) contentTextarea.value = body;
+                } else {
+                    updateNotificationMessage(`Failed to get moment info: ${momentId}`);
+                }
+            } catch (error) {
+                updateNotificationMessage(`Error loading moment: ${error}`);
             }
         }
     }
-    // get api url from element
-    let apiUrl = document.getElementById('moment-editor').getAttribute('data-api') + '/moments'
-    const secret = document.getElementById('moment-editor').getAttribute('data-api-secret')
-    const momentId = document.getElementById('moment-editor').getAttribute('data-moment-id')
-    document.querySelector('.btn').addEventListener('click', async () => {
-        let tag = document.getElementById('tag').value
-        // handle tag change
-        let content = document.getElementById('content').value
-        // send data to api
-        const data = {
-            tags: tag,
-            body: content
+
+    const getValue = (id: string): string => {
+        const el = document.getElementById(id) as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
+        return el ? el.value : '';
+    };
+
+    document.querySelector('.btn')?.addEventListener('click', async () => {
+        try {
+            const tag = getValue('tag');
+            const content = getValue('content');
+            const momentEditor = document.getElementById('moment-editor');
+            const momentId = momentEditor?.getAttribute('data-moment-id');
+
+            if (momentId) {
+                // Update existing moment
+              
+                const { data } = await actions.updateMoment({
+                    id: momentId,
+                    tags: tag,
+                    body: content
+                } as any);
+
+                if (data?.status === 200 || data?.status === 201) {
+                    updateNotificationMessage('Update success!');
+                } else {
+                    updateNotificationMessage(`Update failed: ${data?.text || 'Unknown error'}`);
+                }
+            } else {
+                // Create new moment
+                 const { data: momentId } = await actions.createMoment({tags:tag,body:content} as any );
+
+                if (momentId) {
+                    updateNotificationMessage('Post success!');
+                } else {
+                    updateNotificationMessage('Post failed');
+                }
+            }
+        } catch (error) {
+            updateNotificationMessage(`Error: ${error}`);
         }
-        if (momentId) {
-            data['id'] = document.getElementById('moment-editor').getAttribute('data-moment-id')
-            apiUrl = apiUrl + '/' + momentId
-        }
-        const {status,text} = await fetch(apiUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + secret
-            },
-            body: JSON.stringify({
-                tags:tag,
-                body:content
-            })
-        })
-        if (status === 201 || status === 200) {
-            updateNotificationMessage('Post success!')
-        } else {
-            updateNotificationMessage('Post failed:' + await text())
-        }
-    })
-    InitIfEdit()
+    });
+
+    // Initialize the form if editing
+    initIfEdit();
 </script>
