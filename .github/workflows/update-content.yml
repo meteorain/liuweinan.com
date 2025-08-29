@@ -30,4 +30,4 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.CONTENT_DEPLOY_TOKEN }}  # Use the token from secrets
       run: |
-        git push https://x-access-token:${GITHUB_TOKEN}@github.com/yuhangch/yuhang.ch.git HEAD:main
+        git push https://x-access-token:${GITHUB_TOKEN}@github.com/meteorain/liuweinan.com.git HEAD:main
