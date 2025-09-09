@@ -84,7 +84,7 @@ function updateOpacity(element, value) {
 }
 
 async function fetchAndProcessData(nooftweets) {
-  const url = "https://argo.liuweinan.com/?uri=%2Fmoments";
+  const url = "https://isso.fly.dev/?uri=%2Fmoments";
   try {
     const response = await fetch(url);
     const data = await response.json();
