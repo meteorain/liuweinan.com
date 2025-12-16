@@ -64,7 +64,6 @@
 
 <script>
     import { actions } from 'astro:actions';
-    import { objectToFormData } from '../utils/formData';
 
     function updateNotificationMessage(msg: string) {
         const notification = document.getElementById('notification');
@@ -198,8 +197,7 @@
             const editedEntity = getEditedEntity();
             editedEntity.moments_id = lastRowId;
             
-            const formData = objectToFormData(editedEntity);
-            const { data } = await actions.createReview(formData);
+            const { data } = await actions.createReview(editedEntity as any);
             
             if (data?.status === 201) {
                 updateNotificationMessage(`Success to create review link moment ${lastRowId}`);
