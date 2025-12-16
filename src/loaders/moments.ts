@@ -27,17 +27,25 @@ export interface Moment {
 
 export function momentLoader(id:string): any {
     const url = `${API_URL}/moments/${id}`;
-    const moment = fetch(url, {
-        headers: {
-            'Authorization': `Bearer ${API_SECRET}`
-        }
-    }).then(res => res.json());
-
 
     return {
         name: "moment-loader",
         load: async () => {
-            return moment
+            try {
+                const res = await fetch(url, {
+                    headers: {
+                        'Authorization': `Bearer ${API_SECRET}`
+                    }
+                });
+
+                if (!res.ok) {
+                    throw new Error(`HTTP ${res.status} ${res.statusText}`);
+                }
+
+                return await res.json();
+            } catch (error) {
+                throw new Error(`Failed to load moment: ${error instanceof Error ? error.message : String(error)}`);
+            }
         },
     };
 }
@@ -45,17 +53,24 @@ export function momentLoader(id:string): any {
 export function momentsLoader(page:number): any {
     const url = `${API_URL}/moments?page=${page}`;
 
-    const moments = fetch(url, {
-        headers: {
-            'Authorization': `Bearer ${API_SECRET}`
-        }
-    }).then(res => res.json());
-
-
     return {
         name: "moments-loader",
         load: async () => {
-            return moments
+            try {
+                const res = await fetch(url, {
+                    headers: {
+                        'Authorization': `Bearer ${API_SECRET}`
+                    }
+                });
+
+                if (!res.ok) {
+                    throw new Error(`HTTP ${res.status} ${res.statusText}`);
+                }
+
+                return await res.json();
+            } catch (error) {
+                throw new Error(`Failed to load moments: ${error instanceof Error ? error.message : String(error)}`);
+            }
         },
     };
 }
