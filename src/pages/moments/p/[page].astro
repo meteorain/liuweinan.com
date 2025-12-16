@@ -1,22 +1,74 @@
 ---
-import MomentLayout from '@layouts/MomentLayout.astro'
+import MomentLayout from "@layouts/MomentLayout.astro";
+import Layout from "@layouts/Layout.astro";
+import { useLocale } from "@utils/locale";
 export const prerender = false;
 
-const {page} = Astro.params
+let error: Error | null = null;
+let pageOptions: any = null;
 
-const pageIndex = parseInt(page, 10)
+try {
+    const { page } = Astro.params;
 
-if (pageIndex === undefined) {
-    throw new Error('Slug is required')
-}
-const pageOptions = {
-    currentPage: pageIndex,
-    pageSize: 10,
-    url: {
-        prev: pageIndex > 1 ? `/moments/p/${pageIndex - 1}` : '',
-        next: '/moments/p/' + (pageIndex + 1)
+    if (!page) {
+        throw new Error("Page parameter is required");
     }
+
+    const pageIndex = parseInt(page, 10);
+
+    if (isNaN(pageIndex) || pageIndex < 1) {
+        throw new Error(`Invalid page number: ${page}`);
+    }
+
+    pageOptions = {
+        currentPage: pageIndex,
+        pageSize: 10,
+        url: {
+            prev: pageIndex > 1 ? `/moments/p/${pageIndex - 1}` : "",
+            next: "/moments/p/" + (pageIndex + 1),
+        },
+    };
+} catch (e: any) {
+    error = e instanceof Error ? e : new Error(String(e));
 }
 ---
 
-<MomentLayout page={pageOptions}/>
+{
+    error ? (
+        <Layout title="Error">
+            <div class="max-w-[65ch] mt-8 p-6 border border-red-300 dark:border-red-700 rounded-lg bg-red-50 dark:bg-red-900/20">
+                <h1 class="text-2xl font-bold text-red-600 dark:text-red-400 mb-4">
+                    错误
+                </h1>
+                <div class="space-y-2">
+                    <p class="text-red-600 dark:text-red-400 font-semibold">
+                        错误信息:
+                    </p>
+                    <p class="text-red-700 dark:text-red-300">
+                        {error.message}
+                    </p>
+                    {error.stack && (
+                        <>
+                            <p class="text-red-600 dark:text-red-400 font-semibold mt-4">
+                                堆栈跟踪:
+                            </p>
+                            <pre class="bg-red-100 dark:bg-red-900/40 p-4 rounded overflow-auto text-xs font-mono text-red-800 dark:text-red-200 whitespace-pre-wrap">
+                                {error.stack}
+                            </pre>
+                        </>
+                    )}
+                    <div class="mt-4">
+                        <a
+                            href="/moments"
+                            class="text-blue-600 dark:text-blue-400 hover:underline"
+                        >
+                            ← 返回 Moments
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </Layout>
+    ) : (
+        <MomentLayout page={pageOptions} />
+    )
+}
