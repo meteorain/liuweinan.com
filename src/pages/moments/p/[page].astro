@@ -4,10 +4,14 @@ export const prerender = false;
 
 const { page } = Astro.params;
 
+if (!page) {
+    throw new Error("Page parameter is required");
+}
+
 const pageIndex = parseInt(page, 10);
 
-if (pageIndex === undefined) {
-    throw new Error("Slug is required");
+if (isNaN(pageIndex) || pageIndex < 1) {
+    throw new Error(`Invalid page number: ${page}`);
 }
 const pageOptions = {
     currentPage: pageIndex,

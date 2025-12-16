@@ -23,7 +23,7 @@ const loader = momentsLoader(page.currentPage)
 let result = await loader.load()
 
 
-const {moments, next, prev} = result
+const {moments = [], next = null, prev = null} = result || {}
 const pageHref = (page) => {
     if (!page) return null
     if (page === 1) return path(`/moments`)
