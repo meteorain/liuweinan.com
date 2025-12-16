@@ -19,11 +19,27 @@ interface Props {
     }
 }
 
-const loader = momentsLoader(page.currentPage)
-let result = await loader.load()
+let error: Error | null = null;
+let result: any = null;
+let moments: any[] = [];
+let next: number | null = null;
+let prev: number | null = null;
 
+try {
+    const loader = momentsLoader(page.currentPage)
+    result = await loader.load()
+    
+    if (!result || typeof result !== 'object') {
+        throw new Error('Invalid response from API')
+    }
+    
+    moments = result.moments || [];
+    next = result.next || null;
+    prev = result.prev || null;
+} catch (e: any) {
+    error = e instanceof Error ? e : new Error(String(e));
+}
 
-const {moments, next, prev} = result
 const pageHref = (page) => {
     if (!page) return null
     if (page === 1) return path(`/moments`)
@@ -32,34 +48,68 @@ const pageHref = (page) => {
 ---
 
 <Layout title={t('nav.moments')}>
-    <div class="max-w-[65ch]">
-        <div class="mt-8">
-            {
-                moments.map((c) =>
-                        <MomentCard content={c}/>)
-            }
-            {!moments.length &&
-                    <BackLater/>}
+    {error ? (
+        <div class="max-w-[65ch] mt-8 p-6 border border-red-300 dark:border-red-700 rounded-lg bg-red-50 dark:bg-red-900/20">
+            <h1 class="text-2xl font-bold text-red-600 dark:text-red-400 mb-4">
+                错误
+            </h1>
+            <div class="space-y-2">
+                <p class="text-red-600 dark:text-red-400 font-semibold">
+                    错误信息:
+                </p>
+                <p class="text-red-700 dark:text-red-300">
+                    {error.message}
+                </p>
+                {error.stack && (
+                    <>
+                        <p class="text-red-600 dark:text-red-400 font-semibold mt-4">
+                            堆栈跟踪:
+                        </p>
+                        <pre class="bg-red-100 dark:bg-red-900/40 p-4 rounded overflow-auto text-xs font-mono text-red-800 dark:text-red-200 whitespace-pre-wrap">
+                            {error.stack}
+                        </pre>
+                    </>
+                )}
+                <div class="mt-4">
+                    <a
+                        href={path('/moments')}
+                        class="text-blue-600 dark:text-blue-400 hover:underline"
+                    >
+                        ← 返回 Moments
+                    </a>
+                </div>
+            </div>
         </div>
-        <div class="mt-4">
-            <span>
+    ) : (
+        <div class="max-w-[65ch]">
+            <div class="mt-8">
                 {
-                    prev && (
-                                <a  href={pageHref(prev)} class="panda-link">
-                                    {t('pagination.previous')}
-                                </a>
-                    )
+                    moments.map((c) =>
+                            <MomentCard content={c}/>)
                 }
-            </span>
-            <span class="float-right">
-                {
-                    next && (
-                                <a  href={pageHref(next)} class="panda-link">
-                                    {t('pagination.next')}
-                                </a>
-                    )
-                }
-            </span>
+                {!moments.length &&
+                        <BackLater/>}
+            </div>
+            <div class="mt-4">
+                <span>
+                    {
+                        prev && (
+                                    <a  href={pageHref(prev)} class="panda-link">
+                                        {t('pagination.previous')}
+                                    </a>
+                        )
+                    }
+                </span>
+                <span class="float-right">
+                    {
+                        next && (
+                                    <a  href={pageHref(next)} class="panda-link">
+                                        {t('pagination.next')}
+                                    </a>
+                        )
+                    }
+                </span>
+            </div>
         </div>
-    </div>
+    )}
 </Layout>
