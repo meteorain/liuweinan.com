@@ -27,53 +27,17 @@ export interface Moment {
 
 export function momentLoader(id:string): any {
     const url = `${API_URL}/moments/${id}`;
+    const moment = fetch(url, {
+        headers: {
+            'Authorization': `Bearer ${API_SECRET}`
+        }
+    }).then(res => res.json());
+
 
     return {
         name: "moment-loader",
         load: async () => {
-            const res = await fetch(url, {
-                headers: {
-                    'Authorization': `Bearer ${API_SECRET}`
-                }
-            });
-            
-            const contentType = res.headers.get('content-type') || '';
-            const responseText = await res.text();
-            
-            if (!res.ok) {
-                const error: any = new Error(`HTTP ${res.status} ${res.statusText}`);
-                error.status = res.status;
-                error.statusText = res.statusText;
-                error.url = url;
-                error.responseText = responseText;
-                error.headers = Object.fromEntries(res.headers.entries());
-                throw error;
-            }
-            
-            if (!contentType.includes('application/json')) {
-                const error: any = new Error(`Expected JSON but got ${contentType}`);
-                error.status = res.status;
-                error.statusText = res.statusText;
-                error.url = url;
-                error.contentType = contentType;
-                error.responseText = responseText;
-                error.headers = Object.fromEntries(res.headers.entries());
-                throw error;
-            }
-            
-            try {
-                return JSON.parse(responseText);
-            } catch (e: any) {
-                const error: any = new Error(`Failed to parse JSON: ${e.message}`);
-                error.status = res.status;
-                error.statusText = res.statusText;
-                error.url = url;
-                error.contentType = contentType;
-                error.responseText = responseText;
-                error.headers = Object.fromEntries(res.headers.entries());
-                error.parseError = e.message;
-                throw error;
-            }
+            return moment
         },
     };
 }
@@ -81,52 +45,17 @@ export function momentLoader(id:string): any {
 export function momentsLoader(page:number): any {
     const url = `${API_URL}/moments?page=${page}`;
 
+    const moments = fetch(url, {
+        headers: {
+            'Authorization': `Bearer ${API_SECRET}`
+        }
+    }).then(res => res.json());
+
+
     return {
         name: "moments-loader",
         load: async () => {
-            const res = await fetch(url, {
-                headers: {
-                    'Authorization': `Bearer ${API_SECRET}`
-                }
-            });
-            
-            const contentType = res.headers.get('content-type') || '';
-            const responseText = await res.text();
-            
-            if (!res.ok) {
-                const error: any = new Error(`HTTP ${res.status} ${res.statusText}`);
-                error.status = res.status;
-                error.statusText = res.statusText;
-                error.url = url;
-                error.responseText = responseText;
-                error.headers = Object.fromEntries(res.headers.entries());
-                throw error;
-            }
-            
-            if (!contentType.includes('application/json')) {
-                const error: any = new Error(`Expected JSON but got ${contentType}`);
-                error.status = res.status;
-                error.statusText = res.statusText;
-                error.url = url;
-                error.contentType = contentType;
-                error.responseText = responseText;
-                error.headers = Object.fromEntries(res.headers.entries());
-                throw error;
-            }
-            
-            try {
-                return JSON.parse(responseText);
-            } catch (e: any) {
-                const error: any = new Error(`Failed to parse JSON: ${e.message}`);
-                error.status = res.status;
-                error.statusText = res.statusText;
-                error.url = url;
-                error.contentType = contentType;
-                error.responseText = responseText;
-                error.headers = Object.fromEntries(res.headers.entries());
-                error.parseError = e.message;
-                throw error;
-            }
+            return moments
         },
     };
 }

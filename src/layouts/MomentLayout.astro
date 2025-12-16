@@ -19,39 +19,11 @@ interface Props {
     }
 }
 
-let error: Error | null = null;
-let errorDetails: any = null;
-let result: any = null;
-let moments: any[] = [];
-let next: number | null = null;
-let prev: number | null = null;
+const loader = momentsLoader(page.currentPage)
+let result = await loader.load()
 
-try {
-    const loader = momentsLoader(page.currentPage)
-    result = await loader.load()
-    
-    if (!result || typeof result !== 'object') {
-        throw new Error('Invalid response from API')
-    }
-    
-    moments = result.moments || [];
-    next = result.next || null;
-    prev = result.prev || null;
-} catch (e: any) {
-    error = e instanceof Error ? e : new Error(String(e));
-    errorDetails = {
-        message: e.message,
-        status: e.status,
-        statusText: e.statusText,
-        url: e.url,
-        contentType: e.contentType,
-        responseText: e.responseText,
-        headers: e.headers,
-        parseError: e.parseError,
-        stack: e.stack
-    };
-}
 
+const {moments, next, prev} = result
 const pageHref = (page) => {
     if (!page) return null
     if (page === 1) return path(`/moments`)
@@ -60,131 +32,34 @@ const pageHref = (page) => {
 ---
 
 <Layout title={t('nav.moments')}>
-    {error ? (
-        <div class="max-w-[65ch] mt-8 p-6 border border-red-300 dark:border-red-700 rounded-lg bg-red-50 dark:bg-red-900/20">
-            <h1 class="text-2xl font-bold text-red-600 dark:text-red-400 mb-4">
-                错误
-            </h1>
-            <div class="space-y-4">
-                <div>
-                    <p class="text-red-600 dark:text-red-400 font-semibold">
-                        错误信息:
-                    </p>
-                    <p class="text-red-700 dark:text-red-300">
-                        {error.message}
-                    </p>
-                </div>
-                
-                {errorDetails && (
-                    <>
-                        {errorDetails.status && (
-                            <div>
-                                <p class="text-red-600 dark:text-red-400 font-semibold">
-                                    HTTP 状态:
-                                </p>
-                                <p class="text-red-700 dark:text-red-300">
-                                    {errorDetails.status} {errorDetails.statusText}
-                                </p>
-                            </div>
-                        )}
-                        
-                        {errorDetails.url && (
-                            <div>
-                                <p class="text-red-600 dark:text-red-400 font-semibold">
-                                    请求 URL:
-                                </p>
-                                <p class="text-red-700 dark:text-red-300 font-mono text-sm break-all">
-                                    {errorDetails.url}
-                                </p>
-                            </div>
-                        )}
-                        
-                        {errorDetails.contentType && (
-                            <div>
-                                <p class="text-red-600 dark:text-red-400 font-semibold">
-                                    Content-Type:
-                                </p>
-                                <p class="text-red-700 dark:text-red-300">
-                                    {errorDetails.contentType}
-                                </p>
-                            </div>
-                        )}
-                        
-                        {errorDetails.responseText && (
-                            <div>
-                                <p class="text-red-600 dark:text-red-400 font-semibold">
-                                    完整响应内容:
-                                </p>
-                                <pre class="bg-red-100 dark:bg-red-900/40 p-4 rounded overflow-auto text-xs font-mono text-red-800 dark:text-red-200 whitespace-pre-wrap max-h-96">
-                                    {errorDetails.responseText}
-                                </pre>
-                            </div>
-                        )}
-                        
-                        {errorDetails.headers && (
-                            <div>
-                                <p class="text-red-600 dark:text-red-400 font-semibold">
-                                    响应头:
-                                </p>
-                                <pre class="bg-red-100 dark:bg-red-900/40 p-4 rounded overflow-auto text-xs font-mono text-red-800 dark:text-red-200">
-                                    {JSON.stringify(errorDetails.headers, null, 2)}
-                                </pre>
-                            </div>
-                        )}
-                        
-                        {errorDetails.stack && (
-                            <div>
-                                <p class="text-red-600 dark:text-red-400 font-semibold">
-                                    堆栈跟踪:
-                                </p>
-                                <pre class="bg-red-100 dark:bg-red-900/40 p-4 rounded overflow-auto text-xs font-mono text-red-800 dark:text-red-200 whitespace-pre-wrap max-h-96">
-                                    {errorDetails.stack}
-                                </pre>
-                            </div>
-                        )}
-                    </>
-                )}
-                
-                <div class="mt-4 pt-4 border-t border-red-300 dark:border-red-700">
-                    <a
-                        href={path('/moments')}
-                        class="text-blue-600 dark:text-blue-400 hover:underline"
-                    >
-                        ← 返回 Moments
-                    </a>
-                </div>
-            </div>
+    <div class="max-w-[65ch]">
+        <div class="mt-8">
+            {
+                moments.map((c) =>
+                        <MomentCard content={c}/>)
+            }
+            {!moments.length &&
+                    <BackLater/>}
         </div>
-    ) : (
-        <div class="max-w-[65ch]">
-            <div class="mt-8">
+        <div class="mt-4">
+            <span>
                 {
-                    moments.map((c) =>
-                            <MomentCard content={c}/>)
+                    prev && (
+                                <a  href={pageHref(prev)} class="panda-link">
+                                    {t('pagination.previous')}
+                                </a>
+                    )
                 }
-                {!moments.length &&
-                        <BackLater/>}
-            </div>
-            <div class="mt-4">
-                <span>
-                    {
-                        prev && (
-                                    <a  href={pageHref(prev)} class="panda-link">
-                                        {t('pagination.previous')}
-                                    </a>
-                        )
-                    }
-                </span>
-                <span class="float-right">
-                    {
-                        next && (
-                                    <a  href={pageHref(next)} class="panda-link">
-                                        {t('pagination.next')}
-                                    </a>
-                        )
-                    }
-                </span>
-            </div>
+            </span>
+            <span class="float-right">
+                {
+                    next && (
+                                <a  href={pageHref(next)} class="panda-link">
+                                    {t('pagination.next')}
+                                </a>
+                    )
+                }
+            </span>
         </div>
-    )}
+    </div>
 </Layout>
