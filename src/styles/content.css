@@ -91,6 +91,10 @@ article > p {
  * prose image
  */
 
+/* 所有 prose 内的图片都应用最大宽度限制 */
+.prose img {
+    @apply max-w-full h-auto;
+}
 
 .prose figure {
     @apply flex flex-col items-center justify-center my-6 mx-auto text-center;
@@ -99,7 +103,8 @@ article > p {
 .prose figure img {
     @apply rounded-lg shadow-md max-w-full h-auto max-h-64;
 
-    width: 300px;
+    max-width: 100%;
+    width: auto;
     height: 200px;
     display: block;
     background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
