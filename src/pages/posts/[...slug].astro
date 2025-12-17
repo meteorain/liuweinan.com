@@ -1,26 +1,26 @@
 ---
-import Layout from '@layouts/Layout.astro'
-import {useLocale} from '@utils/locale'
-import {formatDateYMD} from "@utils/format";
+import Layout from "@layouts/Layout.astro";
+import { useLocale } from "@utils/locale";
+import { formatDateYMD } from "@utils/format";
 import ObsidianEdit from "@components/ObsidianEdit.astro";
-import {getCollection, getEntry, render} from 'astro:content';
-import '../../styles/content.css'
+import { getCollection, getEntry, render } from "astro:content";
+import "../../styles/content.css";
 
 export const prerender = true;
-const {path, t, locale} = useLocale(Astro.url)
+const { path, t, locale } = useLocale(Astro.url);
 const { entry } = Astro.props;
-const {filePath} = entry
+const { filePath } = entry;
 const { Content, remarkPluginFrontmatter } = await entry.render();
 
-const {lastModified} = remarkPluginFrontmatter
+const { lastModified } = remarkPluginFrontmatter;
 
-const {categories, title,  pubDate  } = entry.data;
-const ext = filePath.split('.').pop()
+const { categories, title, pubDate } = entry.data;
+const ext = filePath.split(".").pop();
 // const {Content} = await render(post);
 export async function getStaticPaths() {
-    const notes = await getCollection('posts',
-        (i) =>
-            !i.slug?.includes('.en.')
+    const notes = await getCollection(
+        "posts",
+        (i) => !i.slug?.includes(".en."),
     );
     return notes.map((note) => {
         return {
@@ -34,55 +34,56 @@ export async function getStaticPaths() {
     });
 }
 
-
 // const title = locale === 'en' && FrontMatter['title-en'] ? FrontMatter['title-en'] : FrontMatter['title']
 ---
 
 <Layout title={title} navbar={false}>
+    <a class="panda-link mt-6" href={path("/")}>{t("post.back")}</a>
 
-
-
-    <a  class="panda-link mt-6" href={path('/')} >{t('post.back')}</a>
-
-    <main >
-
+    <main>
         <div class="mt-6">
-
-            <h1 class="text-4xl ">{title} </h1>
-            <div class="flex sm:flex-row flex-col rounded-lg bg-stone-100 dark:bg-stone-800 p-2 px-4">
+            <h1 class="text-4xl">{title}</h1>
+            <div
+                class="flex sm:flex-row flex-col rounded-lg bg-stone-100 dark:bg-stone-800 p-2 px-4"
+            >
                 <div>
                     {
                         categories &&
-                        categories.map((category) => (
+                            categories.map((category) => (
                                 <span class="ml-1">
-                                <a href={path('/categories/' + category)} class="text-sm mr-2 panda-link">
-                                    #{t('categories.' + category)}#
-                                </a>
-                            </span>
-                        ))
+                                    <a
+                                        href={path("/categories/" + category)}
+                                        class="text-sm mr-2 panda-link"
+                                    >
+                                        #{t("categories." + category)}#
+                                    </a>
+                                </span>
+                            ))
                     }
                 </div>
-                <span class="sm:ml-auto ml-0 mt-1 sm:mt-0 pl-1 text-sm font-normal"> {t('post.post_at')} {formatDateYMD(pubDate)}</span>
+                <span
+                    class="sm:ml-auto ml-0 mt-1 sm:mt-0 pl-1 text-sm font-normal"
+                >
+                    {t("post.post_at")} {formatDateYMD(pubDate)}</span
+                >
             </div>
         </div>
         <article class="prose dark:prose-invert prose-netrual max-w-prose mt-6">
-            <Content/>
+            <Content />
         </article>
         <div class="mt-9 flex text-sm font-italic opacity-80">
-            <ObsidianEdit/>
+            <ObsidianEdit />
             {
                 pubDate !== lastModified && (
-                            <span class="ml-auto">
-                    {t('post.last_modified_at')} {formatDateYMD(lastModified)} |
-                </span> 
+                    <span class="ml-auto">
+                        {t("post.last_modified_at")}{" "}
+                        {formatDateYMD(lastModified)} |
+                    </span>
                 )
             }
-              <a class="panda-link ml-2" href={`/raw/posts/${entry.slug}.${ext}`} >
-             
-              {ext === 'md' ? 'Markdown' : 'MDX'}
+            <a class="panda-link ml-2" href={`/raw/posts/${entry.slug}.${ext}`}>
+                {ext === "md" ? "Markdown" : "MDX"}
             </a>
         </div>
     </main>
 </Layout>
-
-

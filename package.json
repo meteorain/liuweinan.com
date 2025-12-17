@@ -16,6 +16,7 @@
     "@astrojs/vercel": "latest",
     "astro": "latest",
     "astro-expressive-code": "latest",
+    "astro-i18n-aut": "^0.7.3",
     "cobe": "latest",
     "lodash": "latest",
     "luxon": "latest",

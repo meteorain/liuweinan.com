@@ -1,0 +1,99 @@
+---
+import { getLocale, getLocaleUrl } from 'astro-i18n-aut';
+const currentLocale = getLocale(Astro.url) || 'zh';
+const nextLocale = currentLocale === 'zh' ? 'en' : 'zh';
+const localeLabel = currentLocale === 'zh' ? 'EN' : '中';
+---
+
+<language-select>
+    <button
+        aria-label={`Switch to ${nextLocale}`}
+        aria-live="polite"
+        class="sl-flex"
+        title={`Switch to ${nextLocale}`}
+        data-locale={currentLocale}
+    >
+        <span class="locale-text">{localeLabel}</span>
+    </button>
+</language-select>
+
+<style>
+    language-select {
+        --language-select-animation-duration: 400ms;
+        --language-select-ease-elastic: cubic-bezier(0.5, 1.25, 0.75, 1.25);
+        display: inline-flex;
+        align-items: center;
+    }
+
+    button {
+        align-items: center;
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        height: 100%;
+        margin-inline: 0.25rem 0;
+        padding-inline: 0.5rem;
+        display: flex;
+        justify-content: center;
+    }
+
+    .locale-text {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: currentColor;
+        user-select: none;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+        .locale-text {
+            transition: opacity var(--language-select-animation-duration) ease;
+        }
+        
+        button:hover .locale-text {
+            opacity: 0.7;
+        }
+    }
+</style>
+
+<script>
+    customElements.define(
+        'language-select',
+        class LanguageSelect extends HTMLElement {
+            constructor() {
+                super();
+
+                const button = this.querySelector('button');
+                if (!button) return;
+
+                button.addEventListener('click', () => {
+                    const currentPath = window.location.pathname;
+                    const currentLocale = button.getAttribute('data-locale') || 'zh';
+                    const nextLocale = currentLocale === 'zh' ? 'en' : 'zh';
+                    
+                    // Get the path without locale prefix
+                    let pathWithoutLocale = currentPath;
+                    if (currentPath.startsWith('/en/') || currentPath.startsWith('/en')) {
+                        pathWithoutLocale = currentPath.replace(/^\/en/, '') || '/';
+                    } else if (currentPath.startsWith('/zh/') || currentPath.startsWith('/zh')) {
+                        pathWithoutLocale = currentPath.replace(/^\/zh/, '') || '/';
+                    }
+                    
+                    // Ensure path starts with /
+                    if (!pathWithoutLocale.startsWith('/')) {
+                        pathWithoutLocale = '/' + pathWithoutLocale;
+                    }
+                    
+                    // Build new path with locale (default locale 'zh' doesn't need prefix)
+                    let newPath = pathWithoutLocale;
+                    if (nextLocale === 'en') {
+                        newPath = '/en' + pathWithoutLocale;
+                    }
+                    
+                    // Navigate to new path
+                    window.location.href = newPath;
+                });
+            }
+        },
+    );
+</script>
+

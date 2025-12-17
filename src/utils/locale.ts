@@ -1,29 +1,42 @@
 import zh from '../locales/zh.yml'
 import en from '../locales/en.yml'
 import get from 'lodash/get'
-
-const getLocale = (url: URL) => ""
+import { getLocale, getLocaleUrl } from 'astro-i18n-aut'
 
 const useLocalePath = (lang: string) => {
-    lang ??= ''
-    if (lang === 'zh') {
-        lang = ''
-    }
-    const start = lang ? '/en' : ''
     return (path: string) => {
-        let url = start + path
-        if (!url.endsWith('/')) url += '/'
-        return url
+        // 确保路径以 / 开头
+        if (!path.startsWith('/')) {
+            path = '/' + path
+        }
+        // 使用 astro-i18n-aut 的 getLocaleUrl 来生成正确路径
+        return getLocaleUrl(path, lang)
     }
 }
 
 const useTranslation = (lang: string) => {
-    if (!lang) lang = 'zh'
+    // 如果没有语言或语言是默认语言 zh，使用中文翻译
+    if (!lang || lang === 'zh') {
+        return (key: string) => {
+            const r = get(zh, key)
+            if (!r) {
+                console.warn(`Translation for "${key}" not found in zh.yml`)
+                // 如果中文没有，尝试英文
+                const enR = get(en, key)
+                if (enR) return enR
+                return key.split('.').pop()
+            }
+            return r
+        }
+    }
+    // 否则使用英文翻译
     return (key: string) => {
-        const data = lang === 'zh' ? [zh, en] : [en, zh]
-        const r = get(data[0], key)
+        const r = get(en, key)
         if (!r) {
-            console.warn(`Translation for "${key}" not found`)
+            console.warn(`Translation for "${key}" not found in en.yml`)
+            // 如果英文没有，尝试中文
+            const zhR = get(zh, key)
+            if (zhR) return zhR
             return key.split('.').pop()
         }
         return r
@@ -31,7 +44,7 @@ const useTranslation = (lang: string) => {
 }
 
 export const useLocale = (url: URL) => {
-    const locale = getLocale(url)
+    const locale = getLocale(url) || 'zh'
     return {
         path: useLocalePath(locale),
         t: useTranslation(locale),

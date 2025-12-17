@@ -6,6 +6,7 @@ import remarkWikiLink from "./src/plugins/wiki-link/index.ts";
 import {getPermalinks} from "./src/plugins/wiki-link/getPermalinks.ts";
 import yaml from '@rollup/plugin-yaml'
 import expressiveCode from 'astro-expressive-code'
+import i18n from 'astro-i18n-aut/integration'
 
 // import nightOwlDark from './src/styles/expressive-code/night-owl-dark.json'
 // import nightOwlLight from './src/styles/expressive-code/night-owl-light.json'
@@ -87,6 +88,13 @@ export default defineConfig({
     },
 
     integrations: [
+        i18n({
+            defaultLocale: 'zh',
+            locales: {
+                zh: 'zh-CN',
+                en: 'en-US',
+            },
+        }),
         UnoCSS(),
         expressiveCode({
             themes: [ 'dracula-soft','snazzy-light' ],
