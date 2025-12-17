@@ -6,16 +6,19 @@ export const prerender = true
 
 
 export async function getStaticPaths() {
-    const posts = await getCollection('posts');
-    const tags = [
+    const paths: any[] = [];
+    
+    // Get tags from Chinese posts
+    const zhPosts = await getCollection('posts');
+    const zhTags = [
         ...new Set(
-            posts
+            zhPosts
                 .filter((i) => i.data.tags)
                 .map((i) => i.data.tags)
                 .flat()
         )
-    ]
-    return tags.map((tag) => {
+    ];
+    paths.push(...zhTags.map((tag) => {
         return {
             params: {
                 tag: tag.replace(/\s/g, '-')
@@ -24,7 +27,30 @@ export async function getStaticPaths() {
                 tag
             }
         }
-    })
+    }));
+    
+    // Get tags from English posts
+    const enPosts = await getCollection('posts-en');
+    const enTags = [
+        ...new Set(
+            enPosts
+                .filter((i) => i.data.tags)
+                .map((i) => i.data.tags)
+                .flat()
+        )
+    ];
+    paths.push(...enTags.map((tag) => {
+        return {
+            params: {
+                tag: tag.replace(/\s/g, '-')
+            },
+            props: {
+                tag
+            }
+        }
+    }));
+    
+    return paths;
 }
 const { tag } = Astro.props
 ---

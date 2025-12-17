@@ -3,8 +3,16 @@ import groupBy from "lodash/groupBy";
 import keys from "lodash/keys";
 import {DateTime} from "luxon";
 
+/**
+ * Get the collection name based on locale
+ */
+export const getPostsCollectionName = (locale: string): 'posts' | 'posts-en' => {
+    return locale === 'en' ? 'posts-en' : 'posts';
+};
+
 export const getAllPosts = async (locale: string, tag: string, category: string) => {
-    const allPosts = await getCollection('posts')
+    const collectionName = getPostsCollectionName(locale);
+    const allPosts = await getCollection(collectionName)
     const filteredPosts = allPosts
         .map( i=>({
             ...i.data,

@@ -1,5 +1,6 @@
 ---
 import {getCollection, getEntry} from 'astro:content';
+import { getLocale } from 'astro-i18n-aut';
 
 export const prerender = false;  // Use SSR mode
 
@@ -10,9 +11,13 @@ const fullSlug = slugParts.slice(2).join('/'); // Remove 'raw' and 'posts'
 const fileExtension = fullSlug.endsWith('.md') ? 'md' : 'mdx';
 const postSlug = fullSlug.replace(/\.(md|mdx)$/, '');
 
+// Determine locale from URL
+const locale = getLocale(Astro.url) || 'zh';
+const collectionName = locale === 'en' ? 'posts-en' : 'posts';
+
 try {
     // Find matching entry in the collection
-    const collection = await getCollection('posts');
+    const collection = await getCollection(collectionName);
     const entry = collection.find(note => 
         note.slug === postSlug || 
         note.slug.endsWith(`/${postSlug}`)

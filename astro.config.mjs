@@ -1,9 +1,9 @@
-import {defineConfig, envField} from 'astro/config';
+import { defineConfig, envField } from 'astro/config';
 import vercel from '@astrojs/vercel'
 
 import UnoCSS from 'unocss/astro'
 import remarkWikiLink from "./src/plugins/wiki-link/index.ts";
-import {getPermalinks} from "./src/plugins/wiki-link/getPermalinks.ts";
+import { getPermalinks } from "./src/plugins/wiki-link/getPermalinks.ts";
 import yaml from '@rollup/plugin-yaml'
 import expressiveCode from 'astro-expressive-code'
 import i18n from 'astro-i18n-aut/integration'
@@ -11,11 +11,12 @@ import i18n from 'astro-i18n-aut/integration'
 // import nightOwlDark from './src/styles/expressive-code/night-owl-dark.json'
 // import nightOwlLight from './src/styles/expressive-code/night-owl-light.json'
 
-import {remarkModifiedTime} from './src/plugins/remark-modified-time.mjs'
+import { remarkModifiedTime } from './src/plugins/remark-modified-time.mjs'
 import remarkDirective from 'remark-directive'
 // rehype-figure
-import { RDBilibiliPlugin} from "./src/plugins/remark-directive.mjs";
-import {InternalLinkPlugin} from "./src/plugins/remark-internal-link.mjs";
+import { RDBilibiliPlugin } from "./src/plugins/remark-directive.mjs";
+import { InternalLinkPlugin } from "./src/plugins/remark-internal-link.mjs";
+import { remarkWikiLinkLocale } from "./src/plugins/remark-wiki-link-locale.mjs";
 import remarkObsidianCallout from './src/plugins/callout/index.js'
 import mdx from "@astrojs/mdx";
 import remarkFigureCaption from "@microflash/remark-figure-caption";
@@ -26,17 +27,17 @@ export default defineConfig({
     vite: {
         plugins: [yaml()],
     },
-    compressHTML:false,
+    compressHTML: false,
     experimental: {
 
     },
     env: {
         schema: {
-            API_URL: envField.string({context: "server", access: "secret"}),
-            API_SECRET: envField.string({context: "server", access: "secret"}),
-            STUDIO_SECRET: envField.string({context: "server", access: "secret"}),
-            MAPBOX_TOKEN: envField.string({context: "client", access: "public"}),
-            AMAP_KEY: envField.string({context: "client", access: "public"}),
+            API_URL: envField.string({ context: "server", access: "secret" }),
+            API_SECRET: envField.string({ context: "server", access: "secret" }),
+            STUDIO_SECRET: envField.string({ context: "server", access: "secret" }),
+            MAPBOX_TOKEN: envField.string({ context: "client", access: "public" }),
+            AMAP_KEY: envField.string({ context: "client", access: "public" }),
         }
     },
     serverIslands: true,
@@ -58,6 +59,7 @@ export default defineConfig({
 
 
         remarkPlugins: [
+            // , // 首先填充 frontmatter，修复 astro-i18n-aut 导致的问题
             remarkModifiedTime,
             remarkDirective,
             remarkFigureCaption,
@@ -65,7 +67,7 @@ export default defineConfig({
             [
                 remarkObsidianCallout,
                 {
-                    blockquoteClass:'callout',
+                    blockquoteClass: 'callout',
                     titleTextTagName: "span",
                     iconTagName: "span",
                     // ...
@@ -73,7 +75,7 @@ export default defineConfig({
             ],
             RDBilibiliPlugin,
             InternalLinkPlugin,
-                [remarkWikiLink, {
+            [remarkWikiLink, {
                 permalinks: getPermalinks("src/content/"),
                 pathFormat: "obsidian-short",
                 hrefTemplate: (permalink) => {
@@ -83,6 +85,7 @@ export default defineConfig({
                     return href;
                 }
             }],
+            remarkWikiLinkLocale, // 在 remarkWikiLink 之后运行，修复 wiki link 的 locale
 
         ]
     },
@@ -97,7 +100,7 @@ export default defineConfig({
         }),
         UnoCSS(),
         expressiveCode({
-            themes: [ 'dracula-soft','snazzy-light' ],
+            themes: ['dracula-soft', 'snazzy-light'],
             themeCssSelector: (theme) => {
                 return '.' + theme.type
             }

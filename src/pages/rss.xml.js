@@ -1,12 +1,17 @@
 import rss from '@astrojs/rss'
 import { getCollection } from 'astro:content'
+import { getLocale } from 'astro-i18n-aut'
 import MarkdownIt from 'markdown-it'
 export const prerender = true;
 
 const parser = new MarkdownIt()
 
-export async function GET({ params }) {
-    const blog = await getCollection('posts',(i)=>i.data.title && !i.data.isDraft && i.data.pubDate)
+export async function GET(context) {
+    // Determine locale from URL
+    const locale = getLocale(context.url) || 'zh';
+    const collectionName = locale === 'en' ? 'posts-en' : 'posts';
+    
+    const blog = await getCollection(collectionName, (i)=>i.data.title && !i.data.isDraft && i.data.pubDate)
     const posts = blog
         .sort((a, b) => (a.data.pubDate < b.data.pubDate ? 1 : -1))
         .map((post) => {

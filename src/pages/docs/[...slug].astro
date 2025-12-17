@@ -16,7 +16,7 @@ const note = await getEntry('docs', slug);
 
 const {title} = note.data
 const {Content,remarkPluginFrontmatter} = await render(note);
-const {lastModified} = remarkPluginFrontmatter
+const {lastModified} = remarkPluginFrontmatter || {}
 
 export async function getStaticPaths() {
     const docs = await getCollection('docs');
@@ -70,7 +70,13 @@ export async function getStaticPaths() {
                     <ObsidianEdit/>
 
                     <span class="ml-auto">
-                    {t('post.last_modified_at')} {formatDateYMD(lastModified)}
+                    {lastModified ? (
+                        <>
+                            {t('post.last_modified_at')} {formatDateYMD(lastModified)}
+                        </>
+                    ) : (
+                        t('post.no_modified_time')
+                    )}
                 </span>
                 </div>
 

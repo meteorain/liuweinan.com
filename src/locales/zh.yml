@@ -26,6 +26,7 @@ post:
     back: 返回
     post_at: 发布于
     last_modified_at: 最后编辑于
+    no_modified_time: 暂无修改时间
 
 message:
     404-content: 页面未找到

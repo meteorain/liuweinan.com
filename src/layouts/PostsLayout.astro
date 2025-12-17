@@ -15,10 +15,9 @@ const filterName = tag || category
 
 
 function getTitle(post: any) {
-    if (!locale || locale === 'zh') return post.title
-    const enTitle = post['title-en']
-    if (!enTitle) return post.title
-    return enTitle
+    // Since we're using different collections for different languages,
+    // each post already has the correct title for its language
+    return post.title
 }
 ---
 
@@ -66,7 +65,7 @@ function getTitle(post: any) {
                     return (
                             <a
                                     class="mr-1 text-sm panda-link my-1 hover:font-bold"
-                                    href={'/tags/' + slugifySpace(tag) + '/'}
+                                    href={path('/tags/' + slugifySpace(tag) + '/')}
                             >
                                 #{t('tags.' + tag)}
                             </a>

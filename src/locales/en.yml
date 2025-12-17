@@ -26,6 +26,7 @@ post:
     back: Back
     post_at: Posted at
     last_modified_at: Last modified at
+    no_modified_time: No modification time available
 message:
     404-content: Page not found
     back-later: Work not finished yet, please come back later

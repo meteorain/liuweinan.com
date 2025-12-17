@@ -17,6 +17,21 @@ const posts = defineCollection({
     })
 });
 
+const postsEn = defineCollection({
+    type: 'content',
+    schema: z.object({
+        title: z.string().optional(),
+        'title-en': z.string().optional(),
+        tags: z.array(z.string()).optional(),
+        categories: z.array(z.string()).optional(),
+        pubDate: z.date().optional(),
+        lastModified: z.date().optional(),
+        notificationTypes: z.array(z.string()).optional(),
+        isDraft: z.boolean().optional(),
+        url: z.string().optional(),
+    })
+});
+
 const docs = defineCollection({
     type: 'content',
     schema: z.object({
@@ -41,6 +56,7 @@ const now = defineCollection({
 
 export const collections = {
     'posts': posts,
+    'posts-en': postsEn,
     'docs': docs,
     // 'now': now,
     'whois': whois,

@@ -4,34 +4,74 @@ import { useLocale } from "@utils/locale";
 import { formatDateYMD } from "@utils/format";
 import ObsidianEdit from "@components/ObsidianEdit.astro";
 import { getCollection, getEntry, render } from "astro:content";
+import { getPostsCollectionName } from "@utils/content";
 import "../../styles/content.css";
 
 export const prerender = true;
 const { path, t, locale } = useLocale(Astro.url);
-const { entry } = Astro.props;
-const { filePath } = entry;
-const { Content, remarkPluginFrontmatter } = await entry.render();
+const { slug } = Astro.params;
 
-const { lastModified } = remarkPluginFrontmatter;
+// Get the correct collection based on locale
+const collectionName = getPostsCollectionName(locale);
+
+const entry = await getEntry(collectionName, slug!);
+
+if (!entry) {
+    return new Response(null, {
+        status: 404,
+        statusText: "Not found",
+    });
+}
+
+const { filePath } = entry;
+let renderResult;
+try {
+    // Use render function (same as docs page)
+    renderResult = await render(entry);
+} catch (error) {
+    throw error;
+}
+
+const { Content, remarkPluginFrontmatter } = renderResult;
+
+// 修复 astro-i18n-aut 导致 remarkPluginFrontmatter 为空的问题
+// 如果 remarkPluginFrontmatter 为空，手动填充它
+let frontmatter = remarkPluginFrontmatter;
+
+const { lastModified } = frontmatter || {};
 
 const { categories, title, pubDate } = entry.data;
 const ext = filePath.split(".").pop();
 // const {Content} = await render(post);
 export async function getStaticPaths() {
-    const notes = await getCollection(
-        "posts",
-        (i) => !i.slug?.includes(".en."),
+    const paths: any[] = [];
+
+    // Get Chinese posts - these will be rendered for default locale (zh)
+    const zhPosts = await getCollection("posts");
+    paths.push(
+        ...zhPosts.map((note) => {
+            return {
+                params: {
+                    slug: note.slug,
+                },
+            };
+        }),
     );
-    return notes.map((note) => {
-        return {
-            params: {
-                slug: note.slug,
-            },
-            props: {
-                entry: note,
-            },
-        };
-    });
+
+    // Get English posts - these will be rendered for 'en' locale
+    // astro-i18n-aut will automatically generate /en/posts/... paths
+    const enPosts = await getCollection("posts-en");
+    paths.push(
+        ...enPosts.map((note) => {
+            return {
+                params: {
+                    slug: note.slug,
+                },
+            };
+        }),
+    );
+
+    return paths;
 }
 
 // const title = locale === 'en' && FrontMatter['title-en'] ? FrontMatter['title-en'] : FrontMatter['title']
@@ -74,14 +114,19 @@ export async function getStaticPaths() {
         <div class="mt-9 flex text-sm font-italic opacity-80">
             <ObsidianEdit />
             {
-                pubDate !== lastModified && (
+                lastModified && pubDate !== lastModified ? (
                     <span class="ml-auto">
                         {t("post.last_modified_at")}{" "}
                         {formatDateYMD(lastModified)} |
                     </span>
-                )
+                ) : !lastModified ? (
+                    <span class="ml-auto">{t("post.no_modified_time")} |</span>
+                ) : null
             }
-            <a class="panda-link ml-2" href={`/raw/posts/${entry.slug}.${ext}`}>
+            <a
+                class="panda-link ml-2"
+                href={path(`/raw/posts/${entry.slug}.${ext}`)}
+            >
                 {ext === "md" ? "Markdown" : "MDX"}
             </a>
         </div>

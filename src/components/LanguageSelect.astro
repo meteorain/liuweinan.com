@@ -32,16 +32,19 @@ const localeLabel = currentLocale === 'zh' ? 'EN' : '中';
         cursor: pointer;
         height: 100%;
         margin-inline: 0.25rem 0;
-        padding-inline: 0.5rem;
+        padding: 0.5rem;
         display: flex;
         justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
     }
 
     .locale-text {
-        font-size: 0.875rem;
+        font-size: 1rem;
         font-weight: 500;
         color: currentColor;
         user-select: none;
+        line-height: 1;
     }
 
     @media (prefers-reduced-motion: no-preference) {
