@@ -59,8 +59,7 @@ export default defineConfig({
 
 
         remarkPlugins: [
-            // , // 首先填充 frontmatter，修复 astro-i18n-aut 导致的问题
-            remarkModifiedTime,
+            remarkModifiedTime, // Run first to set lastModified before other plugins
             remarkDirective,
             remarkFigureCaption,
             // RDNotePlugin,
@@ -85,8 +84,7 @@ export default defineConfig({
                     return href;
                 }
             }],
-            remarkWikiLinkLocale, // 在 remarkWikiLink 之后运行，修复 wiki link 的 locale
-
+            remarkWikiLinkLocale,
         ]
     },
 
