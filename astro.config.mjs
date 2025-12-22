@@ -89,13 +89,7 @@ export default defineConfig({
     },
 
     integrations: [
-        i18n({
-            defaultLocale: 'zh',
-            locales: {
-                zh: 'zh-CN',
-                en: 'en-US',
-            },
-        }),
+
         UnoCSS(),
         expressiveCode({
             themes: ['dracula-soft', 'snazzy-light'],
@@ -103,7 +97,16 @@ export default defineConfig({
                 return '.' + theme.type
             }
         }),
-        mdx(),
+        mdx({
+            extendMarkdownConfig: true, // Ensure MDX inherits markdown config including remark plugins
+        }),
+        i18n({
+            defaultLocale: 'zh',
+            locales: {
+                zh: 'zh-CN',
+                en: 'en-US',
+            },
+        }),
     ], output: 'server',
     adapter: vercel({
         // functionPerRoute: false
