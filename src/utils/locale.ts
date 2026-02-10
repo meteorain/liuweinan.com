@@ -1,7 +1,9 @@
 import zh from '../locales/zh.yml'
 import en from '../locales/en.yml'
-import get from 'lodash/get'
 import { getLocale, getLocaleUrl } from 'astro-i18n-aut'
+
+const getNested = (obj: any, path: string) =>
+    path.split('.').reduce((acc: any, key: string) => (acc && acc[key] !== undefined ? acc[key] : undefined), obj)
 
 const useLocalePath = (lang: string) => {
     return (path: string) => {
@@ -18,11 +20,11 @@ const useTranslation = (lang: string) => {
     // 如果没有语言或语言是默认语言 zh，使用中文翻译
     if (!lang || lang === 'zh') {
         return (key: string) => {
-            const r = get(zh, key)
+            const r = getNested(zh, key)
             if (!r) {
                 console.warn(`Translation for "${key}" not found in zh.yml`)
                 // 如果中文没有，尝试英文
-                const enR = get(en, key)
+                const enR = getNested(en, key)
                 if (enR) return enR
                 return key.split('.').pop()
             }
@@ -31,7 +33,7 @@ const useTranslation = (lang: string) => {
     }
     // 否则使用英文翻译
     return (key: string) => {
-        const r = get(en, key)
+        const r = getNested(en, key)
         if (!r) {
             console.warn(`Translation for "${key}" not found in en.yml`)
             // 如果英文没有，尝试中文

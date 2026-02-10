@@ -1,7 +1,19 @@
 import {getCollection} from "astro:content";
-import groupBy from "lodash/groupBy";
-import keys from "lodash/keys";
 import {DateTime} from "luxon";
+
+function groupBy<T, K extends string | number | symbol>(
+    items: T[],
+    keyFn: (item: T) => K | undefined
+): Record<K, T[]> {
+    return items.reduce((acc, item) => {
+        const key = keyFn(item)
+        if (key === undefined || key === null) return acc
+        const k = key as K
+        if (!acc[k]) acc[k] = []
+        acc[k].push(item)
+        return acc
+    }, {} as Record<K, T[]>)
+}
 
 /**
  * Get the collection name based on locale
@@ -33,7 +45,7 @@ export const getAllPosts = async (locale: string, tag: string, category: string)
 
 
     const postsByYear = groupBy(filteredPosts, (frontmatter) => frontmatter.pubDate?.getFullYear())
-    const result = keys(postsByYear)
+    const result = Object.keys(postsByYear)
         .map((key) => ({
             year: key,
             list: postsByYear[key].sort((a: any, b: any) =>b.pubDate - a.pubDate)

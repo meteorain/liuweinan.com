@@ -19,15 +19,22 @@ const recursiveGetFiles = (dir: string) => {
 
 export const getPermalinks = (
     markdownFolder: string,
-    ignorePatterns: Array<RegExp> = [],
+    ignorePatterns: Array<RegExp> = [
+        /[\\/]\.git[\\/]/,
+        /[\\/]\.obsidian[\\/]/,
+    ],
     func: (str: any, ...args: any[]) => string = defaultPathToPermalinkFunc
 ) => {
     const files = recursiveGetFiles(markdownFolder);
-    const filesFiltered = files.filter((file) => {
-        return !ignorePatterns.some((pattern) => file.match(pattern));
-    });
+    const filesFiltered = files
+        // only markdown / mdx files
+        .filter((file) => /\.(mdx?|MDX?)$/.test(file))
+        // apply ignore patterns
+        .filter((file) => {
+            return !ignorePatterns.some((pattern) => file.match(pattern));
+        });
 
-    var r =  filesFiltered.map((file) => func(file, markdownFolder));
+    const r = filesFiltered.map((file) => func(file, markdownFolder));
     return r
 };
 

@@ -45,9 +45,8 @@ export function RDBilibiliPlugin() {
                 const attributes = node.attributes || {}
                 const bvid = attributes.id
 
-
                 if (!bvid) {
-                    file.fail('Unexpected missing `id` on `youtube` directive', node)
+                    file.fail('Unexpected missing `id` on `bilibili` directive', node)
                 }
 
                 data.hName = 'iframe'

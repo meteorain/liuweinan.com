@@ -2,6 +2,9 @@ import { execSync } from 'child_process'
 import { relative, normalize } from 'path'
 import { existsSync, statSync } from 'fs'
 
+// Cache git timestamps per resolved file key to avoid repeated git calls
+const gitTimeCache = new Map()
+
 function setLastModifiedFromFile(absPath, frontmatter) {
     try {
         if (existsSync(absPath)) {
@@ -10,7 +13,7 @@ function setLastModifiedFromFile(absPath, frontmatter) {
             return frontmatter.lastModified
         }
     } catch {
-        // ignore
+        // ignore filesystem issues, leave lastModified unset
     }
     return null
 }
@@ -45,6 +48,7 @@ export function remarkModifiedTime() {
             const isInSubmodule = absPath.includes('src/content') || absPath.includes('src\\content')
             let gitCommand
             let gitWorkingDir = process.cwd()
+            let cacheKey
 
             if (isInSubmodule) {
                 let projectRoot = process.cwd()
@@ -68,6 +72,7 @@ export function remarkModifiedTime() {
                     .replace(/\\/g, '/')
                 gitCommand = `git -C "${submoduleDir}" log -1 --pretty="format:%cI" -- "${submodulePath}"`
                 gitWorkingDir = projectRoot
+                cacheKey = `submodule:${submodulePath}`
             } else {
                 let projectRoot = process.cwd()
                 if (!absPath.startsWith(projectRoot)) {
@@ -93,6 +98,14 @@ export function remarkModifiedTime() {
                     : absPath.replace(/\\/g, '/').replace(/^\//, '')
                 gitCommand = `git log -1 --pretty="format:%cI" -- "${relativePath}"`
                 gitWorkingDir = projectRoot
+                cacheKey = `root:${relativePath}`
+            }
+
+            // Use cached git time if we already resolved this path
+            const cached = cacheKey && gitTimeCache.get(cacheKey)
+            if (cached) {
+                frontmatter.lastModified = cached
+                return
             }
 
             const result = execSync(gitCommand, {
@@ -105,6 +118,9 @@ export function remarkModifiedTime() {
             const dateString = result ? result.toString().trim() : null
             if (dateString && dateString.length > 0) {
                 frontmatter.lastModified = dateString
+                if (cacheKey) {
+                    gitTimeCache.set(cacheKey, dateString)
+                }
             } else {
                 setLastModifiedFromFile(absPath, frontmatter)
             }

@@ -27,7 +27,7 @@ export default defineConfig({
     vite: {
         plugins: [yaml()],
     },
-    compressHTML: false,
+    compressHTML: true,
     experimental: {
 
     },
@@ -42,7 +42,7 @@ export default defineConfig({
     },
     serverIslands: true,
 
-    // prefetch: true,
+    prefetch: true,
     site: 'https://yuhang.ch',
     scopedStyleStrategy: 'class',
     // trailingSlash: 'always',

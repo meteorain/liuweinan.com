@@ -1,54 +1,31 @@
-# Astro Starter Kit: Basics
+# Yuhang Chen’s Personal Blog (yuhang.ch)
 
-```sh
-npm create astro@latest -- --template basics
-```
+This is **Yuhang Chen’s personal blog and digital garden**, built with Astro and deployed on Vercel.
+It is a personal-use project where I publish long-form posts, notes, and a few small experiments.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
+For a more detailed overview of the stack and architecture,
+see the internal doc at `src/content/docs/overview/tech-stack.md`.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Tech stack (short version)
 
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
+- **Framework**: Astro (server output, deployed on Vercel)
+- **Content**: Collections under `src/content` (`posts`, `posts-en`, `docs`, `whois`, etc.)
+- **Styling**: UnoCSS, Expressive Code, custom typography / prose styles
+- **i18n**: `astro-i18n-aut` (currently `zh` and `en`)
+- **Runtime**: Node 22.x + `@astrojs/vercel` adapter
 
-## 🚀 Project Structure
+## Development
 
-Inside of your Astro project, you'll see the following folders and files:
+> This project currently targets Node **22.22.0** (see `.node-version`).
+> Use `fnm` / `nvm` to switch to the correct version if needed.
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── components/
-│   │   └── Card.astro
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+Using `pnpm` (recommended):
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
 
-Any static assets, like images, can be placed in the `public/` directory.
+## License
 
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+- All **code in this repository** (unless otherwise noted) is licensed under the [MIT License](./LICENSE).
+- All **written content** (blog posts, essays, notes, etc.) is licensed under  
+  **Creative Commons Attribution‑NonCommercial‑NoDerivatives 4.0 International (CC BY‑NC‑ND 4.0)**.  
+  See <https://creativecommons.org/licenses/by-nc-nd/4.0/> for details; when quoting, please keep a link to `https://yuhang.ch`.

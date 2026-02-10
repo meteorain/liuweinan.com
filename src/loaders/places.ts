@@ -6,6 +6,8 @@ interface Place {
     name_en?: string;
     type?: string;
     location?: string;
+    latitude?: number;
+    longitude?: number;
     coordinates?: string;
     rating?: number;
     visit_date?: string;

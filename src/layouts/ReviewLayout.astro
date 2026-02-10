@@ -4,7 +4,6 @@ import ReviewCard from '@components/ReviewCard.astro'
 import BackLater from '@components/BackLater.astro'
 import { useLocale } from '@utils/locale'
 import { reviewsLoader } from '../loaders/reviews'
-import keys from 'lodash/keys'
 const { path, t } = useLocale(Astro.url)
 const { page } = Astro.props
 
@@ -34,7 +33,7 @@ const groupedReviews = reviews.reduce((acc, review) => {
     <div class="max-w-[65ch]">
         <div class="mt-8">
             {
-                keys(groupedReviews).map((k) => {
+                Object.keys(groupedReviews).map((k) => {
                     var g = groupedReviews[k]
                     return (
                             <div class="mb-2">
