@@ -37,7 +37,7 @@ const useTranslation = (lang: string) => {
         if (!r) {
             console.warn(`Translation for "${key}" not found in en.yml`)
             // 如果英文没有，尝试中文
-            const zhR = get(zh, key)
+            const zhR = getNested(zh, key)
             if (zhR) return zhR
             return key.split('.').pop()
         }
