@@ -1,3 +1,17 @@
+/**
+ * Content Styles
+ * 
+ * This file handles all content-related styles including:
+ * - CSS variables (colors, callout configuration)
+ * - Dark mode variables
+ * - Complex prose selectors (links with internal/external handling, blockquote containers)
+ * - Callout component styles
+ * - Animations and keyframes
+ * - Image-related complex styles
+ * 
+ * Note: Simple prose extensions (code blocks, list items) are handled in uno.config.js
+ * via presetTypography cssExtend.
+ */
 :root {
     --color-red-rgb: 233, 49, 71;
     --color-red: #e93147;

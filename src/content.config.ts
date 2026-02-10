@@ -43,6 +43,10 @@ const docs = defineCollection({
 
 const whois = defineCollection({
     type: 'content',
+    schema: z.object({
+        lang: z.enum(['zh', 'en']).default('zh'),
+        title: z.string().optional(),
+    }).passthrough(),
 });
 
 const templates = defineCollection({})

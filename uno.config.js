@@ -1,4 +1,18 @@
-// uno.config.ts
+/**
+ * UnoCSS Configuration
+ * 
+ * This file handles simple prose typography extensions via presetTypography.
+ * 
+ * Note: Complex prose styles (links with internal/external handling, blockquote containers,
+ * callout components, animations) are handled in src/styles/content.css.
+ * 
+ * This config focuses on:
+ * - Simple code block styling (pre, code, li code, blockquote code)
+ * - List item word-break handling
+ * - Blockquote paragraph styling
+ * 
+ * Do NOT add 'a' tag styles here - they are handled by content.css with complex selectors.
+ */
 import { defineConfig, presetMini, presetTypography, transformerDirectives } from 'unocss'
 
 export default defineConfig({
@@ -10,17 +24,11 @@ export default defineConfig({
         presetMini(),
         presetTypography({
             cssExtend: {
-                a: {
-                    'font-size': '.9em',
-                    'text-decoration': 'underline',
-                    'text-decoration-thickness': '0.05em',
-                    'text-underline-offset': '0.2em',
-                    'text-decoration-color': 'rgb(var(--color-primary-main))',
-                    'color': 'rgb(var(--color-text-link))',
-                },
-                'li':{
+                // List item word-break handling
+                'li': {
                     'word-break': 'break-all',
                 },
+                // Code styling in lists
                 'li code': {
                     'white-space': 'pre-wrap',
                     'word-break': 'break-word',
@@ -35,10 +43,7 @@ export default defineConfig({
                 'li code::before': {
                     content: 'none'
                 },
-                'a:hover': {
-                    'text-decoration-thickness': '0.09em',
-
-                },
+                // General code block styling
                 'pre,code': {
                     'white-space': 'pre-wrap',
                     'word-break': 'break-word',
@@ -53,6 +58,7 @@ export default defineConfig({
                 'p code::before': {
                     content: 'none'
                 },
+                // Blockquote content styling (container styles are in content.css)
                 'blockquote p': {
                     'word-break': 'break-all',
                     'margin': '0',
@@ -66,7 +72,6 @@ export default defineConfig({
                     'border-radius': '0.2em',
                     'background-color': 'var(--color-code-bg)'
                 }
-
             }
         })
     ]
