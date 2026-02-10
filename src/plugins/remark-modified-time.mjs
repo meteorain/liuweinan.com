@@ -5,7 +5,6 @@ import { existsSync, statSync } from 'fs'
 export function remarkModifiedTime() {
     return function (tree, file) {
         // Ensure file.data.astro and frontmatter objects exist
-        console.log('file', file)
         if (!file.data) {
             file.data = {}
         }
@@ -18,22 +17,7 @@ export function remarkModifiedTime() {
 
         const filepath = file.history && file.history[0]
 
-        // Enhanced logging to track all file processing
-        const fileExt = filepath ? filepath.split('.').pop() : 'unknown'
-        const isMarkdown = fileExt === 'md'
-        const isMDX = fileExt === 'mdx'
-
-        // Log all file processing (especially during build/prerender)
-        // Use process.stderr to ensure logs are visible even during prerender
-        if (filepath) {
-            const logMsg = `[remark-modified-time] Processing ${fileExt.toUpperCase()} file: ${filepath}`
-            console.log(logMsg)
-            // Also write to stderr to ensure visibility during prerender
-            process.stderr.write(logMsg + '\n')
-        } else {
-            const warnMsg = `[remark-modified-time] No filepath found in file.history`
-            console.warn(warnMsg)
-            process.stderr.write('WARN: ' + warnMsg + '\n')
+        if (!filepath) {
             return
         }
 
@@ -117,9 +101,6 @@ export function remarkModifiedTime() {
 
             if (dateString && dateString.length > 0 && dateString !== '') {
                 file.data.astro.frontmatter.lastModified = dateString
-                const successMsg = `[remark-modified-time] ✓ Set lastModified for ${fileExt}: ${dateString}`
-                console.log(successMsg)
-                process.stderr.write(successMsg + '\n')
             } else {
                 // Fallback: use file modification time if git fails
                 try {
@@ -127,17 +108,9 @@ export function remarkModifiedTime() {
                         const stats = statSync(absPath)
                         const mtime = stats.mtime
                         file.data.astro.frontmatter.lastModified = mtime.toISOString()
-                        const fallbackMsg = `[remark-modified-time] ✓ Using file system mtime for ${fileExt}: ${mtime.toISOString()}`
-                        console.log(fallbackMsg)
-                        process.stderr.write(fallbackMsg + '\n')
-                    } else {
-                        const notFoundMsg = `[remark-modified-time] File not found for fallback: ${absPath}`
-                        console.warn(notFoundMsg)
-                        process.stderr.write('WARN: ' + notFoundMsg + '\n')
                     }
                 } catch (fsError) {
                     // If file system access also fails, leave it empty
-                    console.warn(`[remark-modified-time] Could not get modification time for ${filepath}`)
                 }
             }
         } catch (error) {
@@ -152,19 +125,9 @@ export function remarkModifiedTime() {
                     const stats = statSync(absPath)
                     const mtime = stats.mtime
                     file.data.astro.frontmatter.lastModified = mtime.toISOString()
-                    const fallbackMsg = `[remark-modified-time] ✓ Using file system fallback for ${fileExt}: ${mtime.toISOString()}`
-                    console.log(fallbackMsg)
-                    process.stderr.write(fallbackMsg + '\n')
-                } else {
-                    const errorMsg = `[remark-modified-time] ✗ File not found: ${filepath}, git error: ${error.message}`
-                    console.warn(errorMsg)
-                    process.stderr.write('WARN: ' + errorMsg + '\n')
                 }
             } catch (fsError) {
-                // If file system access also fails, log warning but don't throw
-                console.error(`[remark-modified-time] ✗ Failed to get modification time for ${fileExt} file ${filepath}`)
-                console.error(`[remark-modified-time]   Git error: ${error.message}`)
-                console.error(`[remark-modified-time]   FS error: ${fsError.message}`)
+                // If file system access also fails, ignore
             }
         }
 
