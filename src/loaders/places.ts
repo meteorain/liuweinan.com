@@ -341,6 +341,24 @@ const places: Place[] = [
         latitude: 24.44685
     },
     {
+        name: '兴义',
+        location: '贵州省兴义市',
+        longitude: 104.91758,
+        latitude: 25.00090
+    },
+    {
+        name: '汕尾',
+        location: '广东省汕头尾',
+        longitude: 115.29379,
+        latitude: 22.79301
+    },
+    {
+        name: '汕头',
+        location: '广东省汕头市',
+        longitude: 116.70807,
+        latitude: 23.35924
+    },
+    {
         name: '三亚',
         location: '海南省三亚市',
         longitude: 109.50303,
