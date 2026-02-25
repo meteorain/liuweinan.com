@@ -359,6 +359,12 @@ const places: Place[] = [
         latitude: 23.35924
     },
     {
+        name: '顺德',
+        location: '广东省佛山市',
+        longitude: 113.27119,
+        latitude: 22.82828
+    },
+    {
         name: '三亚',
         location: '海南省三亚市',
         longitude: 109.50303,
