@@ -339,6 +339,30 @@ const places: Place[] = [
         location: '福建省厦门市',
         longitude: 118.06635,
         latitude: 24.44685
+    },
+    {
+        name: '三亚',
+        location: '海南省三亚市',
+        longitude: 109.50303,
+        latitude: 18.21544
+    },
+    {
+        name: '都昌',
+        location: '江西省都昌县',
+        longitude: 116.34925,
+        latitude: 29.26343
+    },
+    {
+        name: '南昌',
+        location: '江西省南昌市',
+        longitude: 115.88871,
+        latitude: 28.59012
+    },
+    {
+        name: '常德',
+        location: '湖南省常德市',
+        longitude: 111.67970,
+        latitude: 29.01317
     }
 ]
 
