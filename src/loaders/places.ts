@@ -381,6 +381,18 @@ const places: Place[] = [
         location: '湖南省常德市',
         longitude: 111.67970,
         latitude: 29.01317
+    },
+    {
+        name: '喀纳斯',
+        location: '新疆省布尔津县',
+        longitude: 87.02914,
+        latitude: 48.77214
+    },
+    {
+        name: '乌鲁木齐',
+        location: '新疆省乌鲁木齐市',
+        longitude: 87.39691,
+        latitude: 43.82135
     }
 ]
 
