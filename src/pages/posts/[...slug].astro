@@ -63,7 +63,7 @@ export async function getStaticPaths() {
         ...zhPosts.map((note) => {
             return {
                 params: {
-                    slug: note.slug,
+                    slug: note.id,
                 },
             };
         }),
@@ -76,7 +76,7 @@ export async function getStaticPaths() {
         ...enPosts.map((note) => {
             return {
                 params: {
-                    slug: note.slug,
+                    slug: note.id,
                 },
             };
         }),
@@ -136,7 +136,7 @@ export async function getStaticPaths() {
             }
             <a
                 class="panda-link ml-2"
-                href={path(`/raw/posts/${entry.slug}.${ext}`)}
+                href={path(`/raw/posts/${entry.id}.${ext}`)}
             >
                 {ext === "md" ? "Markdown" : "MDX"}
             </a>

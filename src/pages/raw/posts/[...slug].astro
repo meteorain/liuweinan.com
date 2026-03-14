@@ -19,8 +19,8 @@ try {
     // Find matching entry in the collection
     const collection = await getCollection(collectionName);
     const entry = collection.find(note => 
-        note.slug === postSlug || 
-        note.slug.endsWith(`/${postSlug}`)
+        note.id === postSlug || 
+        note.id.endsWith(`/${postSlug}`)
     );
     
     if (!entry) {

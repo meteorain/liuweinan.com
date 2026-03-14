@@ -23,7 +23,7 @@ export async function getStaticPaths() {
     const paths = docs.map((note) => {
         return {
             params: {
-                slug: note.slug,
+                slug: note.id,
             },
         };
     });

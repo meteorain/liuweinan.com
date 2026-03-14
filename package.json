@@ -30,7 +30,7 @@
     "@rollup/plugin-yaml": "latest",
     "@types/luxon": "latest",
     "@types/markdown-it": "latest",
-    "@types/node": "^22.19.3",
+    "@types/node": "^22.19.15",
     "dotenv": "latest",
     "gray-matter": "latest",
     "hastscript": "latest",
@@ -40,6 +40,7 @@
     "remark-obsidian-callout": "latest",
     "tsx": "latest",
     "unist-util-visit": "latest",
+    "@unocss/astro": "latest",
     "unocss": "latest",
     "yaml": "latest"
   }

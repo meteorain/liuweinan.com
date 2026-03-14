@@ -19,7 +19,7 @@ export async function GET(context) {
             const html = parser.render(content)
             return {
                 ...post.data,
-                link: `/posts/${post.slug}/`,
+                link: `/posts/${post.id}/`,
                 pubDate: post.data.pubDate,
 
                 content: html

@@ -1,5 +1,5 @@
 import { defineAction } from 'astro:actions';
-import { z } from 'astro:content';
+import { z } from 'astro/zod';
 import { API_URL, API_SECRET } from 'astro:env/server';
 
 const apiUrl = API_URL;

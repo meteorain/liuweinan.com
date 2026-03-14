@@ -1,7 +1,7 @@
 import { defineConfig, envField } from 'astro/config';
 import vercel from '@astrojs/vercel'
 
-import UnoCSS from 'unocss/astro'
+import UnoCSS from '@unocss/astro'
 import remarkWikiLink from "./src/plugins/wiki-link/index.ts";
 import { getPermalinks } from "./src/plugins/wiki-link/getPermalinks.ts";
 import yaml from '@rollup/plugin-yaml'
@@ -26,6 +26,10 @@ import remarkFigureCaption from "@microflash/remark-figure-caption";
 export default defineConfig({
     vite: {
         plugins: [yaml()],
+        optimizeDeps: {
+            // Avoid race where a dep is in newData.optimized but not yet in metadata (browserHash undefined)
+            holdUntilCrawlEnd: true,
+        },
     },
     compressHTML: false,
     experimental: {
