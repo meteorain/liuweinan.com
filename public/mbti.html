@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MBTI 人格测试</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background: #e0e0e0;
+            margin: 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+        }
+        
+        .content {
+            padding: 40px;
+            max-height: calc(100vh - 200px);
+            overflow-y: auto;
+            scroll-behavior: smooth;
+            position: relative;
+        }
+        
+        .question-group {
+            display: none;
+            padding-bottom: 500px; /* 为最后一题留出滚动空间 */
+        }
+        
+        .question-group.active {
+            display: block;
+        }
+        
+        .question {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .question-number {
+            color: #667eea;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+        }
+        
+        .question-text {
+            font-size: 1.1em;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 3px;
+        }
+        
+        .option-label {
+            font-size: 0.85em;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        .option-label.agree {
+            color: #9C27B0;
+        }
+        
+        .option-label.disagree {
+            color: #4CAF50;
+        }
+        
+        /* 移动端标签 - 默认隐藏 */
+        .option-label-mobile {
+            display: none;
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.7em;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        .option-label-mobile.agree {
+            color: #9C27B0;
+        }
+        
+        .option-label-mobile.disagree {
+            color: #4CAF50;
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .radio-option {
+            position: relative;
+        }
+        
+        .radio-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        /* 基础圆圈样式 */
+        .radio-option label {
+            display: block;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: transparent;
+        }
+        
+        /* 左边三个绿色空心圆圈 - 从大到小 */
+        /* 强烈不认同 (-3) - 最大 */
+        .radio-option.size-3 label {
+            width: 44px;
+            height: 44px;
+            border: 3px solid #4CAF50;
+        }
+        
+        /* 并非完全认同 (-2) - 中等 */
+        .radio-option.size-2 label {
+            width: 36px;
+            height: 36px;
+            border: 3px solid #4CAF50;
+        }
+        
+        /* 不认同 (-1) - 最小 */
+        .radio-option.size-1 label {
+            width: 28px;
+            height: 28px;
+            border: 3px solid #4CAF50;
+        }
+        
+        /* 中间灰色圆圈 (0) */
+        .radio-option.size-0 label {
+            width: 32px;
+            height: 32px;
+            border: 3px solid #9E9E9E;
+            background: #E0E0E0;
+        }
+        
+        /* 右边三个紫色空心圆圈 - 从小到大 */
+        /* 同意 (1) - 最小 */
+        .radio-option.size1 label {
+            width: 28px;
+            height: 28px;
+            border: 3px solid #9C27B0;
+        }
+        
+        /* 比较认同 (2) - 中等 */
+        .radio-option.size2 label {
+            width: 36px;
+            height: 36px;
+            border: 3px solid #9C27B0;
+        }
+        
+        /* 强烈认同 (3) - 最大 */
+        .radio-option.size3 label {
+            width: 44px;
+            height: 44px;
+            border: 3px solid #9C27B0;
+        }
+        
+        /* 选中状态 */
+        .radio-option input[type="radio"]:checked + label {
+            background: currentColor;
+            transform: scale(1.15);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* 绿色选中 */
+        .radio-option.size-3 input[type="radio"]:checked + label,
+        .radio-option.size-2 input[type="radio"]:checked + label,
+        .radio-option.size-1 input[type="radio"]:checked + label {
+            background: #4CAF50;
+            border-color: #4CAF50;
+        }
+        
+        /* 灰色选中 */
+        .radio-option.size-0 input[type="radio"]:checked + label {
+            background: #757575;
+            border-color: #757575;
+        }
+        
+        /* 紫色选中 */
+        .radio-option.size1 input[type="radio"]:checked + label,
+        .radio-option.size2 input[type="radio"]:checked + label,
+        .radio-option.size3 input[type="radio"]:checked + label {
+            background: #9C27B0;
+            border-color: #9C27B0;
+        }
+        
+        /* 悬停效果 */
+        .radio-option label:hover {
+            opacity: 0.7;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            border-top: 1px solid #e0e0e0;
+            background: white;
+            gap: 20px;
+        }
+        
+        .navigation .btn {
+            flex: 1;
+            max-width: 200px;
+        }
+        
+        .navigation .btn:first-child {
+            margin-right: auto;
+        }
+        
+        .navigation .btn:last-child {
+            margin-left: auto;
+        }
+        
+        .navigation .btn:only-child,
+        .navigation .btn[style*="hidden"] + .btn {
+            margin: 0 auto;
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #666;
+        }
+        
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .results {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .results.active {
+            display: block;
+        }
+        
+        .result-type {
+            font-size: 4em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+        
+        .result-title {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        
+        .dimension-results {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .dimension-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: left;
+        }
+        
+        .dimension-name {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .dimension-bar {
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+        
+        .dimension-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+        
+        .dimension-fill.left {
+            background: #f44336;
+            float: left;
+        }
+        
+        .dimension-fill.right {
+            background: #4CAF50;
+            float: right;
+        }
+        
+        .dimension-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85em;
+            color: #666;
+        }
+        
+        .restart-btn {
+            margin-top: 30px;
+        }
+        
+        .step-indicator {
+            text-align: center;
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+        }
+        
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .options {
+                flex-direction: row;
+                gap: 8px;
+                padding: 10px;
+                justify-content: center;
+            }
+            
+            .option-label {
+                display: none; /* 隐藏桌面端标签 */
+            }
+            
+            .option-label-mobile {
+                display: block; /* 显示移动端标签 */
+            }
+            
+            .radio-group {
+                order: 0;
+                gap: 6px;
+            }
+            
+            /* 移动端缩小圆圈 */
+            .radio-option.size-3 label {
+                width: 36px;
+                height: 36px;
+            }
+            
+            .radio-option.size-2 label,
+            .radio-option.size2 label {
+                width: 30px;
+                height: 30px;
+            }
+            
+            .radio-option.size-1 label,
+            .radio-option.size1 label {
+                width: 24px;
+                height: 24px;
+            }
+            
+            .radio-option.size-0 label {
+                width: 28px;
+                height: 28px;
+            }
+            
+            .radio-option.size3 label {
+                width: 36px;
+                height: 36px;
+            }
+            
+            .dimension-results {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>MBTI 人格测试</h1>
+            <p>发现你的性格类型，了解真实的自己</p>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        </div>
+        
+        <div class="content">
+            <div class="step-indicator" id="stepIndicator">步骤 1 / 10</div>
+            
+            <div id="quizContainer">
+                <!-- 问题组将通过JS动态生成 -->
+            </div>
+        </div>
+        
+        <div class="results" id="results">
+            <div class="result-type" id="resultType">----</div>
+            <div class="result-title" id="resultTitle">你的性格类型</div>
+            
+            <div class="dimension-results" id="dimensionResults">
+                <!-- 维度结果将通过JS生成 -->
+            </div>
+            
+            <button class="btn btn-primary restart-btn" onclick="restartTest()">重新测试</button>
+        </div>
+    </div>
+
+    <script>
+        // ==================== 题目数据 ====================
+        const QUESTIONS = [
+            { num: 1, text: "你经常结交新朋友。", dimension: "EI", direction: "positive" },
+            { num: 2, text: "复杂和新颖的想法比简单直接的想法更能激发你的兴趣。", dimension: "SN", direction: "positive" },
+            { num: 3, text: "你通常更容易被能引起你情感共鸣的观点说服，而不是被事实性的论据所打动。", dimension: "TF", direction: "positive" },
+            { num: 4, text: "你的生活和工作空间都很干净整洁。", dimension: "JP", direction: "positive" },
+            { num: 5, text: "你通常能够保持冷静，即使在很大的压力下也是如此。", dimension: "TF", direction: "positive" },
+            { num: 6, text: "你觉得与陌生人建立关系或自我推销是一件非常令人畏惧的事情。", dimension: "EI", direction: "negative" },
+            { num: 7, text: "你能够有效地确定任务优先级并进行规划，通常能在截止日期前顺利完成。", dimension: "JP", direction: "positive" },
+            { num: 8, text: "与数字或数据相比，人们的故事和情感对你来说更有说服力。", dimension: "TF", direction: "positive" },
+            { num: 9, text: "你喜欢使用日程表和清单等整理工具。", dimension: "JP", direction: "positive" },
+            { num: 10, text: "即使是一个小小的错误，也可能让你怀疑自己的整体能力和知识。", dimension: "TF", direction: "positive" },
+            { num: 11, text: "你很自在地走到你觉得有趣的人面前，主动与他们交谈。", dimension: "EI", direction: "positive" },
+            { num: 12, text: "你对关于创意作品不同解读的讨论不太感兴趣。", dimension: "SN", direction: "negative" },
+            { num: 13, text: "在决定行动方案时，你更看重事实，而不是人们的感受。", dimension: "TF", direction: "negative" },
+            { num: 14, text: "你经常让一天自然而然地展开，完全没有任何计划。", dimension: "JP", direction: "negative" },
+            { num: 15, text: "你很少担心自己是否能给遇到的人留下好印象。", dimension: "EI", direction: "negative" },
+            { num: 16, text: "你喜欢参与团队合作的活动。", dimension: "EI", direction: "positive" },
+            { num: 17, text: "你喜欢尝试新的、尚未经过验证的方法。", dimension: "SN", direction: "positive" },
+            { num: 18, text: "你更看重体贴他人，而不是一味追求完全的坦诚。", dimension: "TF", direction: "positive" },
+            { num: 19, text: "你主动寻找新的体验和知识领域进行探索。", dimension: "SN", direction: "positive" },
+            { num: 20, text: "你容易担心事情会变得更糟。", dimension: "TF", direction: "positive" },
+            { num: 21, text: "你更喜欢独自进行的爱好或活动，而不是集体的。", dimension: "EI", direction: "negative" },
+            { num: 22, text: "你无法想象自己以写虚构故事为生。", dimension: "SN", direction: "negative" },
+            { num: 23, text: "你在做决策时更注重效率，即使这意味着要忽略某些情感因素。", dimension: "TF", direction: "negative" },
+            { num: 24, text: "你倾向于在放松之前先完成家务。", dimension: "JP", direction: "positive" },
+            { num: 25, text: "有意见分歧时，你更重视证明自己的观点，而不是顾全他人的感受。", dimension: "TF", direction: "negative" },
+            { num: 26, text: "在社交场合，你通常会等别人先自我介绍。", dimension: "EI", direction: "negative" },
+            { num: 27, text: "你的情绪变化得非常快。", dimension: "TF", direction: "positive" },
+            { num: 28, text: "你不容易被情绪化的论点所影响。", dimension: "TF", direction: "negative" },
+            { num: 29, text: "你经常拖到最后一刻才去做事情。", dimension: "JP", direction: "negative" },
+            { num: 30, text: "你喜欢辩论道德难题。", dimension: "TF", direction: "positive" },
+            { num: 31, text: "你通常更喜欢与他人在一起，而不是独自一人。", dimension: "EI", direction: "positive" },
+            { num: 32, text: "当讨论变得非常理论化时，你会感到无聊或失去兴趣。", dimension: "SN", direction: "negative" },
+            { num: 33, text: "当事实与感受发生冲突时，你通常会选择跟随自己的内心。", dimension: "TF", direction: "positive" },
+            { num: 34, text: "你发现很难保持规律的工作或学习计划。", dimension: "JP", direction: "negative" },
+            { num: 35, text: "你很少会对自己所做的决定产生怀疑。", dimension: "TF", direction: "negative" },
+            { num: 36, text: "你的朋友会说你性格活泼外向。", dimension: "EI", direction: "positive" },
+            { num: 37, text: "你喜欢多种形式的创意表达，比如写作。", dimension: "SN", direction: "positive" },
+            { num: 38, text: "你通常根据客观事实而不是情感印象来做出选择。", dimension: "TF", direction: "negative" },
+            { num: 39, text: "你喜欢为每天制定待办事项清单。", dimension: "JP", direction: "positive" },
+            { num: 40, text: "你很少感到不安。", dimension: "TF", direction: "negative" },
+            { num: 41, text: "你避免打电话。", dimension: "EI", direction: "negative" },
+            { num: 42, text: "你喜欢探索陌生的想法和观点。", dimension: "SN", direction: "positive" },
+            { num: 43, text: "你可以很容易地与刚认识的人建立联系。", dimension: "EI", direction: "positive" },
+            { num: 44, text: "如果你的计划被打乱，你的首要任务就是尽快让一切恢复正轨。", dimension: "JP", direction: "positive" },
+            { num: 45, text: "你依然为很久以前犯下的错误感到困扰。", dimension: "TF", direction: "positive" },
+            { num: 46, text: "你对讨论未来世界可能会是什么样子的理论并不太感兴趣。", dimension: "SN", direction: "negative" },
+            { num: 47, text: "你的情绪对你的影响大于你对它们的掌控。", dimension: "TF", direction: "positive" },
+            { num: 48, text: "在做决定时，你更关注受影响者的感受，而不是最合乎逻辑或最高效的做法。", dimension: "TF", direction: "positive" },
+            { num: 49, text: "你的个人工作方式更像是一时的能量爆发，而不是有条理和持续的努力。", dimension: "JP", direction: "negative" },
+            { num: 50, text: "当有人很看重你时，你会想，他们多久之后会对你感到失望。", dimension: "TF", direction: "positive" },
+            { num: 51, text: "你会喜欢一份大部分时间需要独自工作的工作。", dimension: "EI", direction: "negative" },
+            { num: 52, text: "你觉得探讨抽象的哲学问题是在浪费时间。", dimension: "SN", direction: "negative" },
+            { num: 53, text: "比起安静私密的地方，你更喜欢热闹繁忙的环境。", dimension: "EI", direction: "positive" },
+            { num: 54, text: "如果你觉得某个决定是对的，你通常会直接采取行动，而不需要更多的证据。", dimension: "TF", direction: "positive" },
+            { num: 55, text: "你经常感到不堪重负。", dimension: "TF", direction: "positive" },
+            { num: 56, text: "你做事有条不紊，每一步都不会遗漏。", dimension: "JP", direction: "positive" },
+            { num: 57, text: "你更喜欢需要你提出创新解决方案的任务，而不是只需按照具体步骤操作的任务。", dimension: "SN", direction: "positive" },
+            { num: 58, text: "在做决定时，你更倾向于依靠情感直觉，而非逻辑推理。", dimension: "TF", direction: "positive" },
+            { num: 59, text: "你在应对截止日期时感到吃力。", dimension: "JP", direction: "negative" },
+            { num: 60, text: "你相信事情会朝对自己有利的方向发展。", dimension: "TF", direction: "positive" }
+        ];
+
+        // ==================== 配置 ====================
+        const GROUP_SIZE = 6;
+        const TOTAL_GROUPS = Math.ceil(QUESTIONS.length / GROUP_SIZE);
+
+        // 选项配置：值 -> 大小类名
+        const OPTION_CONFIG = [
+            { value: -3, sizeClass: "size-3", label: "强烈不认同" },
+            { value: -2, sizeClass: "size-2", label: "并非完全认同" },
+            { value: -1, sizeClass: "size-1", label: "不认同" },
+            { value: 0, sizeClass: "size-0", label: "不确定" },
+            { value: 1, sizeClass: "size1", label: "同意" },
+            { value: 2, sizeClass: "size2", label: "比较认同" },
+            { value: 3, sizeClass: "size3", label: "强烈认同" }
+        ];
+
+        // ==================== 状态 ====================
+        let currentGroup = 0;
+        let answers = {};
+
+        // ==================== 初始化 ====================
+        function init() {
+            renderQuestions();
+            updateUI();
+        }
+
+        // ==================== 渲染题目 ====================
+        function renderQuestions() {
+            const container = document.getElementById('quizContainer');
+            container.innerHTML = '';
+
+            for (let g = 0; g < TOTAL_GROUPS; g++) {
+                const groupDiv = document.createElement('div');
+                groupDiv.className = `question-group ${g === 0 ? 'active' : ''}`;
+                groupDiv.id = `group-${g}`;
+
+                const startIdx = g * GROUP_SIZE;
+                const endIdx = Math.min(startIdx + GROUP_SIZE, QUESTIONS.length);
+
+                for (let i = startIdx; i < endIdx; i++) {
+                    const q = QUESTIONS[i];
+                    const questionDiv = document.createElement('div');
+                    questionDiv.className = 'question';
+                    questionDiv.id = `question-${q.num}`;
+                    
+                    // 生成选项HTML
+                    const optionsHtml = OPTION_CONFIG.map(opt => `
+                        <div class="radio-option ${opt.sizeClass}">
+                            <input type="radio" 
+                                   name="q${q.num}" 
+                                   id="q${q.num}_v${opt.value}" 
+                                   value="${opt.value}"
+                                   onchange="saveAnswer(${q.num}, ${opt.value})">
+                            <label for="q${q.num}_v${opt.value}" title="${opt.label}"></label>
+                            ${opt.value === -3 ? '<span class="option-label-mobile disagree">不认同</span>' : ''}
+                            ${opt.value === 3 ? '<span class="option-label-mobile agree">同意</span>' : ''}
+                        </div>
+                    `).join('');
+                    
+                    questionDiv.innerHTML = `
+                        <div class="question-number">问题 ${q.num} / 60</div>
+                        <div class="question-text">${q.text}</div>
+                        <div class="options">
+                            <span class="option-label disagree">不认同</span>
+                            <div class="radio-group">
+                                ${optionsHtml}
+                            </div>
+                            <span class="option-label agree">同意</span>
+                        </div>
+                    `;
+                    groupDiv.appendChild(questionDiv);
+                }
+                
+                // 添加导航按钮到组内
+                const navDiv = document.createElement('div');
+                navDiv.className = 'navigation';
+                navDiv.innerHTML = `
+                    <button class="btn btn-secondary" id="prevBtn-${g}" onclick="prevGroup()" style="visibility: ${g === 0 ? 'hidden' : 'visible'};">上一页</button>
+                    <button class="btn btn-primary" id="nextBtn-${g}" onclick="nextGroup()">${g === TOTAL_GROUPS - 1 ? '查看结果' : '下一页'}</button>
+                `;
+                groupDiv.appendChild(navDiv);
+                
+                // 添加空白区域在按钮下方
+                const spacerDiv = document.createElement('div');
+                spacerDiv.className = 'group-spacer';
+                groupDiv.appendChild(spacerDiv);
+
+                container.appendChild(groupDiv);
+            }
+        }
+
+        // ==================== 保存答案 ====================
+        function saveAnswer(questionNum, value) {
+            answers[questionNum] = value;
+            
+            // 自动滚动到下一个问题
+            setTimeout(() => {
+                autoScrollToNextQuestion(questionNum);
+            }, 100);
+        }
+        
+        // ==================== 自动滚动到下一个问题 ====================
+        function autoScrollToNextQuestion(currentQuestionNum) {
+            // 获取当前组的所有问题
+            const startIdx = currentGroup * GROUP_SIZE;
+            const endIdx = Math.min(startIdx + GROUP_SIZE, QUESTIONS.length);
+            const currentGroupQuestions = QUESTIONS.slice(startIdx, endIdx);
+            
+            // 找到当前问题在组内的索引
+            const currentIndex = currentGroupQuestions.findIndex(q => q.num === currentQuestionNum);
+            
+            // 如果不是组内最后一个，滚动到下一个问题
+            if (currentIndex >= 0 && currentIndex < currentGroupQuestions.length - 1) {
+                const nextQuestionNum = currentGroupQuestions[currentIndex + 1].num;
+                const nextQuestionElement = document.getElementById(`question-${nextQuestionNum}`);
+                const currentQuestionElement = document.getElementById(`question-${currentQuestionNum}`);
+                
+                if (nextQuestionElement && currentQuestionElement) {
+                    const contentElement = document.querySelector('.content');
+                    
+                    // 获取当前问题相对于 content 容器顶部的偏移
+                    const currentOffset = currentQuestionElement.offsetTop;
+                    
+                    // 获取下一个问题相对于 content 容器顶部的偏移
+                    const nextOffset = nextQuestionElement.offsetTop;
+                    
+                    // 计算当前滚动位置
+                    const currentScrollTop = contentElement.scrollTop;
+                    
+                    // 计算需要滚动到的目标位置
+                    const targetScrollTop = currentScrollTop + (nextOffset - currentOffset);
+                    
+                    // 执行滚动
+                    contentElement.scrollTo({
+                        top: targetScrollTop,
+                        behavior: 'smooth'
+                    });
+                }
+            } else if (currentIndex === currentGroupQuestions.length - 1) {
+                // 组内最后一题，滚动显示导航按钮
+                const navElement = document.querySelector(`#group-${currentGroup} .navigation`);
+                const currentQuestionElement = document.getElementById(`question-${currentQuestionNum}`);
+                
+                if (navElement && currentQuestionElement) {
+                    const contentElement = document.querySelector('.content');
+                    
+                    // 获取当前问题相对于 content 容器顶部的偏移
+                    const currentOffset = currentQuestionElement.offsetTop;
+                    
+                    // 获取导航按钮相对于 content 容器顶部的偏移
+                    const navOffset = navElement.offsetTop;
+                    
+                    // 计算当前滚动位置
+                    const currentScrollTop = contentElement.scrollTop;
+                    
+                    // 计算需要滚动到的目标位置
+                    const targetScrollTop = currentScrollTop + (navOffset - currentOffset);
+                    
+                    // 执行滚动
+                    contentElement.scrollTo({
+                        top: targetScrollTop,
+                        behavior: 'smooth'
+                    });
+                }
+            }
+        }
+
+        // ==================== 导航 ====================
+        function nextGroup() {
+            // 检查当前组是否全部回答
+            const startIdx = currentGroup * GROUP_SIZE;
+            const endIdx = Math.min(startIdx + GROUP_SIZE, QUESTIONS.length);
+            let allAnswered = true;
+
+            for (let i = startIdx; i < endIdx; i++) {
+                if (answers[QUESTIONS[i].num] === undefined) {
+                    allAnswered = false;
+                    break;
+                }
+            }
+
+            if (!allAnswered) {
+                alert('请回答当前页面的所有问题后再继续');
+                return;
+            }
+
+            if (currentGroup < TOTAL_GROUPS - 1) {
+                document.getElementById(`group-${currentGroup}`).classList.remove('active');
+                currentGroup++;
+                document.getElementById(`group-${currentGroup}`).classList.add('active');
+                
+                // 滚动到页面顶部
+                const contentElement = document.querySelector('.content');
+                contentElement.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+                
+                updateUI();
+            } else {
+                showResults();
+            }
+        }
+
+        function prevGroup() {
+            if (currentGroup > 0) {
+                document.getElementById(`group-${currentGroup}`).classList.remove('active');
+                currentGroup--;
+                document.getElementById(`group-${currentGroup}`).classList.add('active');
+                
+                // 滚动到页面顶部
+                const contentElement = document.querySelector('.content');
+                contentElement.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+                
+                updateUI();
+            }
+        }
+
+        function updateUI() {
+            // 更新进度条
+            const progress = ((currentGroup + 1) / TOTAL_GROUPS) * 100;
+            document.getElementById('progressFill').style.width = `${progress}%`;
+
+            // 更新步骤指示器
+            document.getElementById('stepIndicator').textContent = `步骤 ${currentGroup + 1} / ${TOTAL_GROUPS}`;
+
+            // 恢复已选答案
+            const startIdx = currentGroup * GROUP_SIZE;
+            const endIdx = Math.min(startIdx + GROUP_SIZE, QUESTIONS.length);
+            for (let i = startIdx; i < endIdx; i++) {
+                const q = QUESTIONS[i];
+                if (answers[q.num] !== undefined) {
+                    const radio = document.querySelector(`input[name="q${q.num}"][value="${answers[q.num]}"]`);
+                    if (radio) radio.checked = true;
+                }
+            }
+        }
+
+        // ==================== 计算结果 ====================
+        function calculateResults() {
+            const dimensionScores = { EI: 0, SN: 0, TF: 0, JP: 0 };
+
+            for (const q of QUESTIONS) {
+                if (answers[q.num] !== undefined) {
+                    let score = answers[q.num];
+                    if (q.direction === 'negative') {
+                        score = -score;
+                    }
+                    dimensionScores[q.dimension] += score;
+                }
+            }
+
+            // 计算类型
+            let type = '';
+            type += dimensionScores.EI >= 0 ? 'E' : 'I';
+            type += dimensionScores.SN >= 0 ? 'N' : 'S';
+            type += dimensionScores.TF >= 0 ? 'F' : 'T';
+            type += dimensionScores.JP >= 0 ? 'J' : 'P';
+
+            // 计算百分比
+            const maxScores = { EI: 39, SN: 33, TF: 69, JP: 36 };
+            const percentages = {};
+            for (const dim in dimensionScores) {
+                const max = maxScores[dim];
+                percentages[dim] = Math.round(((dimensionScores[dim] + max) / (2 * max)) * 100);
+            }
+
+            return { type, scores: dimensionScores, percentages };
+        }
+
+        // ==================== 显示结果 ====================
+        function showResults() {
+            const result = calculateResults();
+
+            document.getElementById('quizContainer').style.display = 'none';
+            document.querySelector('.navigation').style.display = 'none';
+            document.getElementById('stepIndicator').style.display = 'none';
+            document.querySelector('.progress-bar').style.display = 'none';
+            document.getElementById('results').classList.add('active');
+
+            document.getElementById('resultType').textContent = result.type;
+
+            // 生成维度结果
+            const dimContainer = document.getElementById('dimensionResults');
+            dimContainer.innerHTML = '';
+
+            const dimensions = [
+                { code: 'EI', left: '内向 (I)', right: '外向 (E)', color: '#667eea' },
+                { code: 'SN', left: '实感 (S)', right: '直觉 (N)', color: '#764ba2' },
+                { code: 'TF', left: '理性 (T)', right: '情感 (F)', color: '#f093fb' },
+                { code: 'JP', left: '感知 (P)', right: '判断 (J)', color: '#4facfe' }
+            ];
+
+            for (const dim of dimensions) {
+                const pct = result.percentages[dim.code];
+                const isRight = pct >= 50;
+                const fillWidth = isRight ? pct : (100 - pct);
+
+                const card = document.createElement('div');
+                card.className = 'dimension-card';
+                card.innerHTML = `
+                    <div class="dimension-name">${dim.left} vs ${dim.right}</div>
+                    <div class="dimension-bar">
+                        <div class="dimension-fill ${isRight ? 'right' : 'left'}" 
+                             style="width: ${fillWidth}%; background: ${dim.color};"></div>
+                    </div>
+                    <div class="dimension-labels">
+                        <span>${100 - pct}%</span>
+                        <span style="font-weight: bold; color: ${dim.color};">${isRight ? dim.right : dim.left}</span>
+                        <span>${pct}%</span>
+                    </div>
+                `;
+                dimContainer.appendChild(card);
+            }
+        }
+
+        // ==================== 重新开始 ====================
+        function restartTest() {
+            currentGroup = 0;
+            answers = {};
+
+            document.getElementById('results').classList.remove('active');
+            document.getElementById('quizContainer').style.display = 'block';
+            document.getElementById('stepIndicator').style.display = 'block';
+            document.querySelector('.progress-bar').style.display = 'block';
+
+            // 重置所有单选按钮
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.checked = false;
+            });
+
+            // 显示第一组
+            document.querySelectorAll('.question-group').forEach((group, idx) => {
+                group.classList.toggle('active', idx === 0);
+            });
+
+            updateUI();
+        }
+
+        // ==================== 启动 ====================
+        init();
+    </script>
+</body>
+</html>
