@@ -1,0 +1,13 @@
+---
+// 百度统计（全站监控）。统一放这一个文件，以后换 ID 只改这里。
+// 被 Layout.astro（普通页面）和 index.astro（独立落地页）的 <head> 各引入一次。
+---
+<script is:inline>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d637c35da59dfbdf67d9914e8446c1c6";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>

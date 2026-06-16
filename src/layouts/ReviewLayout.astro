@@ -3,9 +3,9 @@ import {API_URL} from 'astro:env/server'
 import Layout from '@layouts/Layout.astro'
 import ReviewCard from '@components/ReviewCard.astro'
 import BackLater from '@components/BackLater.astro'
+import EmojiVoteScript from '@components/EmojiVoteScript.astro'
 import { useLocale } from '@utils/locale'
-import { reviewsLoader } from '../loaders/reviews'
-import keys from 'lodash/keys'
+import { loadComments } from '../loaders/comments'
 
 const { path, t, locale } = useLocale(Astro.url)
 const { page } = Astro.props
@@ -22,11 +22,9 @@ interface Props {
     }
 }
 
-const loader = reviewsLoader()
-let result = await loader.load()
-
 // Reviews 数据总长度
-const reviews = (await result.reviews).sort((a, b) => b.created - a.created);
+const reviews = (await loadComments((uri) => uri.startsWith('/posts')))
+    .sort((a, b) => b.created - a.created);
 const totalReviews = reviews.length;
 
 // 计算分页
@@ -40,9 +38,6 @@ const pagedReviews = reviews.slice(startIdx, endIdx);
 // 计算 prev 和 next 页码
 const prev = page.currentPage > 1 ? page.currentPage - 1 : null;
 const next = page.currentPage < totalPages ? page.currentPage + 1 : null;
-
-console.info("====>", page.currentPage, prev, next);
-
 
 // 生成页码链接
 const pageHref = (pageNum) => {
@@ -69,7 +64,7 @@ const groupedReviews = pagedReviews.reduce((acc, review) => {
     <div id="reviews-container" data-api={API_URL} class="max-w-[65ch]">
         <div class="mt-8">
             {
-                keys(groupedReviews).map((k) => {
+                Object.keys(groupedReviews).map((k) => {
                     var g = groupedReviews[k]
                     return (
                         <div class="mb-2">
@@ -110,37 +105,4 @@ const groupedReviews = pagedReviews.reduce((acc, review) => {
     </div>
 </Layout>
 
-<script type="module">
-    document.addEventListener('click', async (event) => {
-        const apiUrl = document.getElementById('reviews-container').getAttribute('data-api');
-        const target = event.target;
-        if (target && target.closest('.emoji-container')) {
-            const id = target.id.split('-')[2];
-            let type = target.getAttribute('data-type') === 'like' ? 'dislike' : 'like';
-            if (target.getAttribute('data-type') == 'like' && target.id.split('-')[3] == '4') type = 'like';
-            if (target.getAttribute('data-type') == 'dislike' && target.id.split('-')[3] == '0') type = 'dislike';
-            try {
-                const response = await fetch(`${apiUrl}/id/${id}/${type}`, {
-                  method: 'POST',
-                });
-                const data = await response.json();
-                if (!await data.message) {
-                    let rate = 3 + data.likes - data.dislikes;
-                    console.info('vote successfully: ', rate);
-                    const container = target.closest('.emoji-container');
-                    const emojis = Array.from(container.querySelectorAll('span'));
-
-                    emojis.forEach((emoji, index) => changeEmoji(emoji, index, rate));
-                }
-            } catch (error) {
-                console.error('Failed to update emoji state:', error);
-            }
-        }
-    });
-
-    function changeEmoji(element, index, rate) {
-        const flag = index >= rate;
-        element.setAttribute('data-type', flag ? 'dislike' : 'like');
-        element.textContent = flag ? '🤍' : '❤️';
-    }
-</script>
+<EmojiVoteScript />

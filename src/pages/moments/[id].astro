@@ -1,16 +1,15 @@
 ---
 import {API_URL} from 'astro:env/server'
-import { momentsLoader } from "../../loaders/moments";
+import { loadComments } from "../../loaders/comments";
 import Layout from '@layouts/Layout.astro';
 import MomentCard from '@components/MomentCard.astro';
 import { useLocale } from '@utils/locale';
 
 export const prerender = false;
 const { id } = Astro.params;
-const loader = momentsLoader();
-let result = await loader.load();
+const moments = await loadComments((uri) => uri.startsWith('/posts') || uri.startsWith('/moments'));
 
-const moment = (await result.moments).find((m) => m.id == id) ?? null;
+const moment = moments.find((m) => m.id == id) ?? null;
 
 const { t } = useLocale(Astro.url);
 ---

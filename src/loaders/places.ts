@@ -1,4 +1,4 @@
-import {API_SECRET, API_URL} from "astro:env/server";
+import {API_URL} from "astro:env/server";
 
 interface Place {
     name: string;

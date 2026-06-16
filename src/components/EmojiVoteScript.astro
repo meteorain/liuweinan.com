@@ -1,0 +1,43 @@
+---
+// 心心点赞的客户端投票逻辑（moments / reviews 共用）。
+// 行为与原实现一致：点红心默认踩(dislike)、点白心默认赞(like)；
+// 唯独最右(4)红心仍赞、最左(0)白心仍踩（让两端能继续往同方向加）。
+// 投票成功后按 rate = 3 + likes - dislikes 重绘整排心心。
+// apiUrl 从最近的带 data-api 的容器读取（#moments-container / #reviews-container 均有）。
+---
+
+<script>
+    function paint(container: Element, rate: number) {
+        container.querySelectorAll('span').forEach((heart, i) => {
+            const liked = i < rate;
+            heart.dataset.type = liked ? 'like' : 'dislike';
+            heart.textContent = liked ? '❤️' : '🤍';
+        });
+    }
+
+    document.addEventListener('click', async (event) => {
+        const heart = event.target as HTMLElement;
+        if (!(heart instanceof HTMLElement) || heart.dataset.index === undefined) return;
+
+        const container = heart.closest('.emoji-container') as HTMLElement | null;
+        const apiUrl = container?.closest('[data-api]')?.getAttribute('data-api');
+        if (!container || !apiUrl) return;
+
+        const id = container.dataset.id;
+        const index = Number(heart.dataset.index);
+        const isRed = heart.dataset.type === 'like';
+
+        // 红心踩、白心赞；唯独最右红心(4)仍赞、最左白心(0)仍踩
+        let vote = isRed ? 'dislike' : 'like';
+        if (isRed && index === 4) vote = 'like';
+        if (!isRed && index === 0) vote = 'dislike';
+
+        try {
+            const res = await fetch(`${apiUrl}/id/${id}/${vote}`, { method: 'POST' });
+            const data = await res.json();
+            if (!data.message) paint(container, 3 + data.likes - data.dislikes);
+        } catch (error) {
+            console.error('Failed to update emoji state:', error);
+        }
+    });
+</script>

@@ -1,10 +1,11 @@
 ---
 import { useLocale } from '@utils/locale'
 import { formatDateYMD } from "../utils/format";
-const { t, locale } = useLocale(Astro.url)
-const {id, author, text, created, uri, title, title_en, likes, dislikes} = Astro.props.content
+import HeartRating from '@components/HeartRating.astro'
+const { t } = useLocale(Astro.url)
+const {id, author, text, created, uri, likes, dislikes} = Astro.props.content
 
-const ratedDateISO = new Date(created * 1000)
+const ratedDate = new Date(created * 1000)
 
 // Function to remove HTML tags
 function removeHtmlTags(input) {
@@ -13,34 +14,16 @@ function removeHtmlTags(input) {
 
 // Clean the text by removing HTML tags
 const cleanedText = removeHtmlTags(text);
-
-function stringLikeToHeart(likes, dislikes) {
-  let rate = Math.min(5, Math.max(0, 3 + likes - dislikes));
-  return Array.from({ length: 5 }, (_, i) => ({
-    emoji: i < rate ? '❤️' : '🤍',
-    type: i < rate ? 'like' : 'dislike'
-  }));
-}
 ---
 
 <div class="mb-2 mr-2">
     <div class="p-3 rounded-xl bg-stone-100 dark:bg-stone-800">
         <div class="mb-2 flex flex-row">
             <span class="accent-auto dark:accent-auto break-words">{cleanedText}</span>
-            <span class="font-light italic text-xs ml-auto">{formatDateYMD(ratedDateISO)}</span>
+            <span class="font-light italic text-xs ml-auto">{formatDateYMD(ratedDate)}</span>
         </div>
         <div class="panda-link text-sm flex flex-wrap">
-            <div class="emoji-container flex gap-0">
-                {stringLikeToHeart(likes, dislikes).map((item, index) => (
-                    <span
-                        id=`emoji-container-${id}-${index}`
-                        class="cursor-pointer"
-                        data-type={item.type}
-                    >
-                        {item.emoji}
-                    </span>
-                ))}
-            </div>
+            <HeartRating id={id} likes={likes} dislikes={dislikes} />
             <span class="mr-2">| {author.slice(0, 10)} </span>
             {
                 uri && (

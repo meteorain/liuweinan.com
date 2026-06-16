@@ -3,6 +3,7 @@
 
 import {relativeTo} from '@utils/format'
 import {useLocale} from '@utils/locale'
+import HeartRating from '@components/HeartRating.astro'
 import MarkdownIt from 'markdown-it'
 interface Props {
     content: {
@@ -18,24 +19,16 @@ interface Props {
     }
 }
 
-const {t, path, locale} = useLocale(Astro.url)
+const {t, locale} = useLocale(Astro.url)
 const {id, author, text, created, uri, title, title_en, likes, dislikes} = Astro.props.content
 
-const review_title = locale === 'en' ? title_en : title
+const cardTitle = locale === 'en' ? title_en : title
 const ratedDateISO = new Date(Number(created) * 1000).toISOString()
 
 const content = new MarkdownIt('commonmark',{
     breaks: true,
     typographer: true
 }).render(text)
-
-function stringLikeToHeart(likes, dislikes) {
-  let rate = Math.min(5, Math.max(0, 3 + likes - dislikes));
-  return Array.from({ length: 5 }, (_, i) => ({
-    emoji: i < rate ? '❤️' : '🤍',
-    type: i < rate ? 'like' : 'dislike'
-  }));
-}
 ---
 
 <div class="my-4">
@@ -60,19 +53,9 @@ function stringLikeToHeart(likes, dislikes) {
                     {author} |
                 </span>
             )}
-            <div class="emoji-container flex gap-0">
-                {stringLikeToHeart(likes, dislikes).map((item, index) => (
-                    <span
-                        id=`emoji-container-${id}-${index}`
-                        class="cursor-pointer"
-                        data-type={item.type}
-                    >
-                        {item.emoji}
-                    </span>
-                ))}
-            </div>
+            <HeartRating id={id} likes={likes} dislikes={dislikes} />
             <a href={/\/moments$/.test(uri) ? `${uri}/${id}` : `${uri}#isso-${id}`} class="prose panda-link external-link ml-auto">
-                <span class="text-sm font-bold font-italic underline">{review_title ? review_title.slice(0, 24) : `#${t('nav.reviews')}#`}</span>
+                <span class="text-sm font-bold font-italic underline">{cardTitle ? cardTitle.slice(0, 24) : `#${t('nav.reviews')}#`}</span>
             </a>
         </div>
     </div>

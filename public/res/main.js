@@ -3,7 +3,7 @@ let ticks, thisTick, nextTick, state, current = 0,
     speed = 20,
     value = 1,
     stop = false;
-const nooftweets = 6;
+const MOMENT_COUNT = 6;
 
 function getTimePeriod(timestamp) {
   const now = Date.now();
@@ -21,8 +21,8 @@ function getTimePeriod(timestamp) {
 
 async function rotateNews() {
   const ticker = document.getElementById("front_news_text");
-  const tlist = await showitems(nooftweets);
-  ticker.innerHTML = tlist + `
+  const listHtml = await fetchMomentsHtml(MOMENT_COUNT);
+  ticker.innerHTML = listHtml + `
     <li id="tick" style="display:none">
       Powered by <a href="mailto:liuweinan85[a]gmail.com" target="_self" onmouseover="stop=true" onmouseout="stop=false">
         <b>Vivian Liu</b>
@@ -83,14 +83,14 @@ function updateOpacity(element, value) {
   element.style.filter = `alpha(opacity=${value * 100})`;
 }
 
-async function fetchAndProcessData(nooftweets) {
+async function fetchMomentsHtml(count) {
   const url = "https://isso.fly.dev/?uri=%2Fmoments";
   try {
     const response = await fetch(url);
     const data = await response.json();
     const replies = data.replies || [];
     const sortedReplies = replies.sort((a, b) => b.created - a.created);
-    return sortedReplies.slice(0, nooftweets).map(({ id, text, created }) => `
+    return sortedReplies.slice(0, count).map(({ id, text, created }) => `
       <li id="tick${id}" style="display:none">
         <a href="/moments/${id}" target="_blank" onmouseover="stop=true" onmouseout="stop=false">${text.replace(/<[^>]*>/g, '')}</a>
         ${getTimePeriod(created * 1000)}
@@ -100,11 +100,6 @@ async function fetchAndProcessData(nooftweets) {
     console.error("Error fetching data:", error);
     return "";
   }
-}
-
-async function showitems(nooftweets) {
-  const tlist = await fetchAndProcessData(nooftweets);
-  return tlist;
 }
 
 // Event Listener Initialization

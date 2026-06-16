@@ -1,0 +1,20 @@
+---
+// 五颗心点赞展示（moments / reviews 共用）。
+// rate = clamp(3 + likes - dislikes, 0, 5)：前 rate 颗红心(❤️)，其余白心(🤍)。
+// 点击投票由 EmojiVoteScript 统一处理（靠 .emoji-container + data-id/data-index/data-type）。
+interface Props {
+    id: string,
+    likes: number,
+    dislikes: number
+}
+const { id, likes, dislikes } = Astro.props
+const rate = Math.min(5, Math.max(0, 3 + likes - dislikes))
+---
+
+<div class="emoji-container flex gap-0" data-id={id}>
+    {Array.from({ length: 5 }, (_, i) => i < rate).map((liked, index) => (
+        <span class="cursor-pointer" data-index={index} data-type={liked ? 'like' : 'dislike'}>
+            {liked ? '❤️' : '🤍'}
+        </span>
+    ))}
+</div>
