@@ -1,3 +1,17 @@
+/**
+ * Content Styles
+ * 
+ * This file handles all content-related styles including:
+ * - CSS variables (colors, callout configuration)
+ * - Dark mode variables
+ * - Complex prose selectors (links with internal/external handling, blockquote containers)
+ * - Callout component styles
+ * - Animations and keyframes
+ * - Image-related complex styles
+ * 
+ * Note: Simple prose extensions (code blocks, list items) are handled in uno.config.js
+ * via presetTypography cssExtend.
+ */
 :root {
     --color-red-rgb: 233, 49, 71;
     --color-red: #e93147;
@@ -39,6 +53,8 @@
     --callout-todo: var(--color-blue-rgb);
     --callout-warning: var(--color-orange-rgb);
     --callout-quote: 158, 158, 158;
+
+    --color-code-bg: #f5f5f5;
 
     scroll-behavior: smooth;
 }
@@ -91,6 +107,10 @@ article > p {
  * prose image
  */
 
+/* 所有 prose 内的图片都应用最大宽度限制 */
+.prose img {
+    @apply max-w-full h-auto;
+}
 
 .prose figure {
     @apply flex flex-col items-center justify-center my-6 mx-auto text-center;
@@ -99,7 +119,8 @@ article > p {
 .prose figure img {
     @apply rounded-lg shadow-md max-w-full h-auto max-h-64;
 
-    width: 300px;
+    max-width: 100%;
+    width: auto;
     height: 200px;
     display: block;
     background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);

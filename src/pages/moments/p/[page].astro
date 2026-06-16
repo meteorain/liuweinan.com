@@ -1,22 +1,26 @@
 ---
-import MomentLayout from '@layouts/MomentLayout.astro'
+import MomentLayout from "@layouts/MomentLayout.astro";
 export const prerender = false;
 
-const {page} = Astro.params
+const { page } = Astro.params;
 
-const pageIndex = parseInt(page, 10)
+if (!page) {
+    throw new Error("Page parameter is required");
+}
 
-if (pageIndex === undefined) {
-    throw new Error('Slug is required')
+const pageIndex = parseInt(page, 10);
+
+if (isNaN(pageIndex) || pageIndex < 1) {
+    throw new Error(`Invalid page number: ${page}`);
 }
 const pageOptions = {
     currentPage: pageIndex,
     pageSize: 20,
     url: {
-        prev: pageIndex > 1 ? `/moments/p/${pageIndex - 1}` : '',
-        next: '/moments/p/' + (pageIndex + 1)
-    }
-}
+        prev: pageIndex > 1 ? `/moments/p/${pageIndex - 1}` : "",
+        next: "/moments/p/" + (pageIndex + 1),
+    },
+};
 ---
 
-<MomentLayout page={pageOptions}/>
+<MomentLayout page={pageOptions} />

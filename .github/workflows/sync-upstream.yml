@@ -1,0 +1,92 @@
+name: 同步上游 yuhangch
+
+# 每周自动把上游 yuhangch/yuhang.ch 的更新合并过来：
+# - 始终保留你的私有内容指针(src/content)与子模块配置，绝不引入上游内容
+# - 有实际代码改动 → 开 PR（Vercel 会自动出预览，你确认后合并）
+# - 出现真冲突 → 开 issue 提醒（可让 Claude 帮忙解决）
+# - 仅上游内容变化 → 跳过
+# 也可在 Actions 页面手动点 “Run workflow” 触发。
+
+on:
+  schedule:
+    - cron: '0 18 * * 0'   # 每周日 18:00 UTC（北京时间周一 02:00）
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.CONTENT_DEPLOY_TOKEN }}
+
+      - name: 合并上游并按需开 PR / issue
+        env:
+          GH_TOKEN: ${{ secrets.CONTENT_DEPLOY_TOKEN }}
+        run: |
+          set -e
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git remote add upstream https://github.com/yuhangch/yuhang.ch.git 2>/dev/null || true
+          git fetch upstream main
+
+          # 上游没有新提交就退出
+          if git merge-base --is-ancestor upstream/main origin/main; then
+            echo "已是最新，无需同步。"
+            exit 0
+          fi
+
+          git checkout -B sync/upstream origin/main
+
+          # 尝试合并（冲突不让脚本中断）
+          git merge --no-edit upstream/main || true
+
+          # 始终保留“我们的”私有内容指针与子模块配置（绝不要上游的内容）
+          for p in src/content .gitmodules; do
+            if git ls-files -u -- "$p" | grep -q .; then
+              git checkout --ours -- "$p" && git add -- "$p"
+            fi
+          done
+
+          # 还有其它冲突 → 开 issue 求助，终止
+          REMAIN="$(git diff --name-only --diff-filter=U || true)"
+          if [ -n "$REMAIN" ]; then
+            git merge --abort || true
+            LIST="$(echo "$REMAIN" | sed 's/^/- /')"
+            BODY="$(printf '自动同步上游 yuhangch/yuhang.ch 时，以下文件有冲突，需要手动合并：\n\n%s\n\n（可以让 Claude 帮你解决这些冲突。）' "$LIST")"
+            OPEN="$(gh issue list --search '上游同步有冲突 in:title state:open' --json number --jq 'length' || echo 0)"
+            if [ "${OPEN:-0}" = "0" ]; then
+              gh issue create --title "⚠️ 上游同步有冲突，需手动处理" --body "$BODY"
+            fi
+            echo "有冲突，已开/已存在 issue。"
+            exit 0
+          fi
+
+          # 完成合并提交（若仍在合并中）
+          if [ -f .git/MERGE_HEAD ]; then
+            git commit --no-edit
+          fi
+
+          # 除内容指针外没有实际改动 → 仅上游内容变化，跳过（不开 PR、不改 main）
+          if git diff --quiet "origin/main..HEAD" -- . ':(exclude)src/content'; then
+            echo "上游仅更新了内容，无代码改动，跳过。"
+            exit 0
+          fi
+
+          # 有实际代码改动 → 推分支、开/更新 PR，交给你用 Vercel 预览验收后合并
+          git push -f origin sync/upstream
+          PR_BODY="自动合并上游 yuhangch/yuhang.ch 最新代码（已自动保留你的私有内容指针）。请查看本 PR 的 Vercel 预览，确认无误后点 Merge。"
+          if gh pr view sync/upstream >/dev/null 2>&1; then
+            gh pr edit sync/upstream --title "🔄 同步上游 yuhangch（自动）" --body "$PR_BODY"
+          else
+            gh pr create --base main --head sync/upstream --title "🔄 同步上游 yuhangch（自动）" --body "$PR_BODY"
+          fi
+          echo "已开/更新 PR，等你验收合并。"

@@ -40,7 +40,7 @@ const pagedMoments = moments.slice(startIdx, endIdx);
 // 为每个 `moment` 添加标题
 const posts = await getCollection('posts');
 const momentsWithTitles = pagedMoments.map(moment => {
-    const matchingPost = posts.find(post => `/posts/${post.slug}` === moment.uri);
+    const matchingPost = posts.find(post => `/posts/${post.id}` === moment.uri);
     if (matchingPost) {
         moment.title = matchingPost.data.title;
     }

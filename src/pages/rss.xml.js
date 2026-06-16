@@ -5,8 +5,8 @@ export const prerender = true;
 
 const parser = new MarkdownIt()
 
-export async function GET({ params }) {
-    const blog = await getCollection('posts',(i)=>i.data.title && !i.data.isDraft && i.data.pubDate)
+export async function GET(context) {
+    const blog = await getCollection('posts', (i)=>i.data.title && !i.data.isDraft && i.data.pubDate)
     const posts = blog
         .sort((a, b) => (a.data.pubDate < b.data.pubDate ? 1 : -1))
         .map((post) => {
@@ -14,7 +14,7 @@ export async function GET({ params }) {
             const html = typeof content === 'string' ? parser.render(content) : ''
             return {
                 ...post.data,
-                link: `/posts/${post.slug}/`,
+                link: `/posts/${post.id}/`,
                 pubDate: post.data.pubDate,
 
                 content: html

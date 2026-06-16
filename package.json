@@ -2,12 +2,16 @@
   "name": "yuhang.ch",
   "type": "module",
   "version": "0.0.1",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro check --minimumSeverity error && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "translate-posts": "tsx scripts/translate-posts.ts"
   },
   "dependencies": {
     "@astrojs/check": "latest",
@@ -16,7 +20,8 @@
     "@astrojs/vercel": "latest",
     "astro": "latest",
     "astro-expressive-code": "latest",
-    "cobe": "latest",
+    "astro-i18n-aut": "^0.7.3",
+    "cobe": "0.6.4",
     "lodash": "latest",
     "luxon": "latest",
     "markdown-it": "latest",
@@ -30,13 +35,18 @@
     "@types/lodash": "latest",
     "@types/luxon": "latest",
     "@types/markdown-it": "latest",
-    "@types/node": "^22.16.0",
+    "@types/node": "^22.19.15",
+    "dotenv": "latest",
+    "gray-matter": "latest",
     "hastscript": "latest",
     "mdast-util-to-string": "latest",
     "mdast-util-wiki-link": "latest",
     "micromark-util-symbol": "latest",
     "remark-obsidian-callout": "latest",
+    "tsx": "latest",
     "unist-util-visit": "latest",
-    "unocss": "latest"
+    "@unocss/astro": "latest",
+    "unocss": "latest",
+    "yaml": "latest"
   }
 }
