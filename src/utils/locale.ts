@@ -21,8 +21,8 @@ const useTranslation = (lang: string) => {
     return (key: string) => {
         const data = lang === 'zh' ? [zh, en] : [en, zh]
         const r = get(data[0], key)
+        // 翻译缺失（如旧博客遗留的标签）直接用原值，不再打印警告
         if (!r) {
-            console.warn(`Translation for "${key}" not found`)
             return key.split('.').pop()
         }
         return r

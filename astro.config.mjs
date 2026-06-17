@@ -47,7 +47,7 @@ export default defineConfig({
     prefetch: true,
     site: 'https://yuhang.ch',
     scopedStyleStrategy: 'class',
-    // trailingSlash: 'always',
+    trailingSlash: 'never',
     build: {
         format: 'directory',
         assets: 'assets',
