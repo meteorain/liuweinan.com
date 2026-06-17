@@ -4,10 +4,9 @@ import { useLocale } from '@utils/locale';
 const { url } = Astro;
 const { path, t, locale } = useLocale(url);
 
-const items = ['moments', 'reviews', 'places'];
+const items = ['moments', 'reviews'];
 const routePath = (item) => {
     if (item === 'moments') return path('/studio');
-    if (item === 'places') return path('/studio/places');
     return path(`/studio/${item}`);
 };
 const isActive = (item) =>

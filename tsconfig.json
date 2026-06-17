@@ -9,7 +9,8 @@
             "@utils/*": ["src/utils/*"],
             "@plugins/*": ["src/plugins/*"],
             "@assets/*": ["src/assets/*"],
-            "@loaders/*": ["src/loaders/*"]
+            "@loaders/*": ["src/loaders/*"],
+            "@data/*": ["src/data/*"]
         }
     },
     "include": ["src/**/*.d.ts", "src/**/*.ts", "src/**/*.astro",]

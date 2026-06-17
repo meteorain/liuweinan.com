@@ -1,0 +1,133 @@
+---
+export const prerender = true
+import { places } from "@data/places";
+
+// places 已是 globe.gl 习惯的 {name, location, lat, lng}，直接喂，无需转换
+const points = places;
+// 旅行路线：按数组顺序（= 添加地点的先后，从上到下）把相邻点连成弧线，无需日期
+const arcs: { startLat: number; startLng: number; endLat: number; endLng: number }[] = [];
+for (let i = 0; i < points.length - 1; i++) {
+    const a = points[i], b = points[i + 1];
+    if (a.lat === b.lat && a.lng === b.lng) continue; // 跳过重合点（如重复的 Paris）
+    arcs.push({ startLat: a.lat, startLng: a.lng, endLat: b.lat, endLng: b.lng });
+}
+---
+
+<div class="my-8">
+    沿着此线前行，但见大江大川。
+</div>
+
+<div id="footprint-globe" data-points={JSON.stringify(points)} data-arcs={JSON.stringify(arcs)}></div>
+
+<style is:global>
+    /* —— 沉浸式：地球铺满整页当背景，标题/导航/页脚浮在其上（仅 /footprint 生效）—— */
+    html, body { background: transparent !important; }
+    /* 让页脚顶到视口底部 */
+    body { min-height: 100vh; display: flex; flex-direction: column; }
+    main { flex: 1 0 auto; }
+
+    /* 地球：固定满屏，置于内容之下 */
+    #footprint-globe { position: fixed; inset: 0; z-index: -1; }
+    html.dark #footprint-globe { background: #1c1917; }      /* 贴图加载前的兜底色 */
+    html:not(.dark) #footprint-globe { background: #FBFBFB; }
+
+    /* 点击穿透：中间大片区域可拖动地球；导航/页脚/主题开关仍可点 */
+    html, body { pointer-events: none; }
+    body > div, nav, footer { pointer-events: auto; } /* Header 是 div、Navbar 是 nav、Footer 是 footer */
+    #footprint-globe { pointer-events: auto; }
+
+    /* HTML 城市标签（系统字体 → 中文/阿拉伯文正常）；颜色随主题切换 */
+    .globe-label {
+        position: absolute; left: 7px; top: -8px; white-space: nowrap;
+        font: 600 12px system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    html.dark .globe-label { color: rgba(255, 200, 120, .96); text-shadow: 0 1px 4px #000, 0 0 2px #000; }
+    html:not(.dark) .globe-label { color: #7a1f12; text-shadow: 0 1px 3px #fff, 0 0 4px #fff, 0 0 2px #fff; }
+</style>
+
+<script>
+    import Globe from 'globe.gl';
+
+    const el = document.getElementById('footprint-globe');
+    if (el) {
+        const points = JSON.parse(el.dataset.points || '[]');
+        const arcs = JSON.parse(el.dataset.arcs || '[]');
+
+        const world = (Globe as any)()(el)
+            .width(window.innerWidth)
+            .height(window.innerHeight)
+            .pointsData(points)
+            .pointLat('lat').pointLng('lng')
+            .pointAltitude(0.012)
+            .pointRadius(0.5)
+            .pointLabel((d: any) => d.location || d.name)
+            .htmlElementsData(points)
+            .htmlLat('lat').htmlLng('lng')
+            .htmlAltitude(0.012)
+            .htmlElement((d: any) => {
+                const wrap = document.createElement('div');
+                wrap.style.cssText = 'position:relative;pointer-events:none;transition:opacity .25s;';
+                const label = document.createElement('span');
+                label.className = 'globe-label';
+                label.textContent = d.name;
+                wrap.appendChild(label);
+                return wrap;
+            })
+            .htmlElementVisibilityModifier((elem: HTMLElement, isVisible: boolean) => {
+                elem.style.opacity = isVisible ? '1' : '0';
+            })
+            // 扁平国家色块（仅浅色模式显示；样式常量，数据在 applyTheme 里切换）
+            .polygonCapColor(() => '#f4f1ea')
+            .polygonSideColor(() => 'rgba(120,140,150,0.12)')
+            .polygonStrokeColor(() => '#c7d6df')
+            .polygonAltitude(0.008)
+            // 旅行路线弧线（按添加顺序，流动虚线动画）
+            .arcsData(arcs)
+            .arcStartLat('startLat').arcStartLng('startLng')
+            .arcEndLat('endLat').arcEndLng('endLng')
+            .arcStroke(0.4)
+            .arcDashLength(0.4).arcDashGap(0.18).arcDashAnimateTime(2200);
+
+        world.pointOfView({ lat: 28, lng: 105, altitude: 2.0 }, 0); // 满屏背景；数值越大地球越小
+        const controls = world.controls();
+        controls.autoRotate = true;
+        controls.autoRotateSpeed = 0.5;
+
+        // 国家边界数据（仅浅色模式用），异步加载后重新应用主题
+        let countries: any[] = [];
+        fetch('/data/world-countries-110m.geojson')
+            .then((r) => r.json())
+            .then((geo) => { countries = (geo.features || []).filter((f: any) => f.properties?.ISO_A2 !== 'AQ'); applyTheme(); })
+            .catch(() => {});
+
+        // —— 主题联动 ——
+        function applyTheme() {
+            const dark = document.documentElement.classList.contains('dark');
+            if (dark) {
+                world.globeImageUrl('/textures/earth-night.jpg')
+                    .backgroundImageUrl('/textures/night-sky.png')
+                    .backgroundColor('#1c1917')
+                    .polygonsData([])
+                    .pointColor(() => 'rgba(255,170,40,0.92)')
+                    .arcColor(() => ['rgba(255,170,40,0.15)', 'rgba(255,205,130,0.85)']);
+                world.globeMaterial().color.set('#ffffff');
+            } else {
+                world.globeImageUrl('/textures/globe-light.png')  // 用纯白小图覆盖夜图（globeImageUrl(null) 清不掉旧贴图）
+                    .backgroundImageUrl(null)
+                    .backgroundColor('#FBFBFB')
+                    .polygonsData(countries)
+                    .pointColor(() => 'rgba(200,40,30,0.95)')
+                    .arcColor(() => ['rgba(200,40,30,0.2)', 'rgba(140,25,18,0.9)']);
+                world.globeMaterial().color.set('#d9e7f0');  // 白图 × 此色 = 海洋色
+            }
+        }
+        applyTheme();
+        new MutationObserver(applyTheme).observe(document.documentElement, {
+            attributes: true, attributeFilter: ['class'],
+        });
+
+        window.addEventListener('resize', () => {
+            world.width(window.innerWidth).height(window.innerHeight);
+        });
+    }
+</script>

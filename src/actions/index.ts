@@ -140,62 +140,6 @@ export const server = {
             return { status: response.status, text: await response.text() };
         }
     }),
-
-
-
-    createPlace: defineAction({
-        input: z.object({
-            name: z.string(),
-            name_en: z.string(),
-            type: z.string(),
-            location: z.string(),
-            coordinates: z.string(),
-            rating: z.number(),
-            visit_date: z.string(),
-            description: z.string(),
-            photos: z.string(),
-            moments_id: z.string()
-        }),
-        handler: async (data) => {
-            const response = await fetch(`${apiUrl}/places`, {
-                ...getOptions('POST', 'application/json'),
-                body: JSON.stringify(data)
-            });
-            return { status: response.status };
-        }
-    }),
-
-    searchPOI: defineAction({
-        input: z.object({
-            keywords: z.string(),
-            region: z.string().optional(),
-            city: z.string().optional()
-        }),
-        handler: async ({ keywords, region, city }) => {
-            const AMAP_KEY = import.meta.env.AMAP_KEY;
-            const searchRegion = region || city || '天津';
-            const url = `https://restapi.amap.com/v5/place/text?key=${AMAP_KEY}&keywords=${encodeURIComponent(keywords)}&region=${encodeURIComponent(searchRegion)}&show_fields=all`;
-            
-            const response = await fetch(url);
-            const data = await response.json();
-            
-            if (data.status === '1' && data.pois && data.pois.length > 0) {
-                return data.pois.map((poi: any) => ({
-                    id: poi.id,
-                    name: poi.name,
-                    address: poi.address,
-                    location: poi.location,
-                    tel: poi.tel,
-                    type: poi.type,
-                    business_area: poi.business_area,
-                    rating: poi.rating,
-                    cost: poi.cost,
-                    photos: poi.photos
-                }));
-            }
-            return [];
-        }
-    })
 };
 
 async function findEntityByImdbId(id: string) {

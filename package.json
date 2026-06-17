@@ -21,7 +21,7 @@
     "astro": "latest",
     "astro-expressive-code": "latest",
     "astro-i18n-aut": "^0.7.3",
-    "cobe": "0.6.4",
+    "globe.gl": "^2.46.1",
     "lodash": "latest",
     "luxon": "latest",
     "markdown-it": "latest",
@@ -36,6 +36,7 @@
     "@types/luxon": "latest",
     "@types/markdown-it": "latest",
     "@types/node": "^22.19.15",
+    "@unocss/astro": "latest",
     "dotenv": "latest",
     "gray-matter": "latest",
     "hastscript": "latest",
@@ -45,7 +46,6 @@
     "remark-obsidian-callout": "latest",
     "tsx": "latest",
     "unist-util-visit": "latest",
-    "@unocss/astro": "latest",
     "unocss": "latest",
     "yaml": "latest"
   }
