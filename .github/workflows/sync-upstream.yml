@@ -30,6 +30,9 @@ jobs:
       - name: 合并上游并按需开 PR / issue
         env:
           GH_TOKEN: ${{ secrets.CONTENT_DEPLOY_TOKEN }}
+          # 强制所有 gh 命令打到本 fork：脚本加了名为 upstream 的 remote，
+          # gh 会把它当 PR 目标仓库（fork 特殊处理），导致 PR/issue 建到上游 yuhangch 去而失败。
+          GH_REPO: ${{ github.repository }}
         run: |
           set -e
           git config user.name "github-actions[bot]"
@@ -49,12 +52,23 @@ jobs:
           # 尝试合并（冲突不让脚本中断）
           git merge --no-edit upstream/main || true
 
-          # 始终保留“我们的”私有内容指针与子模块配置（绝不要上游的内容）
-          for p in src/content .gitmodules; do
-            if git ls-files -u -- "$p" | grep -q .; then
-              git checkout --ours -- "$p" && git add -- "$p"
-            fi
-          done
+          # src/content 恒为我方子模块：上游把它当普通目录带示例内容，会产生
+          # file/directory 与 modify/delete 冲突（git 会把上游版本挪到 src/content~HEAD）。
+          # 无论如何都把它恢复成我方 gitlink，并清掉上游塞进来的一切内容文件。
+          rm -rf 'src/content~HEAD' 2>/dev/null || true
+          git rm -rf --cached --ignore-unmatch -q -- 'src/content~HEAD' >/dev/null 2>&1 || true
+          if git ls-files -u -- src/content | grep -q .; then
+            git rm -rf --cached --ignore-unmatch -q -- src/content >/dev/null 2>&1 || true
+            git restore --source=HEAD --staged -- src/content 2>/dev/null \
+              || git checkout HEAD -- src/content 2>/dev/null || true
+            git add -- src/content 2>/dev/null || true
+          fi
+          git clean -fdq -- src/content >/dev/null 2>&1 || true
+
+          # 始终保留“我们的”子模块配置（绝不要上游对它的改动）
+          if git ls-files -u -- .gitmodules | grep -q .; then
+            git checkout --ours -- .gitmodules && git add -- .gitmodules
+          fi
 
           # 还有其它冲突 → 开 issue 求助，终止
           REMAIN="$(git diff --name-only --diff-filter=U || true)"
@@ -62,11 +76,13 @@ jobs:
             git merge --abort || true
             LIST="$(echo "$REMAIN" | sed 's/^/- /')"
             BODY="$(printf '自动同步上游 yuhangch/yuhang.ch 时，以下文件有冲突，需要手动合并：\n\n%s\n\n（可以让 Claude 帮你解决这些冲突。）' "$LIST")"
-            OPEN="$(gh issue list --search '上游同步有冲突 in:title state:open' --json number --jq 'length' || echo 0)"
+            OPEN="$(gh issue list --search '上游同步有冲突 in:title state:open' --json number --jq 'length' 2>/dev/null || echo 0)"
             if [ "${OPEN:-0}" = "0" ]; then
-              gh issue create --title "⚠️ 上游同步有冲突，需手动处理" --body "$BODY"
+              # 仓库可能禁用了 Issues：开失败也不要让整个 job 挂掉，打印冲突清单即可。
+              gh issue create --title "⚠️ 上游同步有冲突，需手动处理" --body "$BODY" \
+                || echo "::warning::无法开 issue（仓库可能禁用了 Issues）。请手动解决以下冲突：$REMAIN"
             fi
-            echo "有冲突，已开/已存在 issue。"
+            echo "有冲突，已提示（issue 或 warning）。"
             exit 0
           fi
 
