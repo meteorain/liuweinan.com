@@ -2,6 +2,7 @@ import { defineCollection } from 'astro:content';
 import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
 
+<<<<<<< HEAD
 // 基于上游 yuhangch/yuhang.ch 的 content.config.ts。
 // posts 增加一个“转换器”：把重导出 md 的 AstroPaper 风格字段
 // （pubDatetime / tags / draft / modDatetime ...）映射成站点组件使用的字段
@@ -10,6 +11,12 @@ const postSchema = z
     .object({
         title: z.string().optional(),
         'title-en': z.string().optional(),
+=======
+const postSchema = z.object({
+        title: z.string().optional(),
+        'title-en': z.string().optional(),
+        description: z.string().optional(),
+>>>>>>> upstream/main
         tags: z.array(z.string()).optional(),
         categories: z.array(z.string()).optional(),
         pubDate: z.coerce.date().optional(),
@@ -17,6 +24,7 @@ const postSchema = z
         notificationTypes: z.array(z.string()).optional(),
         isDraft: z.boolean().optional(),
         url: z.string().optional(),
+<<<<<<< HEAD
         // —— 重导出新增字段（AstroPaper 风格 + 归档信息），全部保留 ——
         pubDatetime: z.coerce.date().optional(),
         modDatetime: z.coerce.date().optional().nullable(),
@@ -36,10 +44,21 @@ const postSchema = z
         tags: d.tags ?? [],
         isDraft: d.isDraft ?? d.draft ?? false,
     }));
+=======
+    });
+>>>>>>> upstream/main
 
 const posts = defineCollection({
     loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/posts' }),
     schema: postSchema,
+<<<<<<< HEAD
+=======
+});
+
+const postsEn = defineCollection({
+    loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/posts-en' }),
+    schema: postSchema,
+>>>>>>> upstream/main
 });
 
 const docs = defineCollection({

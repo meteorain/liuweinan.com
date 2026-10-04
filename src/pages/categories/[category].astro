@@ -1,8 +1,7 @@
 ---
-import BlogListLayout from '@layouts/PostsLayout.astro'
-import {getCollection} from "astro:content";
-export const prerender = true
+import PostsLayout from '@layouts/PostsLayout.astro';
 
+<<<<<<< HEAD
 export async function getStaticPaths() {
     const paths: any[] = [];
     
@@ -30,6 +29,11 @@ export async function getStaticPaths() {
     return paths;
 }
 const { category } = Astro.props
+=======
+export const prerender = false;
+
+const { category } = Astro.params;
+>>>>>>> upstream/main
 ---
 
-<BlogListLayout tag="" category={category} />
+<PostsLayout tag="" category={category ?? ''} />

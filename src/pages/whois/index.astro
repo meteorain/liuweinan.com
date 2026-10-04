@@ -2,22 +2,53 @@
 import {useLocale} from "../../utils/locale";
 import {getEntry, render} from 'astro:content'
 import Layout from "../../layouts/Layout.astro";
+<<<<<<< HEAD
 import LinkCard from "@components/LinkCard.astro";
 const {path, t, locale} = useLocale(Astro.url)
 export const prerender = true;
+=======
+import ResourceCard from "../../components/ResourceCard.astro";
+import { projects, stacks } from "../../data/whois";
+
+const { t, locale } = useLocale(Astro.url, Astro.locals.locale);
+export const prerender = false;
+>>>>>>> upstream/main
 
 const content = await getEntry('whois', 'index')
 
+<<<<<<< HEAD
 const {Content} = await render(content);
 ---
 
 <Layout title={t('nav.now')}>
     <main >
 
+=======
+let whoisEntry = allWhoisEntries.find(
+    (entry) => entry.data?.lang === preferredLang,
+);
+
+if (!whoisEntry) {
+    whoisEntry =
+        allWhoisEntries.find((entry) => entry.data?.lang === "zh") ??
+        allWhoisEntries[0];
+}
+
+if (!whoisEntry) {
+    throw new Error('[whois] No entries found in "whois" collection');
+}
+
+const { Content } = await render(whoisEntry);
+---
+
+<Layout title={t("nav.whois")}>
+    <main>
+>>>>>>> upstream/main
         <div class="my-8 mx-4">
             <Content/>
         </div>
 
+<<<<<<< HEAD
         <div data-orientation="horizontal" role="separator" class="bg-stone-200 w-full h-px my-8"></div>
 
         <div>
@@ -132,5 +163,26 @@ l55 -26 42 -41 42 -41 27 -53 27 -53 5 -75 4 -75 -22 -57 -21 -57 -45 -50 -45
                 </LinkCard>
             </ul>
         </div>
+=======
+        <div
+            data-orientation="horizontal"
+            role="separator"
+            class="my-8 h-px w-full bg-stone-200"
+        ></div>
+
+        <section>
+            <h2 class="my-8 text-xl font-medium">Projects</h2>
+            <ul class="grid grid-cols-1 gap-3 p-1">
+                {projects.map((project) => <ResourceCard {...project} />)}
+            </ul>
+        </section>
+
+        <section class="mt-8">
+            <h2 class="mb-3 text-xl font-medium">Stacks</h2>
+            <ul class="grid grid-cols-2 gap-3 p-1">
+                {stacks.map((stack) => <ResourceCard {...stack} />)}
+            </ul>
+        </section>
+>>>>>>> upstream/main
     </main>
 </Layout>
