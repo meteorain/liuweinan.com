@@ -1,31 +1,18 @@
-import { defineAction } from 'astro:actions';
-import { z } from 'astro/zod';
-import { API_URL, API_SECRET } from 'astro:env/server';
-
-const apiUrl = API_URL;
-const secret = API_SECRET;
-
-// 统一的 headers 定义
-const getHeaders = (contentType?: string) => {
-    const headers: Record<string, string> = {
-        'Authorization': `Bearer ${secret}`
-    };
-    
-    if (contentType) {
-        headers['Content-Type'] = contentType;
-    } else {
-        headers['accept'] = 'application/json';
-    }
-    
-    return headers;
-};
-
-const getOptions = (method: string = 'GET', contentType?: string) => ({
-    method,
-    headers: getHeaders(contentType)
-});
+import {
+    findEntity,
+    findEntityByTMDBId,
+    searchMedia,
+} from './media';
+import {
+    createMoment,
+    createReview,
+    getMoment,
+    updateMoment,
+} from './content';
+import { createPlace, searchPOI } from './places';
 
 export const server = {
+<<<<<<< HEAD
     searchMedia: defineAction({
         input: z.object({
             keyword: z.string()
@@ -140,43 +127,15 @@ export const server = {
             return { status: response.status, text: await response.text() };
         }
     }),
+=======
+    searchMedia,
+    findEntityByTMDBId,
+    findEntity,
+    createMoment,
+    createReview,
+    getMoment,
+    updateMoment,
+    createPlace,
+    searchPOI,
+>>>>>>> upstream/main
 };
-
-async function findEntityByImdbId(id: string) {
-    const url = (lang: string) => `${apiUrl}/tmdb/3/find/${id}?external_source=imdb_id&language=${lang}`;
-    
-    const getResult = async (response: Response) => {
-        const { movie_results, tv_results, tv_episode_results, tv_season_results } = await response.json();
-        return movie_results[0] || tv_results[0] || tv_episode_results[0] || tv_season_results[0];
-    };
-    
-    const zhResp = await fetch(url('zh'), getOptions());
-    const enResp = await fetch(url('en'), getOptions());
-
-    const zhResult = await getResult(zhResp);
-    if (!zhResult) {
-        return null;
-    }
-    
-    let { title, name, media_type, vote_average, release_date, first_air_date } = zhResult;
-    title = title || name;
-    release_date = release_date || first_air_date;
-    
-    const enResult = await getResult(enResp);
-    let { title: title_en, name: name_en } = enResult;
-    title_en = title_en || name_en;
-    
-    title = title.replace(/'/g, "''");
-    title_en = title_en.replace(/'/g, "''");
-
-    return {
-        imdb_id: id,
-        title,
-        title_en,
-        media_type,
-        imdb_rating: vote_average,
-        rating: -1,
-        release_date: release_date,
-        rated_date: null
-    };
-}

@@ -1,20 +1,20 @@
-import {getCollection} from "astro:content";
-import {DateTime} from "luxon";
+import { getCollection, type CollectionEntry } from 'astro:content';
 
-function groupBy<T, K extends string | number | symbol>(
-    items: T[],
-    keyFn: (item: T) => K | undefined
-): Record<K, T[]> {
-    return items.reduce((acc, item) => {
-        const key = keyFn(item)
-        if (key === undefined || key === null) return acc
-        const k = key as K
-        if (!acc[k]) acc[k] = []
-        acc[k].push(item)
-        return acc
-    }, {} as Record<K, T[]>)
+export type PostEntry = CollectionEntry<'posts'> | CollectionEntry<'posts-en'>;
+
+export interface PostListItem {
+    id: string;
+    url: string;
+    title?: string;
+    description?: string;
+    tags?: string[];
+    categories?: string[];
+    pubDate: Date;
+    lastModified?: Date;
+    isDraft?: boolean;
 }
 
+<<<<<<< HEAD
 export const getAllPosts = async (locale: string, tag: string, category: string) => {
     const allPosts = await getCollection('posts')
     const filteredPosts = allPosts
@@ -52,6 +52,57 @@ export const getAllPosts = async (locale: string, tag: string, category: string)
                 .filter((i) => i.tags)
                 .map((i) => i.tags)
                 .flat()
-        )
-    }
+=======
+export interface PostsByYear {
+    year: string;
+    list: PostListItem[];
 }
+
+export const getPostsCollectionName = (locale: string): 'posts' | 'posts-en' =>
+    locale === 'en' ? 'posts-en' : 'posts';
+
+export const getAllPosts = async (
+    locale: string,
+    tag = '',
+    category = '',
+): Promise<{ posts: PostsByYear[]; tags: Set<string> }> => {
+    const collectionName = getPostsCollectionName(locale);
+    const allPosts = await getCollection(collectionName);
+    const filteredPosts: PostListItem[] = allPosts
+        .filter((entry): entry is PostEntry & { data: PostEntry['data'] & { pubDate: Date } } =>
+            !entry.data.isDraft && entry.data.pubDate instanceof Date,
+>>>>>>> upstream/main
+        )
+        .filter((entry) => {
+            if (tag) return entry.data.tags?.includes(tag) ?? false;
+            if (category) return entry.data.categories?.includes(category) ?? false;
+            return true;
+        })
+        .map((entry) => ({
+            id: entry.id,
+            url: `/posts/${entry.id}/`,
+            title: entry.data.title,
+            description: entry.data.description,
+            tags: entry.data.tags,
+            categories: entry.data.categories,
+            pubDate: entry.data.pubDate,
+            lastModified: entry.data.lastModified,
+            isDraft: entry.data.isDraft,
+        }))
+        .sort((a, b) => b.pubDate.getTime() - a.pubDate.getTime());
+
+    const byYear = new Map<string, PostListItem[]>();
+    for (const post of filteredPosts) {
+        const year = String(post.pubDate.getFullYear());
+        const posts = byYear.get(year) ?? [];
+        posts.push(post);
+        byYear.set(year, posts);
+    }
+
+    const posts = [...byYear.entries()]
+        .sort(([a], [b]) => Number(b) - Number(a))
+        .map(([year, list]) => ({ year, list }));
+
+    const tags = new Set(filteredPosts.flatMap((post) => post.tags ?? []));
+    return { posts, tags };
+};

@@ -8,10 +8,14 @@
             "@styles/*": ["src/styles/*"],
             "@utils/*": ["src/utils/*"],
             "@plugins/*": ["src/plugins/*"],
+<<<<<<< HEAD
             "@assets/*": ["src/assets/*"],
             "@loaders/*": ["src/loaders/*"],
             "@data/*": ["src/data/*"]
+=======
+            "@assets/*": ["src/assets/*"]
+>>>>>>> upstream/main
         }
     },
-    "include": ["src/**/*.d.ts", "src/**/*.ts", "src/**/*.astro",]
+    "include": [".astro/types.d.ts", ".astro/env.d.ts", "src/**/*.d.ts", "src/**/*.ts", "src/**/*.astro"]
 }
