@@ -1,5 +1,7 @@
 import { defineConfig, envField } from 'astro/config';
 import vercel from '@astrojs/vercel'
+import { fileURLToPath } from 'node:url'
+import { unified } from '@astrojs/markdown-remark'
 
 import UnoCSS from '@unocss/astro'
 import remarkWikiLink from "./src/plugins/wiki-link/index.ts";
@@ -24,56 +26,78 @@ import remarkFigureCaption from "@microflash/remark-figure-caption";
 export default defineConfig({
     vite: {
         plugins: [yaml()],
-        optimizeDeps: {
-            // Avoid race where a dep is in newData.optimized but not yet in metadata (browserHash undefined)
-            holdUntilCrawlEnd: true,
+        resolve: {
+            alias: {
+                picomatch: fileURLToPath(new URL('./src/shims/picomatch.mjs', import.meta.url)),
+            },
         },
     },
     compressHTML: false,
-    experimental: {
-
-    },
     env: {
+        validateSecrets: true,
         schema: {
-            API_URL: envField.string({ context: "server", access: "secret" }),
+            API_URL: envField.string({ context: "server", access: "public" }),
             API_SECRET: envField.string({ context: "server", access: "secret" }),
             STUDIO_SECRET: envField.string({ context: "server", access: "secret" }),
             MAPBOX_TOKEN: envField.string({ context: "client", access: "public" }),
-            AMAP_KEY: envField.string({ context: "client", access: "public" }),
+            AMAP_KEY: envField.string({ context: "server", access: "secret" }),
         }
     },
-    serverIslands: true,
-
-    prefetch: true,
+    i18n: {
+        locales: ['zh', 'en'],
+        defaultLocale: 'zh',
+        routing: 'manual',
+    },
+    prefetch: {
+        prefetchAll: false,
+        defaultStrategy: 'hover',
+    },
     site: 'https://yuhang.ch',
+<<<<<<< HEAD
     scopedStyleStrategy: 'class',
     trailingSlash: 'never',
+=======
+    scopedStyleStrategy: 'where',
+    trailingSlash: 'always',
+>>>>>>> upstream/main
     build: {
         format: 'directory',
         assets: 'assets',
     },
     markdown: {
-
-        syntaxHighlight: false,
-        remarkRehype: {
-            footnoteLabel: ' '
-        },
-
-
-        remarkPlugins: [
-            remarkModifiedTime, // Run first to set lastModified before other plugins
-            remarkDirective,
-            remarkFigureCaption,
-            // RDNotePlugin,
-            [
-                remarkObsidianCallout,
-                {
-                    blockquoteClass: 'callout',
-                    titleTextTagName: "span",
-                    iconTagName: "span",
-                    // ...
-                },
+        processor: unified({
+            remarkRehype: {
+                footnoteLabel: ' '
+            },
+            remarkPlugins: [
+                remarkModifiedTime, // Run first to set lastModified before other plugins
+                remarkDirective,
+                remarkFigureCaption,
+                // RDNotePlugin,
+                [
+                    remarkObsidianCallout,
+                    {
+                        blockquoteClass: 'callout',
+                        titleTextTagName: "span",
+                        iconTagName: "span",
+                        // ...
+                    },
+                ],
+                RDBilibiliPlugin,
+                InternalLinkPlugin,
+                [remarkWikiLink, {
+                    permalinks: getPermalinks("src/content/"),
+                    pathFormat: "obsidian-short",
+                    hrefTemplate: (permalink) => {
+                        const href = permalink.replaceAll("src/content/", "/") + '/';
+                        if (!href.startsWith('/'))
+                            return '/' + href;
+                        return href;
+                    }
+                }],
+                remarkWikiLinkLocale,
             ],
+<<<<<<< HEAD
             RDBilibiliPlugin,
             InternalLinkPlugin,
             [remarkWikiLink, {
@@ -87,6 +111,10 @@ export default defineConfig({
                 }
             }],
         ]
+=======
+        }),
+        syntaxHighlight: false,
+>>>>>>> upstream/main
     },
 
     integrations: [
@@ -101,7 +129,12 @@ export default defineConfig({
         mdx({
             extendMarkdownConfig: true, // Ensure MDX inherits markdown config including remark plugins
         }),
+<<<<<<< HEAD
     ], output: 'server',
+=======
+    ],
+    output: 'server',
+>>>>>>> upstream/main
     adapter: vercel({
         // functionPerRoute: false
     })
