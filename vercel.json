@@ -1,4 +1,9 @@
 {
+  "git": {
+    "deploymentEnabled": {
+      "sync/upstream": false
+    }
+  },
   "installCommand": "bash bin/vercel-install.sh",
   "buildCommand": "astro build",
   "rewrites": [
