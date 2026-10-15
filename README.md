@@ -33,7 +33,9 @@ pnpm build
 
 Copy `.env.example` to `.env` and fill in the server secrets before using Studio or live API pages.
 
-`API_SECRET`, `STUDIO_SECRET`, and `AMAP_KEY` are server-only secrets. `MAPBOX_TOKEN` is intentionally a public client variable because it is used by the browser map.
+SSR talks to `api.yuhang.ch` with short-lived **Ed25519 JWTs** (`API_JWT_PRIVATE_KEY`). See [SECRETS.md](./SECRETS.md). Generate keys from the api repo: `pnpm keys:generate`.
+
+`API_JWT_PRIVATE_KEY`, `STUDIO_SECRET`, and `AMAP_KEY` are server-only secrets. `MAPBOX_TOKEN` is intentionally a public client variable because it is used by the browser map.
 
 
 ## License

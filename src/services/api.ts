@@ -1,4 +1,5 @@
-import { API_SECRET, API_URL } from 'astro:env/server';
+import { API_URL } from 'astro:env/server';
+import { requiredScope, signApiJwt } from './api-jwt';
 
 const REQUEST_TIMEOUT_MS = 10_000;
 
@@ -140,7 +141,9 @@ export async function apiFetch<T>(path: string, init: RequestInit = {}): Promise
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
     const headers = new Headers(init.headers);
-    headers.set('Authorization', `Bearer ${API_SECRET}`);
+    const method = (init.method ?? 'GET').toUpperCase();
+    const jwt = await signApiJwt(requiredScope(method));
+    headers.set('Authorization', `Bearer ${jwt}`);
     headers.set('Accept', headers.get('Accept') ?? 'application/json');
 
     try {

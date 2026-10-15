@@ -22,6 +22,18 @@ import remarkObsidianCallout from './src/plugins/callout/index.js'
 import mdx from "@astrojs/mdx";
 import remarkFigureCaption from "@microflash/remark-figure-caption";
 
+/** Ensure Vercel sends /en/* to SSR so manual i18n middleware can rewrite. */
+function vercelEnLocaleRoutes() {
+    return {
+        name: 'vercel-en-locale-routes',
+        hooks: {
+            'astro:build:done': async () => {
+                const { patchVercelEnRoutes } = await import('./scripts/patch-vercel-en-routes.mjs');
+                patchVercelEnRoutes();
+            },
+        },
+    };
+}
 
 // https://astro.build/config
 export default defineConfig({
@@ -38,7 +50,9 @@ export default defineConfig({
         validateSecrets: true,
         schema: {
             API_URL: envField.string({ context: "server", access: "public" }),
-            API_SECRET: envField.string({ context: "server", access: "secret" }),
+            API_JWT_PRIVATE_KEY: envField.string({ context: "server", access: "secret" }),
+            // Transition only — Worker still accepts legacy Bearer until cutover deploy removes it.
+            API_SECRET: envField.string({ context: "server", access: "secret", optional: true }),
             STUDIO_SECRET: envField.string({ context: "server", access: "secret" }),
             MAPBOX_TOKEN: envField.string({ context: "client", access: "public" }),
             AMAP_KEY: envField.string({ context: "server", access: "secret" }),
@@ -98,7 +112,7 @@ export default defineConfig({
     },
 
     integrations: [
-
+        vercelEnLocaleRoutes(),
         UnoCSS(),
         expressiveCode({
             themes: ['dracula-soft', 'snazzy-light'],

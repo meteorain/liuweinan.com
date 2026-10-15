@@ -5,10 +5,11 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro check --minimumSeverity error && astro build",
+    "build": "astro check --minimumSeverity error && astro build && node scripts/patch-vercel-en-routes.mjs",
     "preview": "astro preview",
     "astro": "astro",
-    "translate-posts": "tsx scripts/translate-posts.ts"
+    "translate-posts": "tsx scripts/translate-posts.ts",
+    "secrets:put": "pwsh ./scripts/put-vercel-env.ps1"
   },
   "dependencies": {
     "@astrojs/check": "0.9.10",
@@ -19,6 +20,7 @@
     "astro": "^7.3.1",
     "astro-expressive-code": "0.44.2",
     "cobe": "latest",
+    "jose": "^6.2.12",
     "luxon": "latest",
     "markdown-it": "latest",
     "picomatch": "4.0.7",
