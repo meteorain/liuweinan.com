@@ -50,8 +50,8 @@ export default defineConfig({
         validateSecrets: true,
         schema: {
             API_URL: envField.string({ context: "server", access: "public" }),
-            API_JWT_PRIVATE_KEY: envField.string({ context: "server", access: "secret" }),
-            // Transition only — Worker still accepts legacy Bearer until cutover deploy removes it.
+            API_JWT_PRIVATE_KEY: envField.string({ context: "server", access: "secret", optional: true }),
+            // Legacy Bearer fallback while JWT private key is fixed / cutover incomplete.
             API_SECRET: envField.string({ context: "server", access: "secret", optional: true }),
             STUDIO_SECRET: envField.string({ context: "server", access: "secret" }),
             MAPBOX_TOKEN: envField.string({ context: "client", access: "public" }),
