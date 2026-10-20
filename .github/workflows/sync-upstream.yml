@@ -80,11 +80,12 @@ jobs:
             git commit -m "🔄 同步上游 yuhangch/yuhang.ch（含未解决冲突，待手动处理）" || true
             git push -f origin sync/upstream
             CONFLICT_BODY="$(printf '⚠️ 自动同步上游 yuhangch/yuhang.ch 时有冲突。已把【带冲突标记】的合并推到本分支，请手动解决后再合并（可让 Claude 拉 sync/upstream 分支解决）。\n\n冲突文件：\n%s\n\n注意：本分支含 <<<<<<< 冲突标记，未解决前请勿直接 Merge。' "$LIST")"
-            if gh pr view sync/upstream >/dev/null 2>&1; then
-              gh pr edit sync/upstream --title "⚠️ 同步上游 yuhangch（有冲突，需手动解决）" --body "$CONFLICT_BODY"
-            else
-              gh pr create --base main --head sync/upstream --title "⚠️ 同步上游 yuhangch（有冲突，需手动解决）" --body "$CONFLICT_BODY"
-            fi
+            CT="⚠️ 同步上游 yuhangch（有冲突，需手动解决）"
+            # 先 edit(PR 已存在时)，失败再 create(PR 不存在时)，再失败只警告——
+            # 分支已强推、PR diff 已自动更新，无论如何不让 job 失败。
+            gh pr edit sync/upstream --title "$CT" --body "$CONFLICT_BODY" 2>/dev/null \
+              || gh pr create --base main --head sync/upstream --title "$CT" --body "$CONFLICT_BODY" 2>/dev/null \
+              || echo "::warning::PR 创建/更新失败（分支已推送、PR 列表仍可见）。"
             echo "有冲突，已推分支并开/更新 PR（待手动解决）。"
             exit 0
           fi
@@ -103,9 +104,8 @@ jobs:
           # 有实际代码改动 → 推分支、开/更新 PR，交给你用 Vercel 预览验收后合并
           git push -f origin sync/upstream
           PR_BODY="自动合并上游 yuhangch/yuhang.ch 最新代码（已自动保留你的私有内容指针）。请查看本 PR 的 Vercel 预览，确认无误后点 Merge。"
-          if gh pr view sync/upstream >/dev/null 2>&1; then
-            gh pr edit sync/upstream --title "🔄 同步上游 yuhangch（自动）" --body "$PR_BODY"
-          else
-            gh pr create --base main --head sync/upstream --title "🔄 同步上游 yuhangch（自动）" --body "$PR_BODY"
-          fi
+          PT="🔄 同步上游 yuhangch（自动）"
+          gh pr edit sync/upstream --title "$PT" --body "$PR_BODY" 2>/dev/null \
+            || gh pr create --base main --head sync/upstream --title "$PT" --body "$PR_BODY" 2>/dev/null \
+            || echo "::warning::PR 创建/更新失败（分支已推送、PR 列表仍可见）。"
           echo "已开/更新 PR，等你验收合并。"
