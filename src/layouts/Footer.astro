@@ -1,18 +1,34 @@
 ---
 import { useLocale } from '@utils/locale'
+<<<<<<< HEAD
 import Analytics from '@components/Analytics.astro'
 const { t, path } = useLocale(Astro.url)
+=======
+const { t, path } = useLocale(Astro.url, Astro.locals.locale)
+>>>>>>> upstream/main
 ---
 
 <footer class="mt-12 mb-6 text-sm">
     <div class="mb-2">
         <a href="https://www.instagram.com/liuweinan/" class="panda-link">{t('footer.contact')}</a>
         <span class="mx-1">|</span>
+<<<<<<< HEAD
         <a rel="prefetch-intent" href="/rss.xml" class="panda-link">{t('footer.rss')}</a>
         <span class="mx-1">|</span>
         <a rel="prefetch-intent" href="/reviews" class="panda-link">{t('nav.reviews')}</a>
         <span class="mx-1">|</span>
         <a rel="prefetch-intent" href="/footprint" class="panda-link">{t('nav.footprint')}</a>
+=======
+        <a data-astro-reload href={path('/rss.xml')} class="panda-link">{t('footer.rss')}</a>
+        <span class="mx-1">|</span>
+        <a href="https://chenyuhang.cn" class="panda-link">{t('footer.collection')}</a>
+        <span class="mx-1">|</span>
+        <a data-astro-prefetch href={path('/reviews/')} class="panda-link">{t('nav.reviews')}</a>
+        <span class="mx-1">|</span>
+        <!-- <a data-astro-prefetch href={path('/footprint/')} class="panda-link">{t('nav.footprint')}</a>
+        <span class="mx-1">|</span> -->
+        <a data-astro-prefetch href={path('/places/')} class="panda-link">{t('nav.places')}</a>
+>>>>>>> upstream/main
     </div>
     <div class="mb-1">
         <span>2006-{new Date().getFullYear()}</span>
