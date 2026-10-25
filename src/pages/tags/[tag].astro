@@ -1,9 +1,9 @@
 ---
-import PostsLayout from '@layouts/PostsLayout.astro'
-import {getCollection} from "astro:content";
-export const prerender = true
+import PostsLayout from '@layouts/PostsLayout.astro';
 
+export const prerender = false;
 
+<<<<<<< HEAD
 
 export async function getStaticPaths() {
     const paths: any[] = [];
@@ -32,6 +32,9 @@ export async function getStaticPaths() {
     return paths;
 }
 const { tag } = Astro.props
+=======
+const { tag } = Astro.params;
+>>>>>>> upstream/main
 ---
 
-<PostsLayout tag={tag} category="" />
+<PostsLayout tag={tag ?? ''} category="" />
