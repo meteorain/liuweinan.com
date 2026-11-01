@@ -4,31 +4,33 @@ import Layout from "@layouts/Layout.astro";
 import { useLocale } from "@utils/locale";
 import { formatDateYMD } from "@utils/format";
 import ObsidianEdit from "@components/ObsidianEdit.astro";
+<<<<<<< HEAD
 import { getCollection, getEntry, render } from "astro:content";
+=======
+import { getEntry, render } from "astro:content";
+import { getPostsCollectionName } from "@utils/content";
+>>>>>>> upstream/main
 import "../../styles/content.css";
 
-export const prerender = true;
-const { path, t, locale } = useLocale(Astro.url);
+export const prerender = false;
+const { path, t, locale } = useLocale(Astro.url, Astro.locals.locale);
 const { slug } = Astro.params;
 
 // Safety check: ensure slug exists
 if (!slug) {
-    return new Response(null, {
-        status: 404,
-        statusText: "Not found",
-    });
+    Astro.response.status = 404;
+    return new Response("Not found", { status: 404 });
 }
 
 const entry = await getEntry("posts", slug);
 
 if (!entry) {
-    return new Response(null, {
-        status: 404,
-        statusText: "Not found",
-    });
+    Astro.response.status = 404;
+    return new Response("Not found", { status: 404 });
 }
 
 const { filePath } = entry;
+<<<<<<< HEAD
 let renderResult;
 try {
     // Use render function (same as docs page)
@@ -57,6 +59,27 @@ export async function getStaticPaths() {
 
 <Layout title={title} navbar={false}>
     <a class="panda-link mt-6" href={path("/posts")}>{t("post.back")}</a>
+=======
+const { Content, remarkPluginFrontmatter } = await render(entry);
+
+const { lastModified } = remarkPluginFrontmatter || {};
+
+const { categories, title, pubDate, description } = entry.data;
+const ext = filePath?.split(".").pop() ?? "md";
+
+// const title = locale === 'en' && FrontMatter['title-en'] ? FrontMatter['title-en'] : FrontMatter['title']
+---
+
+<Layout
+    title={title}
+    description={description}
+    ogType="article"
+    publishedTime={pubDate}
+    modifiedTime={lastModified}
+    navbar={false}
+>
+    <a class="panda-link mt-6" href={path("/")}>{t("post.back")}</a>
+>>>>>>> upstream/main
 
     <main>
         <div class="mt-6">
@@ -101,6 +124,7 @@ export async function getStaticPaths() {
             <a
                 class="panda-link ml-2"
                 href={path(`/raw/posts/${entry.id}.${ext}`)}
+                data-astro-reload
             >
                 {ext === "md" ? "Markdown" : "MDX"}
             </a>
