@@ -2,12 +2,12 @@
  * Content Styles
  * 
  * This file handles all content-related styles including:
- * - CSS variables (colors, callout configuration)
- * - Dark mode variables
+ * - CSS variables for callout configuration
  * - Complex prose selectors (links with internal/external handling, blockquote containers)
  * - Callout component styles
- * - Animations and keyframes
- * - Image-related complex styles
+ *
+ * Reusable prose typography, theme tokens used by those rules, and media styling
+ * are generated from uno.config.js.
  * 
  * Note: Simple prose extensions (code blocks, list items) are handled in uno.config.js
  * via presetTypography cssExtend.
@@ -54,27 +54,6 @@
     --callout-warning: var(--color-orange-rgb);
     --callout-quote: 158, 158, 158;
 
-    --color-code-bg: #f5f5f5;
-
-    scroll-behavior: smooth;
-}
-
-:root.dark {
-    color-scheme: dark;
-    --color-primary-main: 235 153 161; /* #eb99a1 */
-    --color-secondary-main: 226 111 122; /* #e26f7a */
-    /*--color-primary-main: 138 92 245; !* #eb99a1 *!*/
-    /*--color-secondary-main:168 130 255; !* #e26f7a *!*/
-    --color-text-body: 214 211 209;
-    --color-text-heading: 200 200 200;
-    --color-text-link: var(--color-primary-main);
-    --color-text-link-hover: var(--color-secondary-main);
-    --color-border: var(--color-primary-main);
-    --color-code-bg: #1a202c;
-
-    scroll-behavior: smooth;
-
-
 }
 
 
@@ -88,71 +67,38 @@
     --un-prose-headings: rgb(var(--color-text-heading));
 }
 
-article > p {
-    @apply text-justify indent-8;
-}
-
 /*
  * prose link
  */
-.prose :where(a):not(:where([data-footnote-ref], [data-footnote-backref], .not-prose, .not-prose *)) {
-    text-decoration-color: var(--color-primary-main);
+.prose a:not(:where([data-footnote-ref], [data-footnote-backref], .not-prose, .not-prose *)) {
+    text-decoration-color: rgb(var(--color-text-link));
     text-underline-offset: 0.3em;
-    color: rgb(var(--color-primary-main));
-    @apply mx-1;
+    color: rgb(var(--color-text-link));
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
 
+}
+
+.prose a:not(:where([data-footnote-ref], [data-footnote-backref], .not-prose, .not-prose *)):hover {
+    color: rgb(var(--color-text-link-hover));
+    text-decoration-color: rgb(var(--color-text-link-hover));
+    text-decoration-thickness: 0.125rem;
 }
 
 /*
  * prose image
  */
 
-/* 所有 prose 内的图片都应用最大宽度限制 */
-.prose img {
-    @apply max-w-full h-auto;
-}
-
-.prose figure {
-    @apply flex flex-col items-center justify-center my-6 mx-auto text-center;
-}
-
-.prose figure img {
-    @apply rounded-lg shadow-md max-w-full h-auto max-h-64;
-
-    max-width: 100%;
-    width: auto;
-    height: 200px;
-    display: block;
-    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
-    object-fit: cover;
-
-}
-
-
-@keyframes shimmer {
-    0% {
-        background-position: 200% 0;
-    }
-    100% {
-        background-position: -200% 0;
-    }
-}
-
-.prose figcaption {
-    @apply mt-2 text-sm italic;
-    color: rgb(var(--color-text-heading));
-}
-
 /*prose link add arrow when class not have 'internal'*/
 
-.external-link {
-    @apply after:content-['↗'] after:ml-0;
+.external-link::after {
+    content: '↗';
+    margin-left: 0;
 }
 
-.prose :where(a):not(:where([data-footnote-ref], [data-footnote-backref], .not-prose, .not-prose *)):not(.internal) {
-    @apply after:content-['↗'] after:ml-0;
+.prose :where(a):not(:where([data-footnote-ref], [data-footnote-backref], .not-prose, .not-prose *)):not(.internal)::after {
+    content: '↗';
+    margin-left: 0;
 }
 
 /*prose link add ' [[ link ]] ' when class have 'internal'*/
@@ -175,53 +121,22 @@ article > p {
  * blockquote
  */
 .prose :where(blockquote):not(:where(.not-prose,.callout, .not-prose *)) {
-    @apply bg-gray-100 dark:bg-stone-800
-    text-base m-0
-    border-l-solid
-    font-normal rounded-lg
-    rounded-l-sm
-    pl-4 p-2;
+    background-color: #f3f4f6;
+    font-size: 1rem;
+    margin: 0;
+    border-left-style: solid;
+    font-weight: 400;
+    border-radius: 0.5rem;
+    border-top-left-radius: 0.125rem;
+    border-bottom-left-radius: 0.125rem;
+    padding-left: 1rem;
+    padding: 0.5rem;
     border-left: 6px solid rgb(var(--color-primary-main)) !important;
 }
 
-
-.prose :where(ol > li):not(:where(.not-prose, .not-prose *))::marker,
-.prose :where(ul > li):not(:where(.not-prose, .not-prose *))::marker,
-.prose :where(summary):not(:where(.not-prose, .not-prose *))::marker {
-    color: rgb(var(--color-primary-main));
-    @apply mr-4 font-semibold;
+.dark .prose :where(blockquote):not(:where(.not-prose,.callout, .not-prose *)) {
+    background-color: #292524;
 }
-
-/*
-* footnotes
-*/
-
-[data-footnote-ref]::before {
-    content: ' [';
-}
-
-[data-footnote-ref]::after {
-    content: '] ';
-}
-
-[data-footnote-backref] {
-    text-decoration: none;
-}
-
-[data-footnote-ref] {
-    @apply font-normal no-underline;
-}
-
-.transition-all {
-    transition-property: all;
-    transition-timing-function: cubic-bezier(.4, 0, .2, 1);
-    transition-duration: .15s;
-}
-
-.duration-300 {
-    transition-duration: .3s;
-}
-
 
 .callout {
     --callout-color: var(--callout-default);
