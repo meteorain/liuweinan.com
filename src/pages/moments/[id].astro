@@ -1,12 +1,19 @@
 ---
+<<<<<<< HEAD
 import {API_URL} from 'astro:env/server'
 import { loadComments } from "../../loaders/comments";
 import Layout from '@layouts/Layout.astro';
 import MomentCard from '@components/MomentCard.astro';
+=======
+import Layout from '@layouts/Layout.astro';
+import MomentCard from '@components/MomentCard.astro';
+import { getLiveEntry } from 'astro:content';
+>>>>>>> upstream/main
 import { useLocale } from '@utils/locale';
 
 export const prerender = false;
 const { id } = Astro.params;
+<<<<<<< HEAD
 const moments = await loadComments((uri) => uri.startsWith('/posts') || uri.startsWith('/moments'));
 
 const moment = moments.find((m) => m.id == id) ?? null;
@@ -26,4 +33,30 @@ const { t } = useLocale(Astro.url);
             <noscript>Javascript needs to be activated to view comments.</noscript>
         </section>
     : <p>Moment not found.</p>}
+=======
+const { t } = useLocale(Astro.url, Astro.locals.locale);
+
+if (!id) {
+    Astro.response.status = 404;
+    return new Response('Not found', { status: 404 });
+}
+
+const result = await getLiveEntry('moments', { id });
+if (result.error) {
+    console.error(`[moments/${id}] Failed to load moment:`, result.error);
+    Astro.response.status = 503;
+    return new Response('Moment is temporarily unavailable', { status: 503 });
+}
+const moment = result.entry?.data;
+if (!moment) {
+    Astro.response.status = 404;
+    return new Response('Not found', { status: 404 });
+}
+---
+
+<Layout title={`${t('nav.moments')} #${id}`}>
+    <div class="mt-8">
+        <MomentCard content={moment} />
+    </div>
+>>>>>>> upstream/main
 </Layout>

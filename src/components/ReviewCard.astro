@@ -1,15 +1,33 @@
 ---
 import { useLocale } from '@utils/locale'
+<<<<<<< HEAD
 import { formatDateYMD } from "../utils/format";
 import HeartRating from '@components/HeartRating.astro'
 const { t } = useLocale(Astro.url)
 const {id, author, text, created, uri, likes, dislikes} = Astro.props.content
+=======
+import {formatDateYMD} from "../utils/format";
+import type { Review } from '../services/api';
+interface Props { body: Review }
+const { t, locale } = useLocale(Astro.url, Astro.locals.locale)
+const { imdb_id, title, title_en, rating, rated_date, moments_id } = Astro.props.body
+>>>>>>> upstream/main
 
 const ratedDate = new Date(created * 1000)
 
+<<<<<<< HEAD
 // Function to remove HTML tags
 function removeHtmlTags(input) {
     return input.replace(/<\/?[^>]+(>|$)/g, ""); // Removes all HTML tags
+=======
+const imdb_url = `https://www.imdb.com/title/${imdb_id}`
+function stringRateToStarString(rating: string | number): string {
+    const rate = Number(rating) / 2
+    const fullStar = Math.floor(rate)
+    const halfStar = rate - fullStar > 0.5 ? 1 : 0
+    const emptyStar = 5 - fullStar - halfStar
+    return '★'.repeat(fullStar) + '☆'.repeat(halfStar) + '☆'.repeat(emptyStar)
+>>>>>>> upstream/main
 }
 
 // Clean the text by removing HTML tags

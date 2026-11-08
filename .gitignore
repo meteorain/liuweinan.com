@@ -7,6 +7,7 @@ dist/
 
 # dependencies
 node_modules/
+.npm-cache/
 
 # logs
 npm-debug.log*
@@ -23,6 +24,10 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+<<<<<<< HEAD
 
 # pnpm 本地自动生成（含 allowBuilds），不可提交：会让 Vercel 的 pnpm9 报 packages 缺失
 pnpm-workspace.yaml
+=======
+.env*
+>>>>>>> upstream/main
